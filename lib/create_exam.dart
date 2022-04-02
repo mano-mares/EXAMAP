@@ -43,36 +43,77 @@ class _CreateExamPageState extends State<CreateExamPage> {
     return '${time.hour}:${time.minute}';
   }
 
+  void _createExam() {
+    // TODO: create an exam object and go to admin home page
+    print('Clicked! Create an exam object');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Examen maken'),
-          centerTitle: true,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(children: [
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Vak',
-                  border: OutlineInputBorder(),
-                ),
+      appBar: AppBar(
+        title: const Text('Examen maken'),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(children: [
+            TextFormField(
+              decoration: const InputDecoration(
+                labelText: 'Vak',
+                border: OutlineInputBorder(),
               ),
-              const SizedBox(height: 16.0),
-              TextFormField(
-                controller: _timeController,
-                decoration: const InputDecoration(
-                  labelText: 'Duur',
-                  border: OutlineInputBorder(),
+            ),
+            const SizedBox(height: 16.0),
+            TextFormField(
+              controller: _timeController,
+              decoration: const InputDecoration(
+                labelText: 'Duur',
+                border: OutlineInputBorder(),
+              ),
+              readOnly: true,
+              onTap: _selectTime,
+            ),
+            const Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 0.0),
+                child: ExamQuestionsList(),
+              ),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    child: const Text('EXAMEN AANMAKEN'),
+                    style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(24.0),
+                        textStyle: const TextStyle(fontSize: 16.0)),
+                    onPressed: () => _createExam(),
+                  ),
                 ),
-                readOnly: true,
-                onTap: _selectTime,
-              )
-            ]),
-          ),
-        ));
+              ],
+            )
+          ]),
+        ),
+      ),
+    );
+  }
+}
+
+class ExamQuestionsList extends StatefulWidget {
+  const ExamQuestionsList({Key? key}) : super(key: key);
+
+  @override
+  State<ExamQuestionsList> createState() => _ExamQuestionsListState();
+}
+
+class _ExamQuestionsListState extends State<ExamQuestionsList> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.grey,
+    );
   }
 }
