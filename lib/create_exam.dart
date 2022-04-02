@@ -40,7 +40,7 @@ class _CreateExamPageState extends State<CreateExamPage> {
   }
 
   String _parseTime(TimeOfDay time) {
-    return '${time.hour}:${time.minute}';
+    return '${time.hour}:${time.minute} uur';
   }
 
   void _createExam() {
@@ -110,10 +110,81 @@ class ExamQuestionsList extends StatefulWidget {
 }
 
 class _ExamQuestionsListState extends State<ExamQuestionsList> {
+  final List<Widget> questions = [
+    const Question(),
+    const Question(),
+    const Question(),
+    const Question(),
+    const Question(),
+    const Question(),
+    const Question(),
+  ];
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey,
+        color: Colors.grey,
+        child: Column(
+          //crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: Center(
+                child: Text(
+                  'Vragen',
+                  style: const TextStyle(
+                      fontSize: 24.0, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            Expanded(
+              child: ListView(
+                children: questions,
+              ),
+            ),
+          ],
+        )
+        //child: ListView(children: questions),
+        );
+  }
+}
+
+class Question extends StatelessWidget {
+  const Question({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Card(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            const ListTile(
+              leading: Text('1'),
+              title: Text('Leg het verschil uit tussen een stack en een heap.'),
+              subtitle: Text(
+                'Open vraag',
+                style: TextStyle(fontFamily: 'cursive'),
+              ),
+              trailing: Text('2 ptn.'),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () => print('delete'),
+                ),
+                const SizedBox(width: 8),
+                IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () => print('edit'),
+                ),
+                const SizedBox(width: 8),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
