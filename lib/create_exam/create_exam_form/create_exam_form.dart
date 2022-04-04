@@ -9,23 +9,22 @@ class CreateExamForm extends StatefulWidget {
 }
 
 class _CreateExamFormState extends State<CreateExamForm> {
-  // Create a global key that uniquely identifies the Form widget
-  // and allows validation of the form.
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   final TimeOfDay _initialTime = const TimeOfDay(hour: 1, minute: 30);
-  late TextEditingController _timeController;
+
   late TextEditingController _nameController;
+  late TextEditingController _timeController;
 
   @override
   void initState() {
     super.initState();
-    _timeController = TextEditingController(text: _parseTime(_initialTime));
     _nameController = TextEditingController();
+    _timeController = TextEditingController(text: _parseTime(_initialTime));
   }
 
   @override
   void dispose() {
+    _nameController.dispose();
     _timeController.dispose();
     super.dispose();
   }
@@ -52,11 +51,20 @@ class _CreateExamFormState extends State<CreateExamForm> {
     return '${time.hour}:${time.minute} uur';
   }
 
+  String? _validateName(name) {
+    if (name == null || name.isEmpty) {
+      return 'Please enter a name';
+    }
+    return null;
+  }
+
   void _createExam() {
-    // TODO: create an exam object and go to admin home page
-    String name = _nameController.text;
-    String time = _timeController.text;
-    print('Clicked! Create an exam object with name: $name, time: $time');
+    if (_formKey.currentState!.validate()) {
+      String name = _nameController.text;
+      String time = _timeController.text;
+      print('Clicked! Create an exam object with name: $name, time: $time');
+      // TODO: create an exam object and go to admin home page
+    }
   }
 
   @override
@@ -70,6 +78,7 @@ class _CreateExamFormState extends State<CreateExamForm> {
             labelText: 'Vak',
             border: OutlineInputBorder(),
           ),
+          validator: _validateName,
         ),
         const SizedBox(height: 16.0),
         TextFormField(
