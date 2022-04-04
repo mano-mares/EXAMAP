@@ -15,11 +15,19 @@ class _CreateExamFormState extends State<CreateExamForm> {
 
   final TimeOfDay _initialTime = const TimeOfDay(hour: 1, minute: 30);
   late TextEditingController _timeController;
+  late TextEditingController _nameController;
 
   @override
   void initState() {
     super.initState();
     _timeController = TextEditingController(text: _parseTime(_initialTime));
+    _nameController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _timeController.dispose();
+    super.dispose();
   }
 
   void _selectTime() async {
@@ -46,7 +54,9 @@ class _CreateExamFormState extends State<CreateExamForm> {
 
   void _createExam() {
     // TODO: create an exam object and go to admin home page
-    print('Clicked! Create an exam object');
+    String name = _nameController.text;
+    String time = _timeController.text;
+    print('Clicked! Create an exam object with name: $name, time: $time');
   }
 
   @override
@@ -55,6 +65,7 @@ class _CreateExamFormState extends State<CreateExamForm> {
       key: _formKey,
       child: Column(children: [
         TextFormField(
+          controller: _nameController,
           decoration: const InputDecoration(
             labelText: 'Vak',
             border: OutlineInputBorder(),
