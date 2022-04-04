@@ -1,4 +1,4 @@
-import 'package:examap/create_exam.dart';
+import 'package:examap/create_exam/create_exam.dart';
 import 'package:flutter/material.dart';
 
 void main() {
