@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
 
 class QuestionCard extends StatelessWidget {
-  const QuestionCard({Key? key}) : super(key: key);
+  final int index;
+  final String questionText;
+  final String questionType;
+  final int points;
+
+  const QuestionCard(
+      {required this.index,
+      required this.questionText,
+      required this.questionType,
+      required this.points,
+      Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -9,14 +20,17 @@ class QuestionCard extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          const ListTile(
-            leading: Text('1'),
-            title: Text('Leg het verschil uit tussen een stack en een heap.'),
-            subtitle: Text(
-              'Open vraag',
-              style: TextStyle(fontFamily: 'cursive'),
+          ListTile(
+            leading: Text(
+              '$index.',
+              style: const TextStyle(fontWeight: FontWeight.w400),
             ),
-            trailing: Text('2 ptn.'),
+            title: Text(questionText),
+            subtitle: Text(
+              questionType,
+              style: const TextStyle(fontFamily: 'cursive'),
+            ),
+            trailing: Text('$points ptn.'),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
