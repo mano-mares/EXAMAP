@@ -52,7 +52,14 @@ class _ExamQuestionsListState extends State<ExamQuestionsList> {
               child: ListView.builder(
                 itemCount: context.watch<Exam>().questions.length,
                 itemBuilder: (context, index) {
-                  return context.watch<Exam>().questions[index];
+                  //return context.watch<Exam>().questions[index];
+                  return QuestionCard(
+                      index: context.watch<Exam>().questions[index].id,
+                      questionText:
+                          context.watch<Exam>().questions[index].questionText,
+                      questionType:
+                          context.watch<Exam>().questions[index].questionType,
+                      points: context.watch<Exam>().questions[index].maxPoint);
                 },
               ),
             ),
