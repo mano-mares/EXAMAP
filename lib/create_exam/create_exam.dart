@@ -14,7 +14,7 @@ class _CreateExamPageState extends State<CreateExamPage> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => Exam('', ''),
+      create: (context) => Exam(),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Examen maken'),

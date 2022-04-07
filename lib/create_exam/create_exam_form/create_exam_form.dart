@@ -1,6 +1,7 @@
 import 'package:examap/create_exam/create_exam_form/exam_questions_list.dart';
 import 'package:examap/models/exam.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CreateExamForm extends StatefulWidget {
   const CreateExamForm({Key? key}) : super(key: key);
@@ -59,15 +60,18 @@ class _CreateExamFormState extends State<CreateExamForm> {
     return null;
   }
 
-  void _createExam() {
+  void _createExam(BuildContext context) {
     if (_formKey.currentState!.validate()) {
       String subject = _nameController.text;
       String timeLimit = _timeController.text;
 
-      Exam exam = Exam(subject, timeLimit);
+      context.read<Exam>().subject = subject;
+      context.read<Exam>().timeLimit = timeLimit;
       print(
-          'Clicked! Create an exam object with subject: ${exam.subject}, time: ${exam.timeLimit}');
+          'Clicked! Exam object with subject: ${context.read<Exam>().subject}, time: ${context.read<Exam>().timeLimit}');
       // TODO: Go to admin home page
+
+      // TODO: sync exam to firebase
     }
   }
 
@@ -108,7 +112,7 @@ class _CreateExamFormState extends State<CreateExamForm> {
                 style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(24.0),
                     textStyle: const TextStyle(fontSize: 16.0)),
-                onPressed: () => _createExam(),
+                onPressed: () => _createExam(context),
               ),
             ),
           ],

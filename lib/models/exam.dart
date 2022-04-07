@@ -1,4 +1,3 @@
-import 'package:examap/create_exam/create_exam_form/question_card.dart';
 import 'package:examap/models/question.dart';
 import 'package:flutter/cupertino.dart';
 import '../create_exam/constant.dart' as constant;
@@ -41,7 +40,7 @@ class Exam with ChangeNotifier {
         maxPoint: 2),
   ];
 
-  Exam(this._subject, this._timeLimit);
+  Exam();
 
   // Getters and setters.
   String get subject => _subject;
