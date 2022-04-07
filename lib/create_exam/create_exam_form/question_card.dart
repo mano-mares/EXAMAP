@@ -1,4 +1,9 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../models/exam.dart';
 
 class QuestionCard extends StatelessWidget {
   final int index;
@@ -13,6 +18,14 @@ class QuestionCard extends StatelessWidget {
       required this.points,
       Key? key})
       : super(key: key);
+
+  void _delete(BuildContext context) {
+    context.read<Exam>().removeQuestion(index);
+  }
+
+  void _edit() {
+    print('edit card $index');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +50,14 @@ class QuestionCard extends StatelessWidget {
             children: <Widget>[
               IconButton(
                 icon: const Icon(Icons.delete),
-                onPressed: () => print('delete'),
+                onPressed: () {
+                  _delete(context);
+                },
               ),
               const SizedBox(width: 8),
               IconButton(
                 icon: const Icon(Icons.edit),
-                onPressed: () => print('edit'),
+                onPressed: _edit,
               ),
               const SizedBox(width: 8),
             ],

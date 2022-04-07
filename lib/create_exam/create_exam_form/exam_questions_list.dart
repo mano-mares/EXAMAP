@@ -1,6 +1,8 @@
 import 'package:examap/create_exam/create_exam_form/question_card.dart';
 import 'package:examap/create_exam/question_type.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../models/exam.dart';
 import '../constant.dart' as constant;
 
 class ExamQuestionsList extends StatefulWidget {
@@ -11,39 +13,6 @@ class ExamQuestionsList extends StatefulWidget {
 }
 
 class _ExamQuestionsListState extends State<ExamQuestionsList> {
-  List<Widget> questions = [
-    const QuestionCard(
-        index: 1,
-        questionText: 'Leg het verschil uit tussen een stack en een heap.',
-        questionType: constant.openQuestion,
-        points: 3),
-    const QuestionCard(
-        index: 2,
-        questionText: 'Welk datatype is 5.699?',
-        questionType: constant.multipleChoice,
-        points: 2),
-    const QuestionCard(
-        index: 3,
-        questionText: 'Herschrijf de opgegeven code tot dat het werkt.',
-        questionType: constant.codeCorrection,
-        points: 2),
-    const QuestionCard(
-        index: 4,
-        questionText: 'Leg het verchil uit tussen een float en een double.',
-        questionType: constant.openQuestion,
-        points: 3),
-    const QuestionCard(
-        index: 5,
-        questionText: 'Wat is geen programeertaal uit de volgende opties?',
-        questionType: constant.multipleChoice,
-        points: 1),
-    const QuestionCard(
-        index: 6,
-        questionText: 'Herschrijf de opgegeven code tot dat het werkt.',
-        questionType: constant.codeCorrection,
-        points: 2),
-  ];
-
   void _addQuestion(QuestionType questionType) {
     switch (questionType) {
       case QuestionType.open:
@@ -81,9 +50,9 @@ class _ExamQuestionsListState extends State<ExamQuestionsList> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(32.0, 16.0, 32.0, 0.0),
               child: ListView.builder(
-                itemCount: questions.length,
+                itemCount: context.watch<Exam>().questions.length,
                 itemBuilder: (context, index) {
-                  return questions[index];
+                  return context.watch<Exam>().questions[index];
                 },
               ),
             ),
