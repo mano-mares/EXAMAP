@@ -1,4 +1,5 @@
 import 'package:examap/create_exam/create_exam_form/exam_questions_list.dart';
+import 'package:examap/models/exam.dart';
 import 'package:flutter/material.dart';
 
 class CreateExamForm extends StatefulWidget {
@@ -60,10 +61,13 @@ class _CreateExamFormState extends State<CreateExamForm> {
 
   void _createExam() {
     if (_formKey.currentState!.validate()) {
-      String name = _nameController.text;
-      String time = _timeController.text;
-      print('Clicked! Create an exam object with name: $name, time: $time');
-      // TODO: create an exam object and go to admin home page
+      String subject = _nameController.text;
+      String timeLimit = _timeController.text;
+
+      Exam exam = Exam(subject, timeLimit);
+      print(
+          'Clicked! Create an exam object with subject: ${exam.subject}, time: ${exam.timeLimit}');
+      // TODO: Go to admin home page
     }
   }
 
