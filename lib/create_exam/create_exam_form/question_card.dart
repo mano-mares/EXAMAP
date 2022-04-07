@@ -51,7 +51,16 @@ class QuestionCard extends StatelessWidget {
             children: <Widget>[
               IconButton(
                 icon: const Icon(Icons.delete),
-                onPressed: () => _delete(context),
+                onPressed: () {
+                  _delete(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Removed question $index from the list'),
+                      duration: const Duration(milliseconds: 1500),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                },
               ),
               const SizedBox(width: 8),
               IconButton(
