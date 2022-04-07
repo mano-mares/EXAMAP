@@ -1,5 +1,5 @@
 import 'package:examap/create_exam/create_exam_form/question_card.dart';
-import 'package:examap/create_exam/questionType.dart';
+import 'package:examap/create_exam/question_type.dart';
 import 'package:flutter/material.dart';
 import '../constant.dart' as constant;
 
