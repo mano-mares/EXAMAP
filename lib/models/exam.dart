@@ -52,9 +52,9 @@ class Exam with ChangeNotifier {
 
   List<Question> get questions => _questions;
 
-  void removeQuestion(int id) {
+  void removeQuestionAt(int index) {
     // TODO: remove a question from the list.
-    print('remove question with id $id');
+    print('remove question at index $index');
 
     // This call tells the widgets that are listening to this model to rebuild.
     notifyListeners();

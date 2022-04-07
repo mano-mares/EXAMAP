@@ -20,7 +20,7 @@ class QuestionCard extends StatelessWidget {
       : super(key: key);
 
   void _delete(BuildContext context) {
-    context.read<Exam>().removeQuestion(index);
+    context.read<Exam>().removeQuestionAt(index);
   }
 
   void _edit() {
@@ -35,7 +35,7 @@ class QuestionCard extends StatelessWidget {
         children: <Widget>[
           ListTile(
             leading: Text(
-              '$index.',
+              '${index + 1}.',
               style: const TextStyle(fontWeight: FontWeight.w400),
             ),
             title: Text(questionText),

@@ -49,17 +49,17 @@ class _ExamQuestionsListState extends State<ExamQuestionsList> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(32.0, 16.0, 32.0, 0.0),
-              child: ListView.builder(
-                itemCount: context.watch<Exam>().questions.length,
-                itemBuilder: (context, index) {
-                  //return context.watch<Exam>().questions[index];
-                  return QuestionCard(
-                      index: context.watch<Exam>().questions[index].id,
-                      questionText:
-                          context.watch<Exam>().questions[index].questionText,
-                      questionType:
-                          context.watch<Exam>().questions[index].questionType,
-                      points: context.watch<Exam>().questions[index].maxPoint);
+              child: Consumer<Exam>(
+                builder: (context, exam, child) {
+                  return ListView.builder(
+                      itemCount: exam.questions.length,
+                      itemBuilder: (context, index) {
+                        return QuestionCard(
+                            index: index,
+                            questionText: exam.questions[index].questionText,
+                            questionType: exam.questions[index].questionType,
+                            points: exam.questions[index].maxPoint);
+                      });
                 },
               ),
             ),
