@@ -6,13 +6,14 @@ import 'package:provider/provider.dart';
 import '../../models/exam.dart';
 
 class QuestionCard extends StatelessWidget {
-  final int index;
+  final int index, id;
   final String questionText;
   final String questionType;
   final int points;
 
   const QuestionCard(
       {required this.index,
+      required this.id,
       required this.questionText,
       required this.questionType,
       required this.points,
@@ -24,7 +25,7 @@ class QuestionCard extends StatelessWidget {
   }
 
   void _edit() {
-    print('edit card $index');
+    print('TODO: go to edit card $index');
   }
 
   @override
@@ -50,9 +51,7 @@ class QuestionCard extends StatelessWidget {
             children: <Widget>[
               IconButton(
                 icon: const Icon(Icons.delete),
-                onPressed: () {
-                  _delete(context);
-                },
+                onPressed: () => _delete(context),
               ),
               const SizedBox(width: 8),
               IconButton(

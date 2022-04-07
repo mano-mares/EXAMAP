@@ -3,6 +3,7 @@ import 'package:examap/create_exam/question_type.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/exam.dart';
+import '../../models/question.dart';
 import '../constant.dart' as constant;
 
 class ExamQuestionsList extends StatefulWidget {
@@ -54,11 +55,13 @@ class _ExamQuestionsListState extends State<ExamQuestionsList> {
                   return ListView.builder(
                       itemCount: exam.questions.length,
                       itemBuilder: (context, index) {
+                        Question question = exam.questions[index];
                         return QuestionCard(
                             index: index,
-                            questionText: exam.questions[index].questionText,
-                            questionType: exam.questions[index].questionType,
-                            points: exam.questions[index].maxPoint);
+                            id: question.id,
+                            questionText: question.questionText,
+                            questionType: question.questionType,
+                            points: question.maxPoint);
                       });
                 },
               ),

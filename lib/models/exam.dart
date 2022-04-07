@@ -53,8 +53,7 @@ class Exam with ChangeNotifier {
   List<Question> get questions => _questions;
 
   void removeQuestionAt(int index) {
-    // TODO: remove a question from the list.
-    print('remove question at index $index');
+    _questions.removeAt(index);
 
     // This call tells the widgets that are listening to this model to rebuild.
     notifyListeners();
