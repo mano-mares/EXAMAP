@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Login extends StatelessWidget {
-  const Login({Key? key}) : super(key: key);
+  FirebaseAuth auth = FirebaseAuth.instance;
+
   void passwordForgot() {
     print("Verstuur wachtwoord vergeten mail");
   }
