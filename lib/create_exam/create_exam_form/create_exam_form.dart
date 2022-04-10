@@ -3,6 +3,8 @@ import 'package:examap/models/exam.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../strings.dart' as strings;
+
 class CreateExamForm extends StatefulWidget {
   const CreateExamForm({Key? key}) : super(key: key);
 
@@ -55,7 +57,7 @@ class _CreateExamFormState extends State<CreateExamForm> {
 
   String? _validateName(name) {
     if (name == null || name.isEmpty) {
-      return 'Please enter a name';
+      return 'Vul een naam in';
     }
     return null;
   }
@@ -83,7 +85,7 @@ class _CreateExamFormState extends State<CreateExamForm> {
         TextFormField(
           controller: _nameController,
           decoration: const InputDecoration(
-            labelText: 'Vak',
+            labelText: strings.labelSubject,
             border: OutlineInputBorder(),
           ),
           validator: _validateName,
@@ -92,7 +94,7 @@ class _CreateExamFormState extends State<CreateExamForm> {
         TextFormField(
           controller: _timeController,
           decoration: const InputDecoration(
-            labelText: 'Duur',
+            labelText: strings.labelTimeLimit,
             border: OutlineInputBorder(),
           ),
           readOnly: true,
@@ -108,7 +110,7 @@ class _CreateExamFormState extends State<CreateExamForm> {
           children: [
             Expanded(
               child: ElevatedButton(
-                child: const Text('EXAMEN AANMAKEN'),
+                child: const Text(strings.createButtonText),
                 style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(24.0),
                     textStyle: const TextStyle(fontSize: 16.0)),

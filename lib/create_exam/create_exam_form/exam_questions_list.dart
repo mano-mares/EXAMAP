@@ -2,9 +2,10 @@ import 'package:examap/create_exam/create_exam_form/question_card.dart';
 import 'package:examap/create_exam/question_type.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../models/exam.dart';
 import '../../models/question.dart';
-import '../constant.dart' as constant;
+import '../strings.dart' as strings;
 
 class ExamQuestionsList extends StatefulWidget {
   const ExamQuestionsList({Key? key}) : super(key: key);
@@ -42,7 +43,7 @@ class _ExamQuestionsListState extends State<ExamQuestionsList> {
             padding: EdgeInsets.only(top: 16.0),
             child: Center(
               child: Text(
-                'Vragen',
+                strings.headingText,
                 style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
               ),
             ),
@@ -76,15 +77,15 @@ class _ExamQuestionsListState extends State<ExamQuestionsList> {
               ElevatedButton.icon(
                   onPressed: () => _addQuestion(QuestionType.open),
                   icon: const Icon(Icons.add),
-                  label: const Text(constant.openQuestion)),
+                  label: const Text(strings.openQuestion)),
               ElevatedButton.icon(
                   onPressed: () => _addQuestion(QuestionType.multiple),
                   icon: const Icon(Icons.add),
-                  label: const Text(constant.multipleChoice)),
+                  label: const Text(strings.multipleChoice)),
               ElevatedButton.icon(
                   onPressed: () => _addQuestion(QuestionType.code),
                   icon: const Icon(Icons.add),
-                  label: const Text(constant.codeCorrection)),
+                  label: const Text(strings.codeCorrection)),
             ],
           ),
           const SizedBox(

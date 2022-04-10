@@ -1,5 +1,3 @@
-import 'package:examap/create_exam/question_type.dart';
-
 class Question {
   int id;
   String questionText;
