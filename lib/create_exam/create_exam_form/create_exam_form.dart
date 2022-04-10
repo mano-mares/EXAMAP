@@ -112,8 +112,10 @@ class _CreateExamFormState extends State<CreateExamForm> {
               child: ElevatedButton(
                 child: const Text(strings.createButtonText),
                 style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.all(24.0),
-                    textStyle: const TextStyle(fontSize: 16.0)),
+                  padding: const EdgeInsets.all(24.0),
+                  textStyle: const TextStyle(fontSize: 16.0),
+                  primary: Colors.redAccent[700],
+                ),
                 onPressed: () => _createExam(context),
               ),
             ),

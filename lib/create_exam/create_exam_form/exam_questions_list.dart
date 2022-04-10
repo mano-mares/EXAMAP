@@ -75,17 +75,29 @@ class _ExamQuestionsListState extends State<ExamQuestionsList> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ElevatedButton.icon(
-                  onPressed: () => _addQuestion(QuestionType.open),
-                  icon: const Icon(Icons.add),
-                  label: const Text(strings.openQuestion)),
+                onPressed: () => _addQuestion(QuestionType.open),
+                icon: const Icon(Icons.add),
+                label: const Text(strings.openQuestion),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.red,
+                ),
+              ),
               ElevatedButton.icon(
-                  onPressed: () => _addQuestion(QuestionType.multiple),
-                  icon: const Icon(Icons.add),
-                  label: const Text(strings.multipleChoice)),
+                onPressed: () => _addQuestion(QuestionType.multiple),
+                icon: const Icon(Icons.add),
+                label: const Text(strings.multipleChoice),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.red,
+                ),
+              ),
               ElevatedButton.icon(
-                  onPressed: () => _addQuestion(QuestionType.code),
-                  icon: const Icon(Icons.add),
-                  label: const Text(strings.codeCorrection)),
+                onPressed: () => _addQuestion(QuestionType.code),
+                icon: const Icon(Icons.add),
+                label: const Text(strings.codeCorrection),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.red,
+                ),
+              ),
             ],
           ),
           const SizedBox(
