@@ -28,14 +28,13 @@ class _LoginState extends State<Login> {
 
   void loginFirebase() async {
     try {
-      if (formKey.currentState!.validate()) {}
+      formKey.currentState!.validate();
       setState(() {
         wrongLogin = false;
       });
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
           email: emailController.text.trim(),
           password: passwordController.text.trim());
-      print(wrongLogin);
       if (auth.currentUser != null) {
         //Navigation to next page
       }
