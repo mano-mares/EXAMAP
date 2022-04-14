@@ -1,3 +1,4 @@
+import 'package:examap/create_exam/create_exam.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,14 +12,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Home')),
-        body: const Text('Hello World!'),
-      ),
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.red,
+        ),
+        home: const CreateExamPage());
   }
 }
