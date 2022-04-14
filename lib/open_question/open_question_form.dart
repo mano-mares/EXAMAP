@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'strings.dart' as strings;
 
 class OpenQuestionForm extends StatefulWidget {
@@ -52,6 +53,20 @@ class _OpenQuestionFormState extends State<OpenQuestionForm> {
                 labelText: strings.labelQuestion,
                 border: OutlineInputBorder(),
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextFormField(
+              decoration: const InputDecoration(
+                labelText: 'punten',
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                // Only number can be entered.
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+              ],
             ),
           ),
           ElevatedButton(
