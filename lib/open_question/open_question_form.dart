@@ -10,23 +10,45 @@ class OpenQuestionForm extends StatefulWidget {
 }
 
 class _OpenQuestionFormState extends State<OpenQuestionForm> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController _questionController;
+  late TextEditingController _scoreController;
 
   @override
   void initState() {
     super.initState();
     _questionController = TextEditingController();
+    _scoreController = TextEditingController();
   }
 
   void _addOpenQuestion() {
-    // TODO: add question to questions list in exam object.
+    if (_formKey.currentState!.validate()) {
+      // TODO: add question to questions list in exam object.
+      print(
+          'question: ${_questionController.text}, points: ${_scoreController.text}');
 
-    // TODO: go back to create exam form.
+      // TODO: go back to create exam form.
+    }
+  }
+
+  String? _validateQuestion(question) {
+    if (question == null || question.isEmpty) {
+      return 'Vraag is vereist';
+    }
+    return null;
+  }
+
+  String? _validatePoints(points) {
+    if (points == null || points.isEmpty) {
+      return 'Punt is vereist';
+    }
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: _formKey,
       child: Column(
         children: [
           const Text(
@@ -53,20 +75,23 @@ class _OpenQuestionFormState extends State<OpenQuestionForm> {
                 labelText: strings.labelQuestion,
                 border: OutlineInputBorder(),
               ),
+              validator: _validateQuestion,
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextFormField(
+              controller: _scoreController,
               decoration: const InputDecoration(
-                labelText: 'punten',
+                labelText: strings.labelPoints,
                 border: OutlineInputBorder(),
               ),
               keyboardType: TextInputType.number,
               inputFormatters: <TextInputFormatter>[
-                // Only number can be entered.
+                // Only numbers can be entered.
                 FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
               ],
+              validator: _validatePoints,
             ),
           ),
           ElevatedButton(
@@ -75,6 +100,7 @@ class _OpenQuestionFormState extends State<OpenQuestionForm> {
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.all(20.0),
               textStyle: const TextStyle(fontSize: 16.0),
+              primary: Colors.redAccent[700],
             ),
           ),
         ],
@@ -85,6 +111,7 @@ class _OpenQuestionFormState extends State<OpenQuestionForm> {
   @override
   void dispose() {
     _questionController.dispose();
+    _scoreController.dispose();
     super.dispose();
   }
 }

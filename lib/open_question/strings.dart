@@ -3,4 +3,5 @@ const String appBarTitle = 'Vraag toevoegen';
 const String title = 'Open vraag';
 const String description = 'Voeg een open vraag toe aan het examen.';
 const String labelQuestion = 'Vraag';
+const String labelPoints = 'Punt';
 const String buttonText = 'Toevoegen';

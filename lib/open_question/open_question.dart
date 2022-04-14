@@ -13,8 +13,11 @@ class OpenQuestionPage extends StatelessWidget {
         title: const Text(strings.appBarTitle),
         centerTitle: true,
       ),
-      body: const Center(
-        child: OpenQuestionForm(),
+      body: const Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Center(
+          child: OpenQuestionForm(),
+        ),
       ),
     );
   }
