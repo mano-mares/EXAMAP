@@ -76,7 +76,7 @@ class _LoginState extends State<Login> {
                     child: TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Email cannot be empty';
+                          return 'Email is vereist';
                         }
                         return null;
                       },
@@ -90,7 +90,7 @@ class _LoginState extends State<Login> {
                   child: TextFormField(
                       validator: (text) {
                         if (text == null || text.isEmpty) {
-                          return 'Password cannot be empty';
+                          return 'Wachtwoord is vereist';
                         }
                         return null;
                       },
@@ -99,7 +99,7 @@ class _LoginState extends State<Login> {
                       decoration: InputDecoration(
                           fillColor: Colors.red,
                           border: OutlineInputBorder(),
-                          labelText: 'Password',
+                          labelText: 'Wachtwoord',
                           suffix: InkWell(
                               onTap: togglePasswordView,
                               child: Icon(passwordHidden

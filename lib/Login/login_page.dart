@@ -1,4 +1,4 @@
-import 'package:examap/Login/Login.dart';
+import 'package:examap/Login/login.dart';
 import 'package:examap/main.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +23,7 @@ class LoginPage extends StatelessWidget {
               },
               // onPressed: () => Navigator.of(context).pop(),
             ),
-            title: const Text('Login page')),
+            title: const Text('Login pagina')),
         body: FutureBuilder(
           future:
               Firebase.initializeApp(options: DefaultFirebaseOptions.android),
