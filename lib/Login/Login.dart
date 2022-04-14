@@ -1,15 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class Login extends StatelessWidget {
-  FirebaseAuth auth = FirebaseAuth.instance;
+class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
 
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  bool wrongLogin = false;
+  bool passwordHidden = false;
   void passwordForgot() {
-    print("Verstuur wachtwoord vergeten mail");
+    auth.sendPasswordResetEmail(email: emailController.text.trim());
+    print("Paswoord reset verstuurd");
   }
 
-  void loginFirebase() {
-    print("Login");
+  void togglePasswordView() {
+    setState(() {
+      passwordHidden = !passwordHidden;
+    });
+  }
+
+  void loginFirebase() async {
+    try {
+      if (formKey.currentState!.validate()) {}
+      setState(() {
+        wrongLogin = false;
+      });
+      UserCredential userCredential = await auth.signInWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim());
+      print(wrongLogin);
+      if (auth.currentUser != null) {
+        //Navigation to next page
+      }
+    } catch (e) {
+      print(e.toString());
+      setState(() {
+        wrongLogin = true;
+      });
+    }
   }
 
   @override
@@ -33,19 +68,56 @@ class Login extends StatelessWidget {
               child: const Text("Docent",
                   style:
                       TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0))),
+          Form(
+              key: formKey,
+              child: Column(children: [
+                Container(
+                    padding: const EdgeInsets.fromLTRB(100, 0, 100, 15),
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Email cannot be empty';
+                        }
+                        return null;
+                      },
+                      controller: emailController,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(), labelText: 'Email'),
+                    )),
+                Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.fromLTRB(100, 0, 100, 5),
+                  child: TextFormField(
+                      validator: (text) {
+                        if (text == null || text.isEmpty) {
+                          return 'Password cannot be empty';
+                        }
+                        return null;
+                      },
+                      controller: passwordController,
+                      obscureText: !passwordHidden,
+                      decoration: InputDecoration(
+                          fillColor: Colors.red,
+                          border: OutlineInputBorder(),
+                          labelText: 'Password',
+                          suffix: InkWell(
+                              onTap: togglePasswordView,
+                              child: Icon(passwordHidden
+                                  ? Icons.visibility
+                                  : Icons.visibility_off)))),
+                ),
+              ])),
           Container(
-              padding: const EdgeInsets.fromLTRB(100, 0, 100, 15),
-              child: const TextField(
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(), labelText: 'Username'),
-              )),
-          Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.fromLTRB(100, 0, 100, 5),
-            child: const TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(), labelText: 'Password')),
+            padding: const EdgeInsets.fromLTRB(100, 5, 0, 0),
+            child: Visibility(
+                visible: wrongLogin,
+                child: wrongLogin
+                    ? const Text("U heeft een verkeerde login ingevoerd",
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ))
+                    : const Text("")),
           ),
           Container(
             padding: const EdgeInsets.fromLTRB(100, 5, 0, 0),
