@@ -15,13 +15,14 @@ class ChooseOption extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         ElevatedButton(
-            onPressed: chooseStudent,
-            child: Text(
-              "Student",
-              style: new TextStyle(fontSize: 30.0),
-            ),
-            style: ElevatedButton.styleFrom(
-                fixedSize: const Size(240, 80), primary: Colors.red)),
+          onPressed: chooseStudent,
+          child: const Text(
+            "Student",
+            style: TextStyle(fontSize: 30.0),
+          ),
+          style: ElevatedButton.styleFrom(
+              fixedSize: const Size(240, 80), primary: Colors.red),
+        ),
         ElevatedButton(
           onPressed: chooseDocent,
           child: const Text(
