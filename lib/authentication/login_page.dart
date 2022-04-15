@@ -21,7 +21,6 @@ class LoginPage extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(context);
               },
-              // onPressed: () => Navigator.of(context).pop(),
             ),
             title: const Text('Login pagina')),
         body: FutureBuilder(
@@ -32,9 +31,9 @@ class LoginPage extends StatelessWidget {
               return Text(snapshot.error.toString());
             }
             if (snapshot.connectionState == ConnectionState.done) {
-              return Login();
+              return const Login();
             }
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           },
         ),
       ),
