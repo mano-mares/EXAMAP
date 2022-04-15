@@ -1,3 +1,4 @@
+import 'package:examap/create_exam/create_exam.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -32,14 +33,16 @@ class _LoginState extends State<Login> {
       setState(() {
         wrongLogin = false;
       });
-      UserCredential userCredential = await auth.signInWithEmailAndPassword(
+      await auth.signInWithEmailAndPassword(
           email: emailController.text.trim(),
           password: passwordController.text.trim());
       if (auth.currentUser != null) {
-        //Navigation to next page
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const CreateExamPage()),
+        );
       }
     } catch (e) {
-      print(e.toString());
       setState(() {
         wrongLogin = true;
       });
