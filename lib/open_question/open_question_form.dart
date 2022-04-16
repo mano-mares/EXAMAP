@@ -27,7 +27,7 @@ class _OpenQuestionFormState extends State<OpenQuestionForm> {
       print(
           'question: ${_questionController.text}, points: ${_scoreController.text}');
 
-      // TODO: go back to create exam form.
+      Navigator.pop(context);
     }
   }
 
