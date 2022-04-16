@@ -1,5 +1,8 @@
+import 'package:examap/models/open_question.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import '../models/exam.dart';
 import 'strings.dart' as strings;
 
 class OpenQuestionForm extends StatefulWidget {
@@ -23,10 +26,19 @@ class _OpenQuestionFormState extends State<OpenQuestionForm> {
 
   void _addOpenQuestion() {
     if (_formKey.currentState!.validate()) {
-      // TODO: add question to questions list in exam object.
-      print(
-          'question: ${_questionController.text}, points: ${_scoreController.text}');
+      String questionText = _questionController.text;
+      int maxPoint = int.parse(_scoreController.text);
 
+      context.read<Exam>().addQuestion(
+            OpenQuestion(
+              id: 1,
+              questionText: questionText,
+              maxPoint: maxPoint,
+              questionType: 'Open vraag',
+            ),
+          );
+
+      // Go back to create exam page.
       Navigator.pop(context);
     }
   }
