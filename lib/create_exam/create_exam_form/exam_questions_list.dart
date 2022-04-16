@@ -1,5 +1,6 @@
 import 'package:examap/create_exam/create_exam_form/question_card.dart';
 import 'package:examap/create_exam/question_type.dart';
+import 'package:examap/open_question/open_question.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,16 +19,16 @@ class _ExamQuestionsListState extends State<ExamQuestionsList> {
   void _addQuestion(QuestionType questionType) {
     switch (questionType) {
       case QuestionType.open:
-        // TODO: Handler this case.
-        print('TODO: Go to add open question form');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const OpenQuestionPage()),
+        );
         break;
       case QuestionType.multiple:
-        // TODO: Handle this case.
-        print('TODO: Go to add multiple choice form');
+        // TODO: Go to add multiple choice form:
         break;
       case QuestionType.code:
-        // TODO: Handle this case.
-        print('TODO: Go to add code correction form');
+        // TODO: Go to add code correction form
         break;
     }
     return;
