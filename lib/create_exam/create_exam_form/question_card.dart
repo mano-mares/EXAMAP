@@ -4,7 +4,8 @@ import 'package:provider/provider.dart';
 import '../../models/exam.dart';
 
 class QuestionCard extends StatelessWidget {
-  final int index, id;
+  final int index;
+  final String id;
   final String questionText;
   final String questionType;
   final int points;

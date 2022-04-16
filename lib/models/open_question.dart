@@ -2,7 +2,7 @@ import 'package:examap/models/question.dart';
 
 class OpenQuestion extends Question {
   OpenQuestion(
-      {required int id,
+      {required String id,
       required String questionText,
       required int maxPoint,
       required String questionType})

@@ -2,6 +2,7 @@ import 'package:examap/models/open_question.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 import '../models/exam.dart';
 import 'strings.dart' as strings;
 
@@ -14,6 +15,7 @@ class OpenQuestionForm extends StatefulWidget {
 
 class _OpenQuestionFormState extends State<OpenQuestionForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final uuid = const Uuid();
   late TextEditingController _questionController;
   late TextEditingController _scoreController;
 
@@ -31,7 +33,7 @@ class _OpenQuestionFormState extends State<OpenQuestionForm> {
 
       context.read<Exam>().addQuestion(
             OpenQuestion(
-              id: 1,
+              id: uuid.v4(),
               questionText: questionText,
               maxPoint: maxPoint,
               questionType: 'Open vraag',
