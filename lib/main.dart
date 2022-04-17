@@ -1,5 +1,3 @@
-import 'package:examap/create_exam/create_exam.dart';
-import 'package:examap/open_question/open_question.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'homepage_options/choose_option.dart';
@@ -21,7 +19,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.red,
         ),
-        //home: const CreateExamPage(),
         home: Scaffold(
           appBar: AppBar(),
           body: Column(

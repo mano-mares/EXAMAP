@@ -61,72 +61,83 @@ class _OpenQuestionFormState extends State<OpenQuestionForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          const Text(
-            strings.title,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 50.0,
-            ),
-          ),
-          const Text(
-            strings.description,
-            style: TextStyle(
-              fontSize: 20.0,
-            ),
-          ),
-          const SizedBox(
-            height: 16.0,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextFormField(
-              controller: _questionController,
-              decoration: const InputDecoration(
-                labelText: strings.labelQuestion,
-                border: OutlineInputBorder(),
-              ),
-              validator: _validateQuestion,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextFormField(
-              controller: _scoreController,
-              decoration: const InputDecoration(
-                labelText: strings.labelPoints,
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.number,
-              inputFormatters: <TextInputFormatter>[
-                // Only numbers can be entered.
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-              ],
-              validator: _validatePoints,
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              _addOpenQuestion();
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Open vraag toegevoegd'),
-                  duration: Duration(milliseconds: 1500),
-                  behavior: SnackBarBehavior.floating,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(strings.appBarTitle),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                const Text(
+                  strings.title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 50.0,
+                  ),
                 ),
-              );
-            },
-            child: const Text(strings.buttonText),
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.all(20.0),
-              textStyle: const TextStyle(fontSize: 16.0),
-              primary: Colors.redAccent[700],
+                const Text(
+                  strings.description,
+                  style: TextStyle(
+                    fontSize: 20.0,
+                  ),
+                ),
+                const SizedBox(
+                  height: 16.0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: TextFormField(
+                    controller: _questionController,
+                    decoration: const InputDecoration(
+                      labelText: strings.labelQuestion,
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: _validateQuestion,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: TextFormField(
+                    controller: _scoreController,
+                    decoration: const InputDecoration(
+                      labelText: strings.labelPoints,
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      // Only numbers can be entered.
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    ],
+                    validator: _validatePoints,
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    _addOpenQuestion();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(strings.snackbar),
+                        duration: Duration(milliseconds: 1500),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
+                  child: const Text(strings.buttonText),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(20.0),
+                    textStyle: const TextStyle(fontSize: 16.0),
+                    primary: Colors.redAccent[700],
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

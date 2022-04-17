@@ -1,6 +1,6 @@
 import 'package:examap/create_exam/create_exam_form/question_card.dart';
-import 'package:examap/create_exam/question_type.dart';
-import 'package:examap/open_question/open_question.dart';
+import 'package:examap/models/questions/question_type.dart';
+import 'package:examap/open_question/open_question_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +21,7 @@ class _ExamQuestionsListState extends State<ExamQuestionsList> {
       case QuestionType.open:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const OpenQuestionPage()),
+          MaterialPageRoute(builder: (context) => const OpenQuestionForm()),
         );
         break;
       case QuestionType.multiple:
@@ -55,16 +55,17 @@ class _ExamQuestionsListState extends State<ExamQuestionsList> {
               child: Consumer<Exam>(
                 builder: (context, exam, child) {
                   return ListView.builder(
-                      itemCount: exam.questions.length,
-                      itemBuilder: (context, index) {
-                        Question question = exam.questions[index];
-                        return QuestionCard(
-                            index: index,
-                            id: question.id,
-                            questionText: question.questionText,
-                            questionType: question.questionType,
-                            points: question.maxPoint);
-                      });
+                    itemCount: exam.questions.length,
+                    itemBuilder: (context, index) {
+                      Question question = exam.questions[index];
+                      return QuestionCard(
+                          index: index,
+                          id: question.id,
+                          questionText: question.questionText,
+                          questionType: question.questionType,
+                          points: question.maxPoint);
+                    },
+                  );
                 },
               ),
             ),

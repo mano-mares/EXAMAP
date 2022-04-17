@@ -23,6 +23,10 @@ class Exam with ChangeNotifier {
     notifyListeners();
   }
 
+  Question getQuestionAt(int index) {
+    return _questions[index];
+  }
+
   void removeQuestionAt(int index) {
     _questions.removeAt(index);
 
