@@ -31,6 +31,7 @@ class _OpenQuestionFormState extends State<OpenQuestionForm> {
       String questionText = _questionController.text;
       int maxPoint = int.parse(_scoreController.text);
 
+      // Add an open question to the exam
       context.read<Exam>().addQuestion(
             OpenQuestion(
               id: uuid.v4(),
@@ -42,6 +43,15 @@ class _OpenQuestionFormState extends State<OpenQuestionForm> {
 
       // Go back to create exam page.
       Navigator.pop(context);
+
+      // Show snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(strings.snackbar),
+          duration: Duration(milliseconds: 1500),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
     }
   }
 
@@ -117,16 +127,7 @@ class _OpenQuestionFormState extends State<OpenQuestionForm> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    _addOpenQuestion();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(strings.snackbar),
-                        duration: Duration(milliseconds: 1500),
-                        behavior: SnackBarBehavior.floating,
-                      ),
-                    );
-                  },
+                  onPressed: _addOpenQuestion,
                   child: const Text(strings.buttonText),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(20.0),
