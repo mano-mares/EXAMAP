@@ -24,7 +24,7 @@ class QuestionCard extends StatelessWidget {
   }
 
   void _edit() {
-    print('TODO: go to edit card $index');
+    // TODO: edit card information
   }
 
   @override

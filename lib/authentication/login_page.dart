@@ -1,4 +1,3 @@
-import 'package:examap/main.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import '../firebase_options.dart';
@@ -17,7 +16,7 @@ class LoginPage extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
             leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: Colors.white),
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () {
                 Navigator.pop(context);
               },

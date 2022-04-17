@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/exam.dart';
-import '../../models/question.dart';
+import '../../models/questions/question.dart';
 import '../strings.dart' as strings;
 
 class ExamQuestionsList extends StatefulWidget {

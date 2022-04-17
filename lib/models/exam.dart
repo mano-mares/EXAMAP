@@ -1,6 +1,5 @@
-import 'package:examap/models/question.dart';
+import 'package:examap/models/questions/question.dart';
 import 'package:flutter/cupertino.dart';
-import '../create_exam/strings.dart' as strings;
 
 class Exam with ChangeNotifier {
   String _subject = '';

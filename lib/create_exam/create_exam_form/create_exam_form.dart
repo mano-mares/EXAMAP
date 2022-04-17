@@ -69,8 +69,7 @@ class _CreateExamFormState extends State<CreateExamForm> {
 
       context.read<Exam>().subject = subject;
       context.read<Exam>().timeLimit = timeLimit;
-      print(
-          'Clicked! Exam object with subject: ${context.read<Exam>().subject}, time: ${context.read<Exam>().timeLimit}');
+
       // TODO: Go to admin home page
 
       // TODO: sync exam to firebase

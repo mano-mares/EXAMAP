@@ -1,4 +1,4 @@
-import 'package:examap/models/question.dart';
+import 'package:examap/models/questions/question.dart';
 
 class OpenQuestion extends Question {
   OpenQuestion(
