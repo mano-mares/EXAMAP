@@ -1,10 +1,11 @@
 import 'package:examap/create_exam/create_exam_form/question_card.dart';
-import 'package:examap/create_exam/question_type.dart';
+import 'package:examap/models/questions/question_type.dart';
+import 'package:examap/open_question/open_question_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/exam.dart';
-import '../../models/question.dart';
+import '../../models/questions/question.dart';
 import '../strings.dart' as strings;
 
 class ExamQuestionsList extends StatefulWidget {
@@ -18,16 +19,16 @@ class _ExamQuestionsListState extends State<ExamQuestionsList> {
   void _addQuestion(QuestionType questionType) {
     switch (questionType) {
       case QuestionType.open:
-        // TODO: Handler this case.
-        print('TODO: Go to add open question form');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const OpenQuestionForm()),
+        );
         break;
       case QuestionType.multiple:
-        // TODO: Handle this case.
-        print('TODO: Go to add multiple choice form');
+        // TODO: Go to add multiple choice form:
         break;
       case QuestionType.code:
-        // TODO: Handle this case.
-        print('TODO: Go to add code correction form');
+        // TODO: Go to add code correction form
         break;
     }
     return;
@@ -54,16 +55,17 @@ class _ExamQuestionsListState extends State<ExamQuestionsList> {
               child: Consumer<Exam>(
                 builder: (context, exam, child) {
                   return ListView.builder(
-                      itemCount: exam.questions.length,
-                      itemBuilder: (context, index) {
-                        Question question = exam.questions[index];
-                        return QuestionCard(
-                            index: index,
-                            id: question.id,
-                            questionText: question.questionText,
-                            questionType: question.questionType,
-                            points: question.maxPoint);
-                      });
+                    itemCount: exam.questions.length,
+                    itemBuilder: (context, index) {
+                      Question question = exam.questions[index];
+                      return QuestionCard(
+                          index: index,
+                          id: question.id,
+                          questionText: question.questionText,
+                          questionType: question.questionType,
+                          points: question.maxPoint);
+                    },
+                  );
                 },
               ),
             ),

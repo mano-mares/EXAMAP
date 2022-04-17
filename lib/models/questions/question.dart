@@ -1,5 +1,5 @@
 class Question {
-  int id;
+  String id;
   String questionText;
   int maxPoint;
   String questionType;

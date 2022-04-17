@@ -4,7 +4,8 @@ import 'package:provider/provider.dart';
 import '../../models/exam.dart';
 
 class QuestionCard extends StatelessWidget {
-  final int index, id;
+  final int index;
+  final String id;
   final String questionText;
   final String questionType;
   final int points;
@@ -22,8 +23,8 @@ class QuestionCard extends StatelessWidget {
     context.read<Exam>().removeQuestionAt(index);
   }
 
-  void _edit() {
-    print('TODO: go to edit card $index');
+  void _edit(BuildContext context) {
+    // TODO: go to edit form.
   }
 
   @override
@@ -53,7 +54,7 @@ class QuestionCard extends StatelessWidget {
                   _delete(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Removed question $index from the list'),
+                      content: Text('Vraag $index verwijdert van de lijst'),
                       duration: const Duration(milliseconds: 1500),
                       behavior: SnackBarBehavior.floating,
                     ),
@@ -63,7 +64,7 @@ class QuestionCard extends StatelessWidget {
               const SizedBox(width: 8),
               IconButton(
                 icon: const Icon(Icons.edit),
-                onPressed: _edit,
+                onPressed: () => _edit(context),
               ),
               const SizedBox(width: 8),
             ],
