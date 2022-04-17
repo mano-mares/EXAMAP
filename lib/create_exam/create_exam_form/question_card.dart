@@ -54,7 +54,7 @@ class QuestionCard extends StatelessWidget {
                   _delete(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Removed question $index from the list'),
+                      content: Text('Vraag $index verwijdert van de lijst'),
                       duration: const Duration(milliseconds: 1500),
                       behavior: SnackBarBehavior.floating,
                     ),

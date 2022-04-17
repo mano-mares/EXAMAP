@@ -109,7 +109,16 @@ class _OpenQuestionFormState extends State<OpenQuestionForm> {
             ),
           ),
           ElevatedButton(
-            onPressed: _addOpenQuestion,
+            onPressed: () {
+              _addOpenQuestion();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Open vraag toegevoegd'),
+                  duration: Duration(milliseconds: 1500),
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+            },
             child: const Text(strings.buttonText),
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.all(20.0),
