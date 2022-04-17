@@ -1,3 +1,4 @@
+import 'package:examap/create_exam/create_exam.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'homepage_options/choose_option.dart';
@@ -19,37 +20,38 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.red,
         ),
-        home: Scaffold(
-          appBar: AppBar(),
-          body: Column(
-            children: [
-              Container(
-                child: const Text(
-                  "EXAMAP!",
-                  style: TextStyle(
-                    fontSize: 55.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                padding: const EdgeInsets.only(
-                  bottom: 100.0,
-                ),
-              ),
-              Container(
-                child: const Text(
-                  "Gelieve je rol te kiezen",
-                  style: TextStyle(
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                padding: const EdgeInsets.only(bottom: 100.0),
-              ),
-              ChooseOption(),
-            ],
-            mainAxisAlignment: MainAxisAlignment.center,
-          ),
-        ),
+        home: const CreateExamPage(),
+        // home: Scaffold(
+        //   appBar: AppBar(),
+        //   body: Column(
+        //     children: [
+        //       Container(
+        //         child: const Text(
+        //           "EXAMAP!",
+        //           style: TextStyle(
+        //             fontSize: 55.0,
+        //             fontWeight: FontWeight.bold,
+        //           ),
+        //         ),
+        //         padding: const EdgeInsets.only(
+        //           bottom: 100.0,
+        //         ),
+        //       ),
+        //       Container(
+        //         child: const Text(
+        //           "Gelieve je rol te kiezen",
+        //           style: TextStyle(
+        //             fontSize: 30.0,
+        //             fontWeight: FontWeight.bold,
+        //           ),
+        //         ),
+        //         padding: const EdgeInsets.only(bottom: 100.0),
+        //       ),
+        //       ChooseOption(),
+        //     ],
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //   ),
+        // ),
       ),
     );
   }
