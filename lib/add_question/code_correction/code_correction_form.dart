@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
+import '../../models/exam.dart';
+import '../../models/questions/code_correction_question.dart';
 import 'strings.dart' as strings;
 
 class CodeCorrectionForm extends StatefulWidget {
@@ -12,6 +16,7 @@ class CodeCorrectionForm extends StatefulWidget {
 class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final int _textAreaSize = 10;
+  final uuid = const Uuid();
   late TextEditingController _codeController,
       _correctCodeController,
       _pointController;
@@ -39,9 +44,33 @@ class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
   }
 
   void _addCodeCorrection() {
-    // TODO: add code correction to exam.
     if (_formKey.currentState!.validate()) {
-      print('add question');
+      String code = _codeController.text;
+      String correctCode = _correctCodeController.text;
+      int maxPoint = int.parse(_pointController.text);
+
+      // Add an open question to the exam
+      context.read<Exam>().addQuestion(
+            CodeCorrectionQuestion(
+              id: uuid.v4(),
+              questionText: code,
+              answerText: correctCode,
+              maxPoint: maxPoint,
+              questionType: 'Code correctie',
+            ),
+          );
+
+      // Go back to create exam page.
+      Navigator.pop(context);
+
+      // Show snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(strings.snackbar),
+          duration: Duration(milliseconds: 1500),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
     }
   }
 

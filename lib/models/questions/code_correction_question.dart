@@ -1,7 +1,7 @@
 import 'package:examap/models/questions/question.dart';
 
-class CodeCorrection extends Question {
-  CodeCorrection(
+class CodeCorrectionQuestion extends Question {
+  CodeCorrectionQuestion(
       {required String id,
       required String questionText,
       required String answerText,
