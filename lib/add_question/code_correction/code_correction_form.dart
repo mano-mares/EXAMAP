@@ -11,9 +11,38 @@ class CodeCorrectionForm extends StatefulWidget {
 
 class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final int _textAreaSize = 10;
+  late TextEditingController _codeController,
+      _correctCodeController,
+      _pointController;
+
+  @override
+  void initState() {
+    super.initState();
+    _codeController = TextEditingController();
+    _correctCodeController = TextEditingController();
+    _pointController = TextEditingController();
+  }
+
+  String? _validateCode(value) {
+    if (value == null || value.isEmpty) {
+      return 'Code is vereist';
+    }
+    return null;
+  }
+
+  String? _validatePoints(points) {
+    if (points == null || points.isEmpty) {
+      return 'Punt is vereist';
+    }
+    return null;
+  }
 
   void _addCodeCorrection() {
     // TODO: add code correction to exam.
+    if (_formKey.currentState!.validate()) {
+      print('add question');
+    }
   }
 
   @override
@@ -62,12 +91,14 @@ class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: TextFormField(
+                  controller: _codeController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
                   keyboardType: TextInputType.multiline,
-                  minLines: 9,
-                  maxLines: 9,
+                  minLines: _textAreaSize,
+                  maxLines: _textAreaSize,
+                  validator: _validateCode,
                 ),
               ),
               const SizedBox(
@@ -86,18 +117,20 @@ class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: TextFormField(
+                  controller: _correctCodeController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
                   keyboardType: TextInputType.multiline,
-                  minLines: 9,
-                  maxLines: 9,
+                  minLines: _textAreaSize,
+                  maxLines: _textAreaSize,
+                  validator: _validateCode,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: TextFormField(
-                  //controller: _scoreController,
+                  controller: _pointController,
                   decoration: const InputDecoration(
                     labelText: strings.labelPoint,
                     border: OutlineInputBorder(),
@@ -106,7 +139,7 @@ class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                   ],
-                  //validator: _validatePoints,
+                  validator: _validatePoints,
                 ),
               ),
               const SizedBox(
@@ -129,5 +162,13 @@ class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _codeController.dispose();
+    _correctCodeController.dispose();
+    _pointController.dispose();
+    super.dispose();
   }
 }
