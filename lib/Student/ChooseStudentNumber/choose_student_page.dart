@@ -1,5 +1,5 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'students.dart';
 
 class ChooseStudentPage extends StatefulWidget {
   const ChooseStudentPage({Key? key}) : super(key: key);
@@ -10,7 +10,18 @@ class ChooseStudentPage extends StatefulWidget {
 
 class _ChooseStudentPageState extends State<ChooseStudentPage> {
   @override
+  final studentNumberController = TextEditingController();
   final List<String> Students = ["S107983", "S208148", "S108953"];
+  void checkStudentNumber() {
+    if (studentNumberController.text.trim() == Students[0]) {
+      print("Juist");
+      //navigate to next page
+    } else {
+      print("fout");
+      //foutmelding
+    }
+  }
+
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return MaterialApp(
@@ -47,7 +58,7 @@ class _ChooseStudentPageState extends State<ChooseStudentPage> {
                           alignment: Alignment.topCenter,
                           padding: const EdgeInsets.only(top: 50),
                           child: const Text(
-                            "Voer je studentenummer in",
+                            "Voer je studentennummer in",
                             style: TextStyle(fontSize: 32, color: Colors.white),
                           ),
                         ),
@@ -69,8 +80,9 @@ class _ChooseStudentPageState extends State<ChooseStudentPage> {
                                   ),
                                 )
                               ]),
-                          child: const TextField(
-                            decoration: InputDecoration(
+                          child: TextFormField(
+                            controller: studentNumberController,
+                            decoration: const InputDecoration(
                               icon: Icon(Icons.search),
                               hintText: "Studentennummer",
                               hintStyle: TextStyle(
@@ -93,7 +105,25 @@ class _ChooseStudentPageState extends State<ChooseStudentPage> {
                           MaterialStateProperty.all(const EdgeInsets.all(25)),
                     ),
                     onPressed: () {
-                      //Check Student
+                      if ("S10798sdf3" == studentNumbers[0]) {
+                        print("Juist");
+                      } else {
+                        print("fout");
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text('Wrong studentnumber!'),
+                            content:
+                                const Text('Please enter a new student number'),
+                            actions: [
+                              TextButton(
+                                child: const Text('Close'),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     },
                     child: const Text(
                       "Ga verder",
@@ -104,13 +134,10 @@ class _ChooseStudentPageState extends State<ChooseStudentPage> {
                 Container(
                   alignment: Alignment.center,
                   margin: const EdgeInsets.only(top: 400),
-                  child: Positioned(
-                    top: 700,
-                    child: Image.asset(
-                      'assets/images/undraw_exams.png',
-                      width: 300,
-                      height: 300,
-                    ),
+                  child: Image.asset(
+                    'assets/images/undraw_exams.png',
+                    width: 300,
+                    height: 300,
                   ),
                 ),
               ],

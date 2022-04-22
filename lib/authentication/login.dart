@@ -18,7 +18,6 @@ class _LoginState extends State<Login> {
   bool passwordHidden = false;
   void passwordForgot() {
     auth.sendPasswordResetEmail(email: emailController.text.trim());
-    print("Paswoord reset verstuurd");
   }
 
   void togglePasswordView() {
@@ -83,7 +82,7 @@ class _LoginState extends State<Login> {
                         return null;
                       },
                       controller: emailController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           border: OutlineInputBorder(), labelText: 'Email'),
                     )),
                 Container(
@@ -100,7 +99,7 @@ class _LoginState extends State<Login> {
                       obscureText: !passwordHidden,
                       decoration: InputDecoration(
                           fillColor: Colors.red,
-                          border: OutlineInputBorder(),
+                          border: const OutlineInputBorder(),
                           labelText: 'Wachtwoord',
                           suffix: InkWell(
                               onTap: togglePasswordView,
