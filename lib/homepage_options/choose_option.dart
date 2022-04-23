@@ -1,4 +1,4 @@
-import 'package:examap/Student/ChooseStudentNumber/choose_student_page.dart';
+import 'package:examap/Student/choose_student_number/choose_student_page.dart';
 import 'package:examap/authentication/login_page.dart';
 import 'package:flutter/material.dart';
 
