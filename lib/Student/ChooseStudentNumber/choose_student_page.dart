@@ -11,7 +11,8 @@ class ChooseStudentPage extends StatefulWidget {
 class _ChooseStudentPageState extends State<ChooseStudentPage> {
   @override
   final studentNumberController = TextEditingController();
-  final List<String> Students = ["S107983", "S208148", "S108953"];
+  List<String> Students = ["S107983", "S208148", "S108953"];
+  bool flagWrongStudentNumber = false;
   void checkStudentNumber() {
     if (studentNumberController.text.trim() == Students[0]) {
       print("Juist");
@@ -105,7 +106,16 @@ class _ChooseStudentPageState extends State<ChooseStudentPage> {
                           MaterialStateProperty.all(const EdgeInsets.all(25)),
                     ),
                     onPressed: () {
-                      if ("S10798sdf3" == studentNumbers[0]) {
+                      flagWrongStudentNumber = false;
+                      for (var i = 0; i < studentNumbers.length; i++) {
+                        if (studentNumberController.text.trim() ==
+                            studentNumbers[i]) {
+                          print("Juist");
+                          flagWrongStudentNumber = true;
+                        }
+                      }
+                      if (flagWrongStudentNumber == true) {
+                        //navigate to other page
                         print("Juist");
                       } else {
                         print("fout");
