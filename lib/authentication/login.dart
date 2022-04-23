@@ -1,4 +1,5 @@
 import 'package:examap/create_exam/create_exam.dart';
+import 'package:examap/homepage_docent/homepase_docent.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -29,19 +30,23 @@ class _LoginState extends State<Login> {
 
   void loginFirebase() async {
     try {
-      formKey.currentState!.validate();
-      setState(() {
-        wrongLogin = false;
-      });
-      await auth.signInWithEmailAndPassword(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim());
-      if (auth.currentUser != null) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const CreateExamPage()),
-        );
-      }
+      // formKey.currentState!.validate();
+      // setState(() {
+      //   wrongLogin = false;
+      // });
+      // await auth.signInWithEmailAndPassword(
+      //     email: emailController.text.trim(),
+      //     password: passwordController.text.trim());
+      // if (auth.currentUser != null) {
+      //   Navigator.push(
+      //     context,
+      //     MaterialPageRoute(builder: (context) => const HomePageDocent()),
+      //   );
+      // }
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePageDocent()),
+      );
     } catch (e) {
       setState(() {
         wrongLogin = true;
