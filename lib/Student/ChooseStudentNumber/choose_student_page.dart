@@ -11,17 +11,7 @@ class ChooseStudentPage extends StatefulWidget {
 class _ChooseStudentPageState extends State<ChooseStudentPage> {
   @override
   final studentNumberController = TextEditingController();
-  List<String> Students = ["S107983", "S208148", "S108953"];
   bool flagWrongStudentNumber = false;
-  void checkStudentNumber() {
-    if (studentNumberController.text.trim() == Students[0]) {
-      print("Juist");
-      //navigate to next page
-    } else {
-      print("fout");
-      //foutmelding
-    }
-  }
 
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -110,15 +100,12 @@ class _ChooseStudentPageState extends State<ChooseStudentPage> {
                       for (var i = 0; i < studentNumbers.length; i++) {
                         if (studentNumberController.text.trim() ==
                             studentNumbers[i]) {
-                          print("Juist");
                           flagWrongStudentNumber = true;
                         }
                       }
                       if (flagWrongStudentNumber == true) {
                         //navigate to other page
-                        print("Juist");
                       } else {
-                        print("fout");
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
