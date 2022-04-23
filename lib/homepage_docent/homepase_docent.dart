@@ -1,3 +1,4 @@
+import 'package:examap/create_exam/create_exam.dart';
 import 'package:flutter/material.dart';
 import '../app_bar/my_app_bar.dart';
 import './strings.dart' as strings;
@@ -42,7 +43,13 @@ class HomePageDocent extends StatelessWidget {
                   primary: Colors.red,
                   textStyle: const TextStyle(
                       fontSize: 20, fontWeight: FontWeight.bold)),
-              onPressed: () {}, //TODO: Redirect to Examen aanmaken page
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const CreateExamPage()),
+                );
+              },
             ),
             const SizedBox(height: 20),
             ElevatedButton(

@@ -30,23 +30,19 @@ class _LoginState extends State<Login> {
 
   void loginFirebase() async {
     try {
-      // formKey.currentState!.validate();
-      // setState(() {
-      //   wrongLogin = false;
-      // });
-      // await auth.signInWithEmailAndPassword(
-      //     email: emailController.text.trim(),
-      //     password: passwordController.text.trim());
-      // if (auth.currentUser != null) {
-      //   Navigator.push(
-      //     context,
-      //     MaterialPageRoute(builder: (context) => const HomePageDocent()),
-      //   );
-      // }
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePageDocent()),
-      );
+      formKey.currentState!.validate();
+      setState(() {
+        wrongLogin = false;
+      });
+      await auth.signInWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim());
+      if (auth.currentUser != null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePageDocent()),
+        );
+      }
     } catch (e) {
       setState(() {
         wrongLogin = true;
