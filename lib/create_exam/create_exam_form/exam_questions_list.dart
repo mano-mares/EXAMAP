@@ -1,9 +1,10 @@
+import 'package:examap/add_question/code_correction/code_correction_form.dart';
 import 'package:examap/create_exam/create_exam_form/question_card.dart';
 import 'package:examap/models/questions/question_type.dart';
-import 'package:examap/open_question/open_question_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../add_question/open_question/open_question_form.dart';
 import '../../models/exam.dart';
 import '../../models/questions/question.dart';
 import '../strings.dart' as strings;
@@ -28,7 +29,10 @@ class _ExamQuestionsListState extends State<ExamQuestionsList> {
         // TODO: Go to add multiple choice form:
         break;
       case QuestionType.code:
-        // TODO: Go to add code correction form
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const CodeCorrectionForm()),
+        );
         break;
     }
     return;

@@ -38,7 +38,13 @@ class QuestionCard extends StatelessWidget {
               '${index + 1}.',
               style: const TextStyle(fontWeight: FontWeight.w400),
             ),
-            title: Text(questionText),
+            title: identical(questionType, 'Code correctie')
+                ? Text(
+                    '${questionText.split('\n')[0]}...',
+                    maxLines: 1,
+                    softWrap: false,
+                  )
+                : Text(questionText),
             subtitle: Text(
               questionType,
               style: const TextStyle(fontFamily: 'cursive'),
