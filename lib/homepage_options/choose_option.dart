@@ -1,3 +1,4 @@
+import 'package:examap/Student/choose_student_number/choose_student_page.dart';
 import 'package:examap/authentication/login_page.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +10,10 @@ class ChooseOption extends StatelessWidget {
       children: [
         ElevatedButton(
           onPressed: () {
-            //Navigation to student
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ChooseStudentPage()),
+            );
           },
           child: const Text(
             "Student",
