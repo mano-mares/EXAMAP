@@ -1,9 +1,10 @@
-import 'package:examap/models/questions/open_question.dart';
+import 'package:examap/models/questions/open_question/open_question.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import '../../models/exam.dart';
+import '../../models/questions/open_question/open_question.dart';
 import 'strings.dart' as strings;
 
 class OpenQuestionForm extends StatefulWidget {
