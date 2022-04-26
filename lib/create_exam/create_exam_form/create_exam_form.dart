@@ -80,47 +80,49 @@ class _CreateExamFormState extends State<CreateExamForm> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: Column(children: [
-        TextFormField(
-          controller: _nameController,
-          decoration: const InputDecoration(
-            labelText: strings.labelSubject,
-            border: OutlineInputBorder(),
-          ),
-          validator: _validateName,
-        ),
-        const SizedBox(height: 16.0),
-        TextFormField(
-          controller: _timeController,
-          decoration: const InputDecoration(
-            labelText: strings.labelTimeLimit,
-            border: OutlineInputBorder(),
-          ),
-          readOnly: true,
-          onTap: _selectTime,
-        ),
-        const Expanded(
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 0.0),
-            child: ExamQuestionsList(),
-          ),
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: ElevatedButton(
-                child: const Text(strings.createButtonText),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(24.0),
-                  textStyle: const TextStyle(fontSize: 16.0),
-                  primary: Colors.redAccent[700],
-                ),
-                onPressed: () => _createExam(context),
-              ),
+      child: Column(
+        children: [
+          TextFormField(
+            controller: _nameController,
+            decoration: const InputDecoration(
+              labelText: strings.labelSubject,
+              border: OutlineInputBorder(),
             ),
-          ],
-        )
-      ]),
+            validator: _validateName,
+          ),
+          const SizedBox(height: 16.0),
+          TextFormField(
+            controller: _timeController,
+            decoration: const InputDecoration(
+              labelText: strings.labelTimeLimit,
+              border: OutlineInputBorder(),
+            ),
+            readOnly: true,
+            onTap: _selectTime,
+          ),
+          const Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 0.0),
+              child: ExamQuestionsList(),
+            ),
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  child: const Text(strings.createButtonText),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(24.0),
+                    textStyle: const TextStyle(fontSize: 16.0),
+                    primary: Colors.redAccent[700],
+                  ),
+                  onPressed: () => _createExam(context),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }
