@@ -1,4 +1,5 @@
 import 'package:examap/add_question/code_correction/code_correction_form.dart';
+import 'package:examap/add_question/multiple_choice/multiple_choice_form.dart';
 import 'package:examap/create_exam/create_exam_form/question_card.dart';
 import 'package:examap/models/questions/question_type.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,10 @@ class _ExamQuestionsListState extends State<ExamQuestionsList> {
         );
         break;
       case QuestionType.multiple:
-        // TODO: Go to add multiple choice form:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const MultipleChoiceForm()),
+        );
         break;
       case QuestionType.code:
         Navigator.push(
