@@ -1,9 +1,9 @@
 class Answer {
-  String answerText;
-  bool isCorrect;
+  String? answerText;
+  bool? isCorrect;
 
   Answer({
-    required this.answerText,
-    required this.isCorrect,
+    this.answerText,
+    this.isCorrect,
   });
 }

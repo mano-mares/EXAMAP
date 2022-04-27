@@ -1,6 +1,7 @@
 import 'package:examap/add_question/multiple_choice/answer_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../models/questions/multiple_choice/answer.dart';
 import 'strings.dart' as strings;
 
 class MultipleChoiceForm extends StatefulWidget {
@@ -23,6 +24,18 @@ class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
 
   void _addMultipleChoice() {
     // TODO: implement this function.
+  }
+
+  void _getAnswerA(Answer answer) {
+    print('I got answer A ${answer.answerText} and ${answer.isCorrect}');
+  }
+
+  void _getAnswerB(Answer answer) {
+    print('I got answer B ${answer.answerText} and ${answer.isCorrect}');
+  }
+
+  void _getAnswerC(Answer answer) {
+    print('I got answer C ${answer.answerText} and ${answer.isCorrect}');
   }
 
   @override
@@ -81,8 +94,8 @@ class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
                 color: const Color.fromARGB(255, 245, 241, 241),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: const [
-                    Center(
+                  children: [
+                    const Center(
                       child: Text(
                         strings.headingText,
                         style: TextStyle(
@@ -91,12 +104,15 @@ class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
                     ),
                     AnswerForm(
                       index: 'A',
+                      answer: (Answer answer) => _getAnswerA(answer),
                     ),
                     AnswerForm(
                       index: 'B',
+                      answer: (Answer answer) => _getAnswerB(answer),
                     ),
                     AnswerForm(
                       index: 'C',
+                      answer: (Answer answer) => _getAnswerC(answer),
                     ),
                   ],
                 ),
