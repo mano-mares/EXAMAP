@@ -1,6 +1,8 @@
 import 'package:examap/add_question/multiple_choice/answer_form.dart';
+import 'package:examap/models/questions/multiple_choice/multiple_choice_question.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:uuid/uuid.dart';
 import '../../models/questions/multiple_choice/answer.dart';
 import 'strings.dart' as strings;
 
@@ -12,8 +14,10 @@ class MultipleChoiceForm extends StatefulWidget {
 }
 
 class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
+  final uuid = const Uuid();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController _questionController, _pointController;
+  Answer? answerA, answerB, answerC;
 
   @override
   void initState() {
@@ -24,20 +28,33 @@ class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
 
   void _addMultipleChoice() {
     if (_formKey.currentState!.validate()) {
-      // TODO: implement this function.
+      String questionText = _questionController.text;
+      int maxPoint = int.parse(_pointController.text);
+      List<Answer> answers = [answerA!, answerB!, answerC!];
+
+      MultipleChoiceQuestion question = MultipleChoiceQuestion(
+        id: uuid.v4(),
+        questionText: questionText,
+        maxPoint: maxPoint,
+        questionType: 'Meerkeuze',
+        possibleAnswers: answers,
+      );
     }
   }
 
   void _getAnswerA(Answer answer) {
     print('I got answer A ${answer.answerText} and ${answer.isCorrect}');
+    answerA = answer;
   }
 
   void _getAnswerB(Answer answer) {
     print('I got answer B ${answer.answerText} and ${answer.isCorrect}');
+    answerB = answer;
   }
 
   void _getAnswerC(Answer answer) {
     print('I got answer C ${answer.answerText} and ${answer.isCorrect}');
+    answerC = answer;
   }
 
   String? _validateQuestionText(questionText) {

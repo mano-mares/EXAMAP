@@ -15,4 +15,16 @@ class MultipleChoiceQuestion extends Question {
             questionText: questionText,
             maxPoint: maxPoint,
             questionType: questionType);
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    String base =
+        'id: ${id}, questionText: ${questionText}, maxPoint ${maxPoint}\n';
+    for (var answer in possibleAnswers) {
+      base += 'answer: ${answer.answerText}, isCorrect: ${answer.isCorrect}';
+      base += '\n';
+    }
+    return base;
+  }
 }
