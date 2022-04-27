@@ -23,7 +23,9 @@ class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
   }
 
   void _addMultipleChoice() {
-    // TODO: implement this function.
+    if (_formKey.currentState!.validate()) {
+      // TODO: implement this function.
+    }
   }
 
   void _getAnswerA(Answer answer) {
@@ -36,6 +38,27 @@ class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
 
   void _getAnswerC(Answer answer) {
     print('I got answer C ${answer.answerText} and ${answer.isCorrect}');
+  }
+
+  String? _validateQuestionText(questionText) {
+    if (questionText == null || questionText.isEmpty) {
+      return 'Vraag is vereist';
+    }
+    return null;
+  }
+
+  String? _validatePoints(points) {
+    if (points == null || points.isEmpty) {
+      return 'Punt is vereist';
+    }
+    return null;
+  }
+
+  String? _validateAnswer(answer) {
+    if (answer == null || answer.isEmpty) {
+      return 'Antwoord is vereist';
+    }
+    return null;
   }
 
   @override
@@ -75,6 +98,7 @@ class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
                   labelText: strings.labelQuestion,
                   border: OutlineInputBorder(),
                 ),
+                validator: _validateQuestionText,
               ),
               const SizedBox(height: 16.0),
               TextFormField(
@@ -87,6 +111,7 @@ class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                 ],
+                validator: _validatePoints,
               ),
               const SizedBox(height: 16.0),
               Container(
@@ -105,14 +130,17 @@ class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
                     AnswerForm(
                       index: 'A',
                       answer: (Answer answer) => _getAnswerA(answer),
+                      validator: () => _validateAnswer,
                     ),
                     AnswerForm(
                       index: 'B',
                       answer: (Answer answer) => _getAnswerB(answer),
+                      validator: () => _validateAnswer,
                     ),
                     AnswerForm(
                       index: 'C',
                       answer: (Answer answer) => _getAnswerC(answer),
+                      validator: () => _validateAnswer,
                     ),
                   ],
                 ),

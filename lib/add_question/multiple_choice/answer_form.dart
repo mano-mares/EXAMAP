@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import '../../models/questions/multiple_choice/answer.dart';
 
 class AnswerForm extends StatefulWidget {
   final String index;
   final Function(Answer) answer;
-  const AnswerForm({Key? key, required this.index, required this.answer})
-      : super(key: key);
+  final Function validator;
+  const AnswerForm({
+    Key? key,
+    required this.index,
+    required this.answer,
+    required this.validator,
+  }) : super(key: key);
 
   @override
   State<AnswerForm> createState() => _AnswerFormState();
@@ -16,8 +22,6 @@ class _AnswerFormState extends State<AnswerForm> {
   String dropdownValue = 'Fout';
   final TextEditingController _answerController = TextEditingController();
   Answer data = Answer();
-  String? answerText;
-  bool? isCorrect;
 
   @override
   void initState() {
@@ -52,13 +56,6 @@ class _AnswerFormState extends State<AnswerForm> {
     }).toList();
   }
 
-  // void _sendData(String value) {
-  //   bool isCorrect = (dropdownValue == 'Correct');
-  //   Answer data =
-  //       Answer(answerText: _answerController.text, isCorrect: isCorrect);
-  //   widget.answer(data);
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -80,6 +77,7 @@ class _AnswerFormState extends State<AnswerForm> {
               labelText: 'Antwoord',
               border: OutlineInputBorder(),
             ),
+            validator: widget.validator(),
           ),
         ),
         Flexible(
