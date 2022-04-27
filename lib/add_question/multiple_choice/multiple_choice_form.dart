@@ -1,3 +1,4 @@
+import 'package:examap/add_question/multiple_choice/answer_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'strings.dart' as strings;
@@ -18,6 +19,10 @@ class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
     super.initState();
     _questionController = TextEditingController();
     _pointController = TextEditingController();
+  }
+
+  void _addMultipleChoice() {
+    // TODO: implement this function.
   }
 
   @override
@@ -69,6 +74,36 @@ class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                 ],
+              ),
+              const SizedBox(height: 16.0),
+              Container(
+                height: 400,
+                color: const Color.fromARGB(255, 245, 241, 241),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: const [
+                    Center(
+                      child: Text(
+                        strings.headingText,
+                        style: TextStyle(
+                            fontSize: 24.0, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    AnswerForm(),
+                    AnswerForm(),
+                    AnswerForm(),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: _addMultipleChoice,
+                child: const Text(strings.buttonText),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(20.0),
+                  textStyle: const TextStyle(fontSize: 16.0),
+                  primary: Colors.redAccent[700],
+                ),
               ),
             ],
           ),

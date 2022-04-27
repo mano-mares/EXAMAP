@@ -4,3 +4,5 @@ const String title = 'Meerkeuze';
 const String description = 'Voeg een meerkeuze vraag toe aan het examen.';
 const String labelQuestion = 'Vraag';
 const String labelPoints = 'Punt';
+const String headingText = 'Antwoorden';
+const String buttonText = 'Toevoegen';
