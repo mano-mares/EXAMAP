@@ -1,8 +1,10 @@
-import 'package:examap/add_question/multiple_choice/answer_form.dart';
+import 'package:examap/add_question/multiple_choice/multiple_choice_answer_form.dart';
 import 'package:examap/models/questions/multiple_choice/multiple_choice_question.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
+import '../../models/exam.dart';
 import '../../models/questions/multiple_choice/answer.dart';
 import 'strings.dart' as strings;
 
@@ -39,21 +41,33 @@ class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
         questionType: 'Meerkeuze',
         possibleAnswers: answers,
       );
+
+      // Add question to exam
+      context.read<Exam>().addQuestion(question);
+
+      // Go back to create exam page.
+      Navigator.pop(context);
+
+      // Show snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(strings.snackBar),
+          duration: Duration(milliseconds: 1500),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
     }
   }
 
   void _getAnswerA(Answer answer) {
-    print('I got answer A ${answer.answerText} and ${answer.isCorrect}');
     answerA = answer;
   }
 
   void _getAnswerB(Answer answer) {
-    print('I got answer B ${answer.answerText} and ${answer.isCorrect}');
     answerB = answer;
   }
 
   void _getAnswerC(Answer answer) {
-    print('I got answer C ${answer.answerText} and ${answer.isCorrect}');
     answerC = answer;
   }
 
@@ -144,17 +158,17 @@ class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
                             fontSize: 24.0, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    AnswerForm(
+                    MultipleChoiceAnswerForm(
                       index: 'A',
                       answer: (Answer answer) => _getAnswerA(answer),
                       validator: () => _validateAnswer,
                     ),
-                    AnswerForm(
+                    MultipleChoiceAnswerForm(
                       index: 'B',
                       answer: (Answer answer) => _getAnswerB(answer),
                       validator: () => _validateAnswer,
                     ),
-                    AnswerForm(
+                    MultipleChoiceAnswerForm(
                       index: 'C',
                       answer: (Answer answer) => _getAnswerC(answer),
                       validator: () => _validateAnswer,

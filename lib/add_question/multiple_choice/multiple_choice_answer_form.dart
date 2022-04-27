@@ -3,11 +3,11 @@ import 'package:flutter/rendering.dart';
 
 import '../../models/questions/multiple_choice/answer.dart';
 
-class AnswerForm extends StatefulWidget {
+class MultipleChoiceAnswerForm extends StatefulWidget {
   final String index;
   final Function(Answer) answer;
   final Function validator;
-  const AnswerForm({
+  const MultipleChoiceAnswerForm({
     Key? key,
     required this.index,
     required this.answer,
@@ -15,10 +15,11 @@ class AnswerForm extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<AnswerForm> createState() => _AnswerFormState();
+  State<MultipleChoiceAnswerForm> createState() =>
+      _MultipleChoiceAnswerFormState();
 }
 
-class _AnswerFormState extends State<AnswerForm> {
+class _MultipleChoiceAnswerFormState extends State<MultipleChoiceAnswerForm> {
   String dropdownValue = 'Fout';
   final TextEditingController _answerController = TextEditingController();
   Answer data = Answer();

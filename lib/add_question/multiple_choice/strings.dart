@@ -6,3 +6,5 @@ const String labelQuestion = 'Vraag';
 const String labelPoints = 'Punt';
 const String headingText = 'Antwoorden';
 const String buttonText = 'Toevoegen';
+
+const String snackBar = 'Meerkeuze vraag toegevoegd';
