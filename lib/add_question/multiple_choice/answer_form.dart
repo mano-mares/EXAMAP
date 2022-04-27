@@ -29,11 +29,13 @@ class _AnswerFormState extends State<AnswerForm> {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        const Text('A'),
-        Container(
-          width: 500,
+        const Flexible(
+          child: Text('A'),
+        ),
+        Expanded(
+          flex: 5,
           child: TextFormField(
             decoration: const InputDecoration(
               labelText: 'Antwoord',
@@ -41,12 +43,14 @@ class _AnswerFormState extends State<AnswerForm> {
             ),
           ),
         ),
-        DropdownButton<String>(
-          value: dropdownValue,
-          icon: const Icon(Icons.arrow_downward),
-          elevation: 16,
-          onChanged: _setValue,
-          items: _options(),
+        Flexible(
+          child: DropdownButton<String>(
+            value: dropdownValue,
+            icon: const Icon(Icons.arrow_downward),
+            elevation: 16,
+            onChanged: _setValue,
+            items: _options(),
+          ),
         ),
       ],
     );
