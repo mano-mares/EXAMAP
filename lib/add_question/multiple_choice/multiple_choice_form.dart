@@ -81,17 +81,23 @@ class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
                 color: const Color.fromARGB(255, 245, 241, 241),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: const [
-                    Center(
+                  children: [
+                    const Center(
                       child: Text(
                         strings.headingText,
                         style: TextStyle(
                             fontSize: 24.0, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    AnswerForm(),
-                    AnswerForm(),
-                    AnswerForm(),
+                    AnswerForm(
+                      index: 'A',
+                    ),
+                    AnswerForm(
+                      index: 'B',
+                    ),
+                    AnswerForm(
+                      index: 'C',
+                    ),
                   ],
                 ),
               ),

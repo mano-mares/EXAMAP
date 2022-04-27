@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AnswerForm extends StatefulWidget {
-  const AnswerForm({Key? key}) : super(key: key);
+  String index;
+  AnswerForm({Key? key, required this.index}) : super(key: key);
 
   @override
   State<AnswerForm> createState() => _AnswerFormState();
@@ -31,8 +32,8 @@ class _AnswerFormState extends State<AnswerForm> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        const Flexible(
-          child: Text('A'),
+        Flexible(
+          child: Text(widget.index),
         ),
         Expanded(
           flex: 5,
