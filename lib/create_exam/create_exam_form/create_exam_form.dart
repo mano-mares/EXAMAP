@@ -57,7 +57,7 @@ class _CreateExamFormState extends State<CreateExamForm> {
 
   String? _validateName(name) {
     if (name == null || name.isEmpty) {
-      return 'Vul een naam in';
+      return 'Naam is vereist';
     }
     return null;
   }
@@ -69,6 +69,8 @@ class _CreateExamFormState extends State<CreateExamForm> {
 
       context.read<Exam>().subject = subject;
       context.read<Exam>().timeLimit = timeLimit;
+
+      print(context.read<Exam>());
 
       // TODO: Go to admin home page
 

@@ -39,15 +39,17 @@ class HomePageDocent extends StatelessWidget {
             ElevatedButton(
               child: const Text(strings.createExamBtnLabel),
               style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(240, 80),
-                  primary: Colors.red,
-                  textStyle: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold)),
+                fixedSize: const Size(240, 80),
+                primary: Colors.red,
+                textStyle:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const CreateExamPage()),
+                    builder: (context) => const CreateExamPage(),
+                  ),
                 );
               },
             ),
@@ -55,20 +57,22 @@ class HomePageDocent extends StatelessWidget {
             ElevatedButton(
               child: const Text(strings.correctExamBtnLabel),
               style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(240, 80),
-                  primary: Colors.red,
-                  textStyle: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold)),
+                fixedSize: const Size(240, 80),
+                primary: Colors.red,
+                textStyle:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
               onPressed: () {}, //TODO: Redirect to Examen verbeteren page
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               child: const Text(strings.studentListBtnLabel),
               style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(240, 80),
-                  primary: Colors.red,
-                  textStyle: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold)),
+                fixedSize: const Size(240, 80),
+                primary: Colors.red,
+                textStyle:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
               onPressed: () {}, //TODO: Redirect to Studenten lijst page
             ),
           ],
