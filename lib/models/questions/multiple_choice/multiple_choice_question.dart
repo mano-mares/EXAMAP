@@ -18,11 +18,10 @@ class MultipleChoiceQuestion extends Question {
 
   @override
   String toString() {
-    // TODO: implement toString
-    String base =
-        'id: ${id}, questionText: ${questionText}, maxPoint ${maxPoint}\n';
+    String base = super.toString();
+    base += '\nANSWERS';
     for (var answer in possibleAnswers) {
-      base += 'answer: ${answer.answerText}, isCorrect: ${answer.isCorrect}';
+      base += '\n$answer';
       base += '\n';
     }
     return base;

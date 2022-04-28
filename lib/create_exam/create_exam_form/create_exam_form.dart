@@ -57,7 +57,7 @@ class _CreateExamFormState extends State<CreateExamForm> {
 
   String? _validateName(name) {
     if (name == null || name.isEmpty) {
-      return 'Vul een naam in';
+      return 'Naam is vereist';
     }
     return null;
   }
@@ -67,12 +67,28 @@ class _CreateExamFormState extends State<CreateExamForm> {
       String subject = _nameController.text;
       String timeLimit = _timeController.text;
 
-      context.read<Exam>().subject = subject;
-      context.read<Exam>().timeLimit = timeLimit;
+      Exam exam = context.read<Exam>();
 
-      // TODO: Go to admin home page
+      // Set exam properties.
+      exam.subject = subject;
+      exam.timeLimit = timeLimit;
+
+      // Navigate back.
+      Navigator.pop(context);
+
+      // Show snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(strings.snackbar),
+          duration: Duration(milliseconds: 1500),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
 
       // TODO: sync exam to firebase
+
+      // Clear questions list.
+      exam.questions.clear();
     }
   }
 
