@@ -67,14 +67,28 @@ class _CreateExamFormState extends State<CreateExamForm> {
       String subject = _nameController.text;
       String timeLimit = _timeController.text;
 
-      context.read<Exam>().subject = subject;
-      context.read<Exam>().timeLimit = timeLimit;
+      Exam exam = context.read<Exam>();
 
-      print(context.read<Exam>());
+      // Set exam properties.
+      exam.subject = subject;
+      exam.timeLimit = timeLimit;
 
-      // TODO: Go to admin home page
+      // Navigate back.
+      Navigator.pop(context);
+
+      // Show snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(strings.snackbar),
+          duration: Duration(milliseconds: 1500),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
 
       // TODO: sync exam to firebase
+
+      // Clear questions list.
+      exam.questions.clear();
     }
   }
 
