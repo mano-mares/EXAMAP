@@ -1,9 +1,10 @@
-import 'package:examap/models/questions/open_question.dart';
+import 'package:examap/models/questions/open_question/open_question.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import '../../models/exam.dart';
+import '../../models/questions/open_question/open_question.dart';
 import 'strings.dart' as strings;
 
 class OpenQuestionForm extends StatefulWidget {
@@ -17,19 +18,19 @@ class _OpenQuestionFormState extends State<OpenQuestionForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final uuid = const Uuid();
   late TextEditingController _questionController;
-  late TextEditingController _scoreController;
+  late TextEditingController _pointController;
 
   @override
   void initState() {
     super.initState();
     _questionController = TextEditingController();
-    _scoreController = TextEditingController();
+    _pointController = TextEditingController();
   }
 
   void _addOpenQuestion() {
     if (_formKey.currentState!.validate()) {
       String questionText = _questionController.text;
-      int maxPoint = int.parse(_scoreController.text);
+      int maxPoint = int.parse(_pointController.text);
 
       // Add an open question to the exam
       context.read<Exam>().addQuestion(
@@ -113,7 +114,7 @@ class _OpenQuestionFormState extends State<OpenQuestionForm> {
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: TextFormField(
-                    controller: _scoreController,
+                    controller: _pointController,
                     decoration: const InputDecoration(
                       labelText: strings.labelPoints,
                       border: OutlineInputBorder(),
@@ -146,7 +147,7 @@ class _OpenQuestionFormState extends State<OpenQuestionForm> {
   @override
   void dispose() {
     _questionController.dispose();
-    _scoreController.dispose();
+    _pointController.dispose();
     super.dispose();
   }
 }
