@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import '../../models/exam.dart';
-import '../../models/questions/code_correction_question.dart';
+import '../../models/questions/code_correction/code_correction_question.dart';
 import 'strings.dart' as strings;
 
 class CodeCorrectionForm extends StatefulWidget {
