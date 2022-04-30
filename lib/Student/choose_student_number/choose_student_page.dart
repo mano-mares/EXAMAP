@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'students.dart';
+import '../../res/style/my_fontsize.dart' as sizes;
 
 class ChooseStudentPage extends StatefulWidget {
   const ChooseStudentPage({Key? key}) : super(key: key);
@@ -70,7 +72,7 @@ class _ChooseStudentPageState extends State<ChooseStudentPage> {
                       padding: const EdgeInsets.only(top: 50),
                       child: const Text(
                         "Voer je studentennummer in",
-                        style: TextStyle(fontSize: 32, color: Colors.white),
+                        style: TextStyle(fontSize: sizes.btnMedium, color: Colors.white),
                       ),
                     ),
                   ),
@@ -98,7 +100,7 @@ class _ChooseStudentPageState extends State<ChooseStudentPage> {
                           hintText: "Studentennummer",
                           hintStyle: TextStyle(
                             color: Colors.grey,
-                            fontSize: 20,
+                            fontSize: sizes.text,
                           ),
                         ),
                       ),
@@ -117,7 +119,7 @@ class _ChooseStudentPageState extends State<ChooseStudentPage> {
                 onPressed: checkStudent,
                 child: const Text(
                   "Ga verder",
-                  style: TextStyle(fontSize: 30),
+                  style: TextStyle(fontSize: sizes.medium),
                 ),
               ),
             ),
