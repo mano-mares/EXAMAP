@@ -1,6 +1,5 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:examap/main.dart';
 
 class StudentPhoto extends StatefulWidget {
   const StudentPhoto({Key? key}) : super(key: key);
@@ -9,6 +8,31 @@ class StudentPhoto extends StatefulWidget {
 }
 
 class _StudentPhotoState extends State<StudentPhoto> {
+  List<CameraDescription>? cameras; //list out the camera available
+  CameraController? controller; //controller for camera
+  XFile? image; //for caputred image
+
+  @override
+  void initState() {
+    loadCamera();
+    super.initState();
+  }
+
+  loadCamera() async {
+    cameras = await availableCameras();
+    if (cameras != null) {
+      controller = CameraController(cameras![0], ResolutionPreset.max);
+      controller!.initialize().then((_) {
+        if (!mounted) {
+          return;
+        }
+        setState(() {});
+      });
+    } else {
+      print("No cameras found");
+    }
+  }
+
   void confirmPhoto() {
     showDialog(
       context: context,
@@ -65,6 +89,21 @@ class _StudentPhotoState extends State<StudentPhoto> {
                     fontSize: 25,
                   ),
                 ),
+              ),
+              Column(
+                children: [
+                  SizedBox(
+                    height: 600,
+                    width: 400,
+                    child: controller == null
+                        ? const Center(child: Text("Loading Camera..."))
+                        : !controller!.value.isInitialized
+                            ? const Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : CameraPreview(controller!),
+                  ),
+                ],
               ),
               Container(
                 alignment: Alignment.center,
