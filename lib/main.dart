@@ -70,3 +70,41 @@ class MyApp extends StatelessWidget {
             body: StudentList()));
   }
 }
+
+
+// return MaterialApp(
+//         title: 'Choose Student',
+//         theme: ThemeData(primarySwatch: Colors.red),
+//         home: Scaffold(
+//           appBar: AppBar(),
+//           body: Column(
+//             children: [
+//               Container(
+//                 child: const Text(
+//                   "EXAMAP!",
+//                   style: TextStyle(
+//                     fontSize: sizes.title,
+//                     fontWeight: FontWeight.bold,
+//                   ),
+//                 ),
+//                 padding: const EdgeInsets.only(
+//                   bottom: 100.0,
+//                 ),
+//               ),
+//               Container(
+//                 child: const Text(
+//                   "Gelieve je rol te kiezen",
+//                   style: TextStyle(
+//                     fontSize: sizes.subTitle,
+//                     fontWeight: FontWeight.bold,
+//                   ),
+//                 ),
+//                 padding: const EdgeInsets.only(bottom: 100.0),
+//               ),
+//               ChooseOption(),
+//             ],
+//             mainAxisAlignment: MainAxisAlignment.center,
+//           ),
+//         ),
+//       ),
+//     );
