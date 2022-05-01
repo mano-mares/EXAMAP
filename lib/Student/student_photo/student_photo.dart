@@ -79,9 +79,10 @@ class _StudentPhotoState extends State<StudentPhoto> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(
-                width: 400,
-                child: Text(
+              Container(
+                padding: const EdgeInsets.all(20),
+                width: 450,
+                child: const Text(
                   "Voor de bevestiging van je identiteit vragen we je om een foto te nemen van jou met je studentenkaart",
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -106,18 +107,28 @@ class _StudentPhotoState extends State<StudentPhoto> {
                 ],
               ),
               Container(
+                padding: const EdgeInsets.only(top: 30),
                 alignment: Alignment.center,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      "assets/images/camera_icon.png",
-                      width: 50,
-                      height: 50,
+                    Container(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: Image.asset(
+                        "assets/images/camera_icon.png",
+                        width: 50,
+                        height: 50,
+                      ),
                     ),
                     ElevatedButton(
                       onPressed: confirmPhoto,
-                      child: const Text("Bevestig"),
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
+                        child: const Text(
+                          "Bevestig",
+                          style: TextStyle(fontSize: 30),
+                        ),
+                      ),
                     ),
                   ],
                 ),
