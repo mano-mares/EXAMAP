@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
+
 import '../../models/exam.dart';
 import '../../models/questions/multiple_choice/answer.dart';
 import 'strings.dart' as strings;
+import '../../res/style/my_fontsize.dart' as sizes;
 
 class MultipleChoiceForm extends StatefulWidget {
   const MultipleChoiceForm({Key? key}) : super(key: key);
@@ -110,7 +112,7 @@ class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
                   strings.title,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 50.0,
+                    fontSize: sizes.title,
                   ),
                 ),
               ),
@@ -118,7 +120,7 @@ class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
                 child: Text(
                   strings.description,
                   style: TextStyle(
-                    fontSize: 20.0,
+                    fontSize: sizes.text,
                   ),
                 ),
               ),
@@ -155,7 +157,7 @@ class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
                       child: Text(
                         strings.headingText,
                         style: TextStyle(
-                            fontSize: 24.0, fontWeight: FontWeight.bold),
+                            fontSize: sizes.headingText, fontWeight: FontWeight.bold),
                       ),
                     ),
                     MultipleChoiceAnswerForm(
@@ -182,7 +184,7 @@ class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
                 child: const Text(strings.buttonText),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.all(20.0),
-                  textStyle: const TextStyle(fontSize: 16.0),
+                  textStyle: const TextStyle(fontSize: sizes.btnXSmall),
                   primary: Colors.redAccent[700],
                 ),
               ),

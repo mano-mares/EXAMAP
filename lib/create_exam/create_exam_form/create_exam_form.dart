@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../strings.dart' as strings;
+import '../../res/style/my_fontsize.dart' as sizes;
 
 class CreateExamForm extends StatefulWidget {
   const CreateExamForm({Key? key}) : super(key: key);
@@ -129,7 +130,7 @@ class _CreateExamFormState extends State<CreateExamForm> {
                   child: const Text(strings.createButtonText),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(24.0),
-                    textStyle: const TextStyle(fontSize: 16.0),
+                    textStyle: const TextStyle(fontSize: sizes.btnXSmall),
                     primary: Colors.redAccent[700],
                   ),
                   onPressed: () => _createExam(context),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'homepage_options/choose_option.dart';
 import 'models/exam.dart';
+import 'res/style/my_fontsize.dart' as sizes;
 
 void main() {
   runApp(const MyApp());
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
                 child: const Text(
                   "EXAMAP!",
                   style: TextStyle(
-                    fontSize: 55.0,
+                    fontSize: sizes.title,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
                 child: const Text(
                   "Gelieve je rol te kiezen",
                   style: TextStyle(
-                    fontSize: 30.0,
+                    fontSize: sizes.subTitle,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
