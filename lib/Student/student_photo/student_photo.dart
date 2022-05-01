@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
@@ -112,13 +114,31 @@ class _StudentPhotoState extends State<StudentPhoto> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
+                    Padding(
                       padding: const EdgeInsets.only(right: 20),
-                      child: Image.asset(
-                        "assets/images/camera_icon.png",
-                        width: 50,
-                        height: 50,
-                      ),
+                      child: FloatingActionButton(
+                          onPressed: () async {
+                            try {
+                              if (controller != null) {
+                                if (controller!.value.isInitialized) {
+                                  image = await controller!.takePicture();
+                                  setState(() {});
+                                }
+                              }
+                            } catch (e) {
+                              print(e);
+                            }
+                          },
+                          child: const Icon(Icons.camera)),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      child: image == null
+                          ? const Text("No image captured")
+                          : Image.file(
+                              File(image!.path),
+                              height: 300,
+                            ),
                     ),
                     ElevatedButton(
                       onPressed: confirmPhoto,
