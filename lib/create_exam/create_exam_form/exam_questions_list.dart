@@ -9,6 +9,7 @@ import '../../add_question/open_question/open_question_form.dart';
 import '../../models/exam.dart';
 import '../../models/questions/question.dart';
 import '../strings.dart' as strings;
+import '../../res/style/my_fontsize.dart' as sizes;
 
 class ExamQuestionsList extends StatefulWidget {
   const ExamQuestionsList({Key? key}) : super(key: key);
@@ -53,7 +54,7 @@ class _ExamQuestionsListState extends State<ExamQuestionsList> {
             child: Center(
               child: Text(
                 strings.headingText,
-                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: sizes.headingText, fontWeight: FontWeight.bold),
               ),
             ),
           ),

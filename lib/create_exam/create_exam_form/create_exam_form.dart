@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../strings.dart' as strings;
+import '../../res/style/my_fontsize.dart' as sizes;
 
 class CreateExamForm extends StatefulWidget {
   const CreateExamForm({Key? key}) : super(key: key);
@@ -57,7 +58,7 @@ class _CreateExamFormState extends State<CreateExamForm> {
 
   String? _validateName(name) {
     if (name == null || name.isEmpty) {
-      return 'Vul een naam in';
+      return 'Naam is vereist';
     }
     return null;
   }
@@ -67,12 +68,28 @@ class _CreateExamFormState extends State<CreateExamForm> {
       String subject = _nameController.text;
       String timeLimit = _timeController.text;
 
-      context.read<Exam>().subject = subject;
-      context.read<Exam>().timeLimit = timeLimit;
+      Exam exam = context.read<Exam>();
 
-      // TODO: Go to admin home page
+      // Set exam properties.
+      exam.subject = subject;
+      exam.timeLimit = timeLimit;
+
+      // Navigate back.
+      Navigator.pop(context);
+
+      // Show snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(strings.snackbar),
+          duration: Duration(milliseconds: 1500),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
 
       // TODO: sync exam to firebase
+
+      // Clear questions list.
+      exam.questions.clear();
     }
   }
 
@@ -113,7 +130,7 @@ class _CreateExamFormState extends State<CreateExamForm> {
                   child: const Text(strings.createButtonText),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(24.0),
-                    textStyle: const TextStyle(fontSize: 16.0),
+                    textStyle: const TextStyle(fontSize: sizes.btnXSmall),
                     primary: Colors.redAccent[700],
                   ),
                   onPressed: () => _createExam(context),

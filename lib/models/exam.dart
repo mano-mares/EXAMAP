@@ -33,4 +33,15 @@ class Exam with ChangeNotifier {
     // This call tells the widgets that are listening to this model to rebuild.
     notifyListeners();
   }
+
+  @override
+  String toString() {
+    String base = 'Exam\n Subject: $_subject\n Time: $_timeLimit\n';
+    for (int i = 0; i < _questions.length; i++) {
+      dynamic question = _questions[i];
+      base += '$i. $question';
+      base += '\n';
+    }
+    return base;
+  }
 }

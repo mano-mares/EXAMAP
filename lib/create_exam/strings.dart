@@ -10,3 +10,4 @@ const String multipleChoice = 'Meerkeuze';
 const String codeCorrection = 'Code correctie';
 
 const String createButtonText = 'EXAMEN AANMAKEN';
+const String snackbar = 'Examen aangemaakt';
