@@ -1,3 +1,7 @@
+// https://github.com/liodali/osm_flutter/blob/master/example/lib/src/simple_example.dart
+
+import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 
@@ -35,6 +39,23 @@ class SimpleOSMState extends State<SimpleOSM>
     return OSMFlutter(
       controller: controller,
       trackMyPosition: true,
+      androidHotReloadSupport: true,
+      mapIsLoading: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const CircularProgressIndicator(),
+            const Text("Map is Loading..."),
+          ],
+        ),
+      ),
+      onMapIsReady: (isReady) {
+        if (isReady) {
+          print("map is ready");
+        }
+      },
       initZoom: 19,
       minZoomLevel: 17,
       maxZoomLevel: 14,
@@ -44,34 +65,64 @@ class SimpleOSMState extends State<SimpleOSM>
           icon: Icon(
             Icons.location_history_rounded,
             color: Colors.red,
-            size: 200,
+            size: 150,
           ),
         ),
         directionArrowMarker: const MarkerIcon(
           icon: Icon(
             Icons.double_arrow,
-            size: 48,
+            size: 150,
           ),
         ),
       ),
+      // showContributorBadgeForOSM: true,
+      // onLocationChanged: (myLocation) {
+      //   print(myLocation);
+      // },
+      staticPoints: [
+        StaticPositionGeoPoint(
+          "line 1",
+          const MarkerIcon(
+            icon: Icon(
+              Icons.location_history_rounded,
+              color: Colors.red,
+              size: 80,
+            ),
+          ),
+          [
+            GeoPoint(latitude: 51.23007740985662, longitude: 4.416186427790708),
+          ],
+        ),
+      ],
       roadConfiguration: RoadConfiguration(
         startIcon: const MarkerIcon(
-          icon: Icon(
+          icon: const Icon(
             Icons.person,
-            size: 200,
+            size: 64,
             color: Colors.brown,
           ),
         ),
-        roadColor: Colors.yellowAccent,
+        middleIcon: const MarkerIcon(
+          icon: Icon(Icons.location_history_sharp),
+        ),
+        roadColor: Colors.red,
       ),
       markerOption: MarkerOption(
-          defaultMarker: const MarkerIcon(
-        icon: const Icon(
-          Icons.person_pin_circle,
-          color: Colors.blue,
-          size: 56,
+        defaultMarker: const MarkerIcon(
+          icon: const Icon(
+            Icons.home,
+            color: Colors.orange,
+            size: 64,
+          ),
         ),
-      )),
+        advancedPickerMarker: const MarkerIcon(
+          icon: const Icon(
+            Icons.location_searching,
+            color: Colors.green,
+            size: 64,
+          ),
+        ),
+      ),
       showDefaultInfoWindow: true,
     );
   }
