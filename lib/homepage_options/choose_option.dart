@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import '../res/style/my_fontsize.dart' as sizes;
 
 class ChooseOption extends StatelessWidget {
+  const ChooseOption({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Row(
