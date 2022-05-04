@@ -1,7 +1,9 @@
 import 'dart:io';
-
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import '../../firebase_options.dart';
 
 class StudentPhoto extends StatefulWidget {
   const StudentPhoto({Key? key}) : super(key: key);
@@ -10,13 +12,16 @@ class StudentPhoto extends StatefulWidget {
 }
 
 class _StudentPhotoState extends State<StudentPhoto> {
+  bool isPhotoTaken = false;
   List<CameraDescription>? cameras; //list out the camera available
   CameraController? controller; //controller for camera
   XFile? image; //for caputred image
-
+  late FirebaseStorage storage;
   @override
   void initState() {
     loadCamera();
+    Firebase.initializeApp(options: DefaultFirebaseOptions.android);
+    storage = FirebaseStorage.instance;
     super.initState();
   }
 
@@ -35,6 +40,30 @@ class _StudentPhotoState extends State<StudentPhoto> {
     }
   }
 
+  void takePhoto() async {
+    try {
+      if (controller != null) {
+        if (controller!.value.isInitialized) {
+          image = await controller!.takePicture();
+          setState(() {});
+          isPhotoTaken = true;
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void uploadPhoto() async {
+    try {
+      final ref = storage.ref().child('file/');
+      File uploadImage = File(image!.path);
+      await ref.putFile(uploadImage);
+    } catch (e) {
+      print(e);
+    }
+  }
+
   void confirmPhoto() {
     showDialog(
       context: context,
@@ -47,9 +76,7 @@ class _StudentPhotoState extends State<StudentPhoto> {
             onPressed: () => Navigator.pop(context),
           ),
           ElevatedButton(
-            onPressed: () => {
-              //Navigate to next page,
-            },
+            onPressed: confirmPhoto,
             child: const Text(
               "Bevestig",
               style: TextStyle(fontSize: 20),
@@ -117,18 +144,7 @@ class _StudentPhotoState extends State<StudentPhoto> {
                     Padding(
                       padding: const EdgeInsets.only(right: 20),
                       child: FloatingActionButton(
-                          onPressed: () async {
-                            try {
-                              if (controller != null) {
-                                if (controller!.value.isInitialized) {
-                                  image = await controller!.takePicture();
-                                  setState(() {});
-                                }
-                              }
-                            } catch (e) {
-                              print(e);
-                            }
-                          },
+                          onPressed: takePhoto,
                           child: const Icon(Icons.camera)),
                     ),
                     Container(
