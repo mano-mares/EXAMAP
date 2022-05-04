@@ -11,7 +11,7 @@ class HomePageDocent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MyAppBar(),
+      appBar: const MyAppBar(appBarTitle: strings.appBarTitle),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
