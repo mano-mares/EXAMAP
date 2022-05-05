@@ -53,8 +53,9 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(100.0),
-        child: ListView(children: <Widget>[
+      padding: const EdgeInsets.all(100.0),
+      child: ListView(
+        children: <Widget>[
           Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.fromLTRB(100, 100, 100, 20),
@@ -69,8 +70,8 @@ class _LoginState extends State<Login> {
               alignment: Alignment.center,
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 50),
               child: const Text("Docent",
-                  style:
-                      TextStyle(fontWeight: FontWeight.bold, fontSize: sizes.subTitle))),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: sizes.subTitle))),
           Form(
               key: formKey,
               child: Column(children: [
@@ -144,6 +145,8 @@ class _LoginState extends State<Login> {
                     textStyle: const TextStyle(
                         fontSize: sizes.btnSmall, fontWeight: FontWeight.bold)),
               )),
-        ]));
+        ],
+      ),
+    );
   }
 }

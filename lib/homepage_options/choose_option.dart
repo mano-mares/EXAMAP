@@ -14,7 +14,8 @@ class ChooseOption extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ChooseStudentPage()),
+              MaterialPageRoute(
+                  builder: (context) => const ChooseStudentPage()),
             );
           },
           child: const Text(

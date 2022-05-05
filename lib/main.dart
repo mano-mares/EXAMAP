@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:examap/create_exam/create_exam.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.red,
         ),
         home: Scaffold(
+          backgroundColor: Colors.white,
           appBar: AppBar(),
           body: Column(
             children: [
@@ -33,9 +35,7 @@ class MyApp extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                padding: const EdgeInsets.only(
-                  bottom: 100.0,
-                ),
+                padding: const EdgeInsets.fromLTRB(0, 70, 0, 80),
               ),
               Container(
                 child: const Text(
@@ -45,9 +45,17 @@ class MyApp extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                padding: const EdgeInsets.only(bottom: 100.0),
+                padding: const EdgeInsets.only(bottom: 120.0),
               ),
               ChooseOption(),
+              Container(
+                padding: const EdgeInsets.only(top: 70),
+                child: Image.asset(
+                  'assets/images/undraw_question.png',
+                  width: 275,
+                  height: 275,
+                ),
+              ),
             ],
             mainAxisAlignment: MainAxisAlignment.center,
           ),
