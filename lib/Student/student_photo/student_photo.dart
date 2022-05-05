@@ -39,17 +39,22 @@ class _StudentPhotoState extends State<StudentPhoto> {
   }
 
   void takePhoto() async {
+    isPhotoTaken = true;
     try {
       if (controller != null) {
         if (controller!.value.isInitialized) {
           image = await controller!.takePicture();
           setState(() {});
-          isPhotoTaken = true;
         }
       }
     } catch (e) {
       print(e);
     }
+  }
+
+  void retakePhoto() {
+    isPhotoTaken = false;
+    setState(() {});
   }
 
   void uploadPhoto() async {
@@ -61,6 +66,7 @@ class _StudentPhotoState extends State<StudentPhoto> {
     } catch (e) {
       print(e);
     }
+    //navigate to exam screen
   }
 
   void confirmPhoto() {
@@ -108,7 +114,7 @@ class _StudentPhotoState extends State<StudentPhoto> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.fromLTRB(10, 50, 10, 40),
                 width: 450,
                 child: const Text(
                   "Voor de bevestiging van je identiteit vragen we je om een foto te nemen van jou met je studentenkaart",
@@ -119,41 +125,49 @@ class _StudentPhotoState extends State<StudentPhoto> {
                   ),
                 ),
               ),
-              Column(
-                children: [
-                  SizedBox(
-                    height: 600,
-                    width: 400,
-                    child: controller == null
-                        ? const Center(child: Text("Loading Camera..."))
-                        : !controller!.value.isInitialized
-                            ? const Center(
-                                child: CircularProgressIndicator(),
-                              )
-                            : CameraPreview(controller!),
-                  ),
-                ],
-              ),
+              isPhotoTaken
+                  ? SizedBox(
+                      height: 750,
+                      width: 420,
+                      child: Image.file(
+                        File(image!.path),
+                      ),
+                    )
+                  : Column(
+                      children: [
+                        SizedBox(
+                          height: 750,
+                          width: 420,
+                          child: controller == null
+                              ? const Center(child: Text("Loading Camera..."))
+                              : !controller!.value.isInitialized
+                                  ? const Center(
+                                      child: CircularProgressIndicator(),
+                                    )
+                                  : CameraPreview(controller!),
+                        ),
+                      ],
+                    ),
               Container(
                 padding: const EdgeInsets.only(top: 30),
                 alignment: Alignment.center,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    isPhotoTaken
+                        ? Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: FloatingActionButton(
+                              onPressed: retakePhoto,
+                              child: const Icon(Icons.replay_rounded),
+                            ),
+                          )
+                        : const Text(""),
                     Padding(
                       padding: const EdgeInsets.only(right: 20),
                       child: FloatingActionButton(
                           onPressed: takePhoto,
                           child: const Icon(Icons.camera)),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      child: image == null
-                          ? const Text("No image captured")
-                          : Image.file(
-                              File(image!.path),
-                              height: 300,
-                            ),
                     ),
                     ElevatedButton(
                       onPressed: confirmPhoto,
