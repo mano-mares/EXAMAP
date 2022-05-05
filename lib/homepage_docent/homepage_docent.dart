@@ -1,7 +1,9 @@
 import 'package:examap/create_exam/create_exam.dart';
 import 'package:flutter/material.dart';
+
 import '../app_bar/my_app_bar.dart';
 import './strings.dart' as strings;
+import '../res/style/my_fontsize.dart' as sizes;
 
 class HomePageDocent extends StatelessWidget {
   const HomePageDocent({Key? key}) : super(key: key);
@@ -18,7 +20,7 @@ class HomePageDocent extends StatelessWidget {
               child: const Text(
                 strings.titleTxt,
                 style: TextStyle(
-                  fontSize: 55.0,
+                  fontSize: sizes.title,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -30,7 +32,7 @@ class HomePageDocent extends StatelessWidget {
               child: const Text(
                 strings.subTitleTxt,
                 style: TextStyle(
-                  fontSize: 30.0,
+                  fontSize: sizes.subTitle,
                   // fontWeight: FontWeight.bold,
                 ),
               ),
@@ -42,7 +44,7 @@ class HomePageDocent extends StatelessWidget {
                 fixedSize: const Size(240, 80),
                 primary: Colors.red,
                 textStyle:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    const TextStyle(fontSize: sizes.text, fontWeight: FontWeight.bold),
               ),
               onPressed: () {
                 Navigator.push(
@@ -60,7 +62,7 @@ class HomePageDocent extends StatelessWidget {
                 fixedSize: const Size(240, 80),
                 primary: Colors.red,
                 textStyle:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    const TextStyle(fontSize: sizes.text, fontWeight: FontWeight.bold),
               ),
               onPressed: () {}, //TODO: Redirect to Examen verbeteren page
             ),
@@ -71,7 +73,7 @@ class HomePageDocent extends StatelessWidget {
                 fixedSize: const Size(240, 80),
                 primary: Colors.red,
                 textStyle:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    const TextStyle(fontSize: sizes.text, fontWeight: FontWeight.bold),
               ),
               onPressed: () {}, //TODO: Redirect to Studenten lijst page
             ),

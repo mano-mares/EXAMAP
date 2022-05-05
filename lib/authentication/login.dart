@@ -2,6 +2,8 @@ import 'package:examap/homepage_docent/homepage_docent.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../res/style/my_fontsize.dart' as sizes;
+
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -51,8 +53,9 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(100.0),
-        child: ListView(children: <Widget>[
+      padding: const EdgeInsets.all(100.0),
+      child: ListView(
+        children: <Widget>[
           Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.fromLTRB(100, 100, 100, 20),
@@ -60,15 +63,15 @@ class _LoginState extends State<Login> {
                 "Log in",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 50.0,
+                  fontSize: sizes.title,
                 ),
               )),
           Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 50),
               child: const Text("Docent",
-                  style:
-                      TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0))),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: sizes.subTitle))),
           Form(
               key: formKey,
               child: Column(children: [
@@ -140,8 +143,10 @@ class _LoginState extends State<Login> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 50, vertical: 20),
                     textStyle: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold)),
+                        fontSize: sizes.btnSmall, fontWeight: FontWeight.bold)),
               )),
-        ]));
+        ],
+      ),
+    );
   }
 }

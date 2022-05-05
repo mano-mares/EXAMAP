@@ -1,5 +1,8 @@
+import 'package:examap/student/student_photo/student_photo.dart';
 import 'package:flutter/material.dart';
+
 import 'students.dart';
+import '../../res/style/my_fontsize.dart' as sizes;
 
 class ChooseStudentPage extends StatefulWidget {
   const ChooseStudentPage({Key? key}) : super(key: key);
@@ -14,7 +17,10 @@ class _ChooseStudentPageState extends State<ChooseStudentPage> {
 
   void checkStudent() {
     if (studentNumbers.contains(studentNumberController.text.trim()) == true) {
-      //navigat to next page
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const StudentPhoto()),
+      );
     } else {
       showDialog(
         context: context,
@@ -23,7 +29,7 @@ class _ChooseStudentPageState extends State<ChooseStudentPage> {
           content: const Text('Voer een geldig studentennummer in'),
           actions: [
             TextButton(
-              child: const Text('Close'),
+              child: const Text('Sluit'),
               onPressed: () => Navigator.pop(context),
             ),
           ],
@@ -70,7 +76,7 @@ class _ChooseStudentPageState extends State<ChooseStudentPage> {
                       padding: const EdgeInsets.only(top: 50),
                       child: const Text(
                         "Voer je studentennummer in",
-                        style: TextStyle(fontSize: 32, color: Colors.white),
+                        style: TextStyle(fontSize: sizes.btnMedium, color: Colors.white),
                       ),
                     ),
                   ),
@@ -98,7 +104,7 @@ class _ChooseStudentPageState extends State<ChooseStudentPage> {
                           hintText: "Studentennummer",
                           hintStyle: TextStyle(
                             color: Colors.grey,
-                            fontSize: 20,
+                            fontSize: sizes.text,
                           ),
                         ),
                       ),
@@ -117,7 +123,7 @@ class _ChooseStudentPageState extends State<ChooseStudentPage> {
                 onPressed: checkStudent,
                 child: const Text(
                   "Ga verder",
-                  style: TextStyle(fontSize: 30),
+                  style: TextStyle(fontSize: sizes.medium),
                 ),
               ),
             ),

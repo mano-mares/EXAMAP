@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../models/questions/multiple_choice/answer.dart';
+import '../../res/style/my_fontsize.dart' as sizes;
 
 class MultipleChoiceAnswerForm extends StatefulWidget {
   final String index;
@@ -65,7 +66,7 @@ class _MultipleChoiceAnswerFormState extends State<MultipleChoiceAnswerForm> {
           child: Text(
             widget.index,
             style: const TextStyle(
-              fontSize: 16,
+              fontSize: sizes.xSmall,
             ),
           ),
         ),

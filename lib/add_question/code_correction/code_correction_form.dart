@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
+
 import '../../models/exam.dart';
 import '../../models/questions/code_correction/code_correction_question.dart';
 import 'strings.dart' as strings;
+import '../../res/style/my_fontsize.dart' as sizes;
 
 class CodeCorrectionForm extends StatefulWidget {
   const CodeCorrectionForm({Key? key}) : super(key: key);
@@ -92,7 +94,7 @@ class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
                   strings.title,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 50.0,
+                    fontSize: sizes.title,
                   ),
                 ),
               ),
@@ -100,7 +102,7 @@ class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
                 child: Text(
                   strings.description,
                   style: TextStyle(
-                    fontSize: 20.0,
+                    fontSize: sizes.text,
                   ),
                 ),
               ),
@@ -112,7 +114,7 @@ class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
                 child: Text(
                   strings.labelCode,
                   style: TextStyle(
-                    fontSize: 20.0,
+                    fontSize: sizes.text,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -138,7 +140,7 @@ class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
                 child: Text(
                   strings.labelCorrecteCode,
                   style: TextStyle(
-                    fontSize: 20.0,
+                    fontSize: sizes.text,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -181,7 +183,7 @@ class _CodeCorrectionFormState extends State<CodeCorrectionForm> {
                   child: const Text(strings.buttonText),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(20.0),
-                    textStyle: const TextStyle(fontSize: 16.0),
+                    textStyle: const TextStyle(fontSize: sizes.btnXSmall),
                     primary: Colors.redAccent[700],
                   ),
                 ),
