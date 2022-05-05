@@ -160,30 +160,29 @@ class _StudentPhotoState extends State<StudentPhoto> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     isPhotoTaken
-                        ? Padding(
-                            padding: const EdgeInsets.all(15),
-                            child: FloatingActionButton(
-                              onPressed: retakePhoto,
-                              child: const Icon(Icons.replay_rounded),
-                            ),
+                        ? FloatingActionButton(
+                            onPressed: retakePhoto,
+                            child: const Icon(Icons.replay_rounded),
                           )
                         : const Text(""),
                     Padding(
-                      padding: const EdgeInsets.only(right: 20),
+                      padding: const EdgeInsets.all(20),
                       child: FloatingActionButton(
                           onPressed: takePhoto,
                           child: const Icon(Icons.camera)),
                     ),
-                    ElevatedButton(
-                      onPressed: confirmPhoto,
-                      child: Container(
-                        padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
-                        child: const Text(
-                          "Bevestig",
-                          style: TextStyle(fontSize: fontSizes.btnMedium),
-                        ),
-                      ),
-                    ),
+                    isPhotoTaken
+                        ? ElevatedButton(
+                            onPressed: confirmPhoto,
+                            child: Container(
+                              padding: const EdgeInsets.all(15),
+                              child: const Text(
+                                "Bevestig",
+                                style: TextStyle(fontSize: fontSizes.btnMedium),
+                              ),
+                            ),
+                          )
+                        : const Text(""),
                   ],
                 ),
               ),
