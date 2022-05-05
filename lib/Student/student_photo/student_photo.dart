@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import '../../firebase_options.dart';
+import '../../res/style/my_fontsize.dart' as fontSizes;
 
 class StudentPhoto extends StatefulWidget {
   const StudentPhoto({Key? key}) : super(key: key);
@@ -61,6 +62,7 @@ class _StudentPhotoState extends State<StudentPhoto> {
     try {
       FirebaseStorage storage = FirebaseStorage.instance;
       final ref = storage.ref().child('S112189');
+      //TODO: Change student number dynamically
       File uploadImage = File(image!.path);
       await ref.putFile(uploadImage);
     } catch (e) {
@@ -80,13 +82,16 @@ class _StudentPhotoState extends State<StudentPhoto> {
             child: const Text('Sluit'),
             onPressed: () => Navigator.pop(context),
           ),
-          ElevatedButton(
-            onPressed: uploadPhoto,
-            child: const Text(
-              "Bevestig",
-              style: TextStyle(fontSize: 20),
+          Container(
+            padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
+            child: ElevatedButton(
+              onPressed: uploadPhoto,
+              child: const Text(
+                "Bevestig",
+                style: TextStyle(fontSize: fontSizes.btnMedium),
+              ),
             ),
-          ),
+          )
         ],
       ),
     );
@@ -121,7 +126,7 @@ class _StudentPhotoState extends State<StudentPhoto> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 25,
+                    fontSize: fontSizes.subTitle,
                   ),
                 ),
               ),
@@ -175,7 +180,7 @@ class _StudentPhotoState extends State<StudentPhoto> {
                         padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
                         child: const Text(
                           "Bevestig",
-                          style: TextStyle(fontSize: 30),
+                          style: TextStyle(fontSize: fontSizes.btnMedium),
                         ),
                       ),
                     ),
