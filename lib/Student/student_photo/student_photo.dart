@@ -16,12 +16,10 @@ class _StudentPhotoState extends State<StudentPhoto> {
   List<CameraDescription>? cameras; //list out the camera available
   CameraController? controller; //controller for camera
   XFile? image; //for caputred image
-  late FirebaseStorage storage;
   @override
   void initState() {
-    loadCamera();
     Firebase.initializeApp(options: DefaultFirebaseOptions.android);
-    storage = FirebaseStorage.instance;
+    loadCamera();
     super.initState();
   }
 
@@ -56,7 +54,8 @@ class _StudentPhotoState extends State<StudentPhoto> {
 
   void uploadPhoto() async {
     try {
-      final ref = storage.ref().child('file/');
+      FirebaseStorage storage = FirebaseStorage.instance;
+      final ref = storage.ref().child('S112189');
       File uploadImage = File(image!.path);
       await ref.putFile(uploadImage);
     } catch (e) {
@@ -76,7 +75,7 @@ class _StudentPhotoState extends State<StudentPhoto> {
             onPressed: () => Navigator.pop(context),
           ),
           ElevatedButton(
-            onPressed: confirmPhoto,
+            onPressed: uploadPhoto,
             child: const Text(
               "Bevestig",
               style: TextStyle(fontSize: 20),
