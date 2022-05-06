@@ -1,8 +1,9 @@
-// https://github.com/liodali/osm_flutter/blob/master/example/lib/src/simple_example.dart
+// https://github.com/liodali/osm_flutter/blob/master/example/lib/src/home/home_example.dart
 
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 
 class SimpleOSM extends StatefulWidget {
@@ -15,14 +16,15 @@ class SimpleOSM extends StatefulWidget {
 class SimpleOSMState extends State<SimpleOSM>
     with AutomaticKeepAliveClientMixin {
   late MapController controller;
+  String userLocation = "";
 
   @override
   void initState() {
     super.initState();
     controller = MapController(
+      initMapWithUserPosition: false,
       initPosition:
           GeoPoint(latitude: 51.23007740985662, longitude: 4.416186427790708),
-      initMapWithUserPosition: false,
       // areaLimit: BoundingBox(
       //   east: 2.367,
       //   north: 49.500,
@@ -30,6 +32,16 @@ class SimpleOSMState extends State<SimpleOSM>
       //   west:  51.683,
       // ),
     );
+    getUserLocation();
+  }
+
+  Future<String> getUserLocation() async {
+    try {
+      await controller.currentLocation();
+    } catch (e) {
+      print(e.toString());
+    }
+    return userLocation;
   }
 
   @override
@@ -79,21 +91,21 @@ class SimpleOSMState extends State<SimpleOSM>
       // onLocationChanged: (myLocation) {
       //   print(myLocation);
       // },
-      staticPoints: [
-        StaticPositionGeoPoint(
-          "line 1",
-          const MarkerIcon(
-            icon: Icon(
-              Icons.location_history_rounded,
-              color: Colors.red,
-              size: 80,
-            ),
-          ),
-          [
-            GeoPoint(latitude: 51.23007740985662, longitude: 4.416186427790708),
-          ],
-        ),
-      ],
+      // staticPoints: [
+      //   StaticPositionGeoPoint(
+      //     "line 1",
+      //     const MarkerIcon(
+      //       icon: Icon(
+      //         Icons.location_history_rounded,
+      //         color: Colors.red,
+      //         size: 80,
+      //       ),
+      //     ),
+      //     [
+      //       GeoPoint(latitude: 51.23007740985662, longitude: 4.416186427790708),
+      //     ],
+      //   ),
+      // ],
       roadConfiguration: RoadConfiguration(
         startIcon: const MarkerIcon(
           icon: const Icon(
@@ -126,6 +138,9 @@ class SimpleOSMState extends State<SimpleOSM>
       showDefaultInfoWindow: true,
     );
   }
+
+  // @override
+  // Future<String> toString() async => userLocation;
 
   @override
   bool get wantKeepAlive => true;
