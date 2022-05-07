@@ -71,21 +71,23 @@ class _StudentExamState extends State<StudentExam> {
       //color: const Color.fromARGB(255, 245, 241, 241),
       child: Padding(
         padding: const EdgeInsets.all(0.0),
-        child: OpenQuestionForm(),
+//        child: OpenQuestionForm(questionText: 'Wat is het zin van het leven?'),
+        child: CodeCorrectionForm(
+            questionText: "system.out.println('hello'world);"),
       ),
     );
   }
 
-  Form OpenQuestionForm() {
+  Form OpenQuestionForm({required String questionText}) {
     return Form(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
             margin: const EdgeInsets.symmetric(vertical: 16.0),
-            child: const Text(
-              'Wat is het zin van het leven?',
-              style: TextStyle(
+            child: Text(
+              questionText,
+              style: const TextStyle(
                 fontSize: sizes.medium,
                 fontWeight: FontWeight.bold,
               ),
@@ -102,6 +104,43 @@ class _StudentExamState extends State<StudentExam> {
         ],
       ),
     );
+  }
+
+  Form CodeCorrectionForm({required String questionText}) {
+    return Form(
+        child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 16.0),
+          child: const Text(
+            'Pas de code aan zodat dit zou werken.',
+            style: TextStyle(
+              fontSize: sizes.medium,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Text(
+          questionText,
+          style: const TextStyle(
+            fontSize: sizes.small,
+            fontWeight: FontWeight.w200,
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.only(top: 16.0),
+          child: TextFormField(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+            ),
+            keyboardType: TextInputType.multiline,
+            minLines: 4,
+            maxLines: 4,
+          ),
+        ),
+      ],
+    ));
   }
 
   ElevatedButton nextQuestionButton() {
