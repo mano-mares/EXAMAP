@@ -19,6 +19,8 @@ class _StudentExamState extends State<StudentExam> {
   late Exam exam;
   List<Widget> questionButtonsList = [];
 
+  List<bool> isChecked = [false, false, false];
+
   @override
   void initState() {
     super.initState();
@@ -72,8 +74,16 @@ class _StudentExamState extends State<StudentExam> {
       child: Padding(
         padding: const EdgeInsets.all(0.0),
 //        child: OpenQuestionForm(questionText: 'Wat is het zin van het leven?'),
-        child: CodeCorrectionForm(
-            questionText: "system.out.println('hello'world);"),
+        // child: CodeCorrectionForm(
+        //     questionText: "system.out.println('hello'world);"),
+        child: MultipleChoiceForm(
+          questionText: exam.questions[2].questionText,
+          answers: [
+            Answer(answerText: 'c++', isCorrect: false),
+            Answer(answerText: 'c--', isCorrect: true),
+            Answer(answerText: 'c#', isCorrect: false),
+          ],
+        ),
       ),
     );
   }
@@ -141,6 +151,52 @@ class _StudentExamState extends State<StudentExam> {
         ),
       ],
     ));
+  }
+
+  Form MultipleChoiceForm(
+      {required String questionText, required List<Answer> answers}) {
+    return Form(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Text(
+              questionText,
+              style: const TextStyle(
+                fontSize: sizes.medium,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          for (int i = 0; i < answers.length; i++)
+            checkboxAnswer(index: i, answerText: answers[i].answerText!)
+        ],
+      ),
+    );
+  }
+
+  Widget checkboxAnswer({required int index, required String answerText}) {
+    return Row(
+      children: [
+        Checkbox(
+          value: isChecked[index],
+          onChanged: (bool? value) {
+            setState(
+              () {
+                isChecked[index] = value!;
+              },
+            );
+          },
+        ),
+        Text(
+          answerText,
+          style: const TextStyle(
+            fontSize: sizes.small,
+          ),
+        ),
+      ],
+    );
   }
 
   ElevatedButton nextQuestionButton() {
