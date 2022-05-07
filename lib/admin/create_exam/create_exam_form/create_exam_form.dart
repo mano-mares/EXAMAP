@@ -1,10 +1,10 @@
-import 'package:examap/create_exam/create_exam_form/exam_questions_list.dart';
+import 'package:examap/admin/create_exam/create_exam_form/exam_questions_list.dart';
 import 'package:examap/models/exam.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../strings.dart' as strings;
-import '../../res/style/my_fontsize.dart' as sizes;
+import '../../../res/style/my_fontsize.dart' as sizes;
 
 class CreateExamForm extends StatefulWidget {
   const CreateExamForm({Key? key}) : super(key: key);

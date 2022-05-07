@@ -1,9 +1,9 @@
-import 'package:examap/create_exam/create_exam.dart';
+import 'package:examap/admin/create_exam/create_exam.dart';
 import 'package:flutter/material.dart';
 
-import '../app_bar/my_app_bar.dart';
+import '../../app_bar/my_app_bar.dart';
 import './strings.dart' as strings;
-import '../res/style/my_fontsize.dart' as sizes;
+import '../../res/style/my_fontsize.dart' as sizes;
 
 class HomePageDocent extends StatelessWidget {
   const HomePageDocent({Key? key}) : super(key: key);
@@ -43,8 +43,8 @@ class HomePageDocent extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(240, 80),
                 primary: Colors.red,
-                textStyle:
-                    const TextStyle(fontSize: sizes.text, fontWeight: FontWeight.bold),
+                textStyle: const TextStyle(
+                    fontSize: sizes.text, fontWeight: FontWeight.bold),
               ),
               onPressed: () {
                 Navigator.push(
@@ -61,8 +61,8 @@ class HomePageDocent extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(240, 80),
                 primary: Colors.red,
-                textStyle:
-                    const TextStyle(fontSize: sizes.text, fontWeight: FontWeight.bold),
+                textStyle: const TextStyle(
+                    fontSize: sizes.text, fontWeight: FontWeight.bold),
               ),
               onPressed: () {}, //TODO: Redirect to Examen verbeteren page
             ),
@@ -72,8 +72,8 @@ class HomePageDocent extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(240, 80),
                 primary: Colors.red,
-                textStyle:
-                    const TextStyle(fontSize: sizes.text, fontWeight: FontWeight.bold),
+                textStyle: const TextStyle(
+                    fontSize: sizes.text, fontWeight: FontWeight.bold),
               ),
               onPressed: () {}, //TODO: Redirect to Studenten lijst page
             ),

@@ -1,12 +1,12 @@
+import 'package:examap/models/exam.dart';
+import 'package:examap/models/questions/code_correction/code_correction_question.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../models/exam.dart';
-import '../../models/questions/code_correction/code_correction_question.dart';
 import 'strings.dart' as strings;
-import '../../res/style/my_fontsize.dart' as sizes;
+import '../../../res/style/my_fontsize.dart' as sizes;
 
 class CodeCorrectionForm extends StatefulWidget {
   const CodeCorrectionForm({Key? key}) : super(key: key);

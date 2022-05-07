@@ -1,15 +1,15 @@
-import 'package:examap/add_question/code_correction/code_correction_form.dart';
-import 'package:examap/add_question/multiple_choice/multiple_choice_form.dart';
-import 'package:examap/create_exam/create_exam_form/question_card.dart';
+import 'package:examap/admin/add_question/code_correction/code_correction_form.dart';
+import 'package:examap/admin/add_question/multiple_choice/multiple_choice_form.dart';
+import 'package:examap/admin/create_exam/create_exam_form/question_card.dart';
 import 'package:examap/models/questions/question_type.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../add_question/open_question/open_question_form.dart';
-import '../../models/exam.dart';
-import '../../models/questions/question.dart';
+import '../../../models/exam.dart';
+import '../../../models/questions/question.dart';
 import '../strings.dart' as strings;
-import '../../res/style/my_fontsize.dart' as sizes;
+import '../../../res/style/my_fontsize.dart' as sizes;
 
 class ExamQuestionsList extends StatefulWidget {
   const ExamQuestionsList({Key? key}) : super(key: key);
@@ -54,7 +54,8 @@ class _ExamQuestionsListState extends State<ExamQuestionsList> {
             child: Center(
               child: Text(
                 strings.headingText,
-                style: TextStyle(fontSize: sizes.headingText, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: sizes.headingText, fontWeight: FontWeight.bold),
               ),
             ),
           ),

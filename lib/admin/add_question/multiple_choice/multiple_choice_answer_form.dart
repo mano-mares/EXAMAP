@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../models/questions/multiple_choice/answer.dart';
-import '../../res/style/my_fontsize.dart' as sizes;
+import '../../../models/questions/multiple_choice/answer.dart';
+import '../../../res/style/my_fontsize.dart' as sizes;
 
 class MultipleChoiceAnswerForm extends StatefulWidget {
   final String index;
