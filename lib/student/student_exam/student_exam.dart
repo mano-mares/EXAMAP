@@ -6,6 +6,8 @@ import 'package:examap/models/questions/open_question/open_question.dart';
 import 'package:examap/models/questions/question.dart';
 import 'package:flutter/material.dart';
 
+import '../../res/style/my_fontsize.dart' as sizes;
+
 class StudentExam extends StatefulWidget {
   const StudentExam({Key? key}) : super(key: key);
 
@@ -59,13 +61,53 @@ class _StudentExamState extends State<StudentExam> {
     return dummyExam;
   }
 
+  Container QuestionContainer() {
+    return Container(
+      width: 500,
+      height: 500,
+      color: Colors.green,
+    );
+  }
+
+  ElevatedButton nextQuestionButton() {
+    return ElevatedButton(
+      onPressed: () {
+        // TODO: go to next question.
+      },
+      child: const Text(
+        "Volgende vraag",
+        style: TextStyle(fontSize: sizes.btnSmall),
+      ),
+      style: ElevatedButton.styleFrom(
+        primary: Colors.red,
+        padding: const EdgeInsets.all(32.0),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Examen'),
+        title: Text('${exam?.subject}'),
+        centerTitle: true,
       ),
-      body: Text('examen maken'),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView(
+          children: [
+            QuestionContainer(),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  nextQuestionButton(),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
