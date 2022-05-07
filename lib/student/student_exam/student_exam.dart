@@ -63,6 +63,7 @@ class _StudentExamState extends State<StudentExam> {
 
   Container QuestionContainer() {
     return Container(
+      padding: EdgeInsets.only(top: 16.0),
       width: 500,
       height: 500,
       color: Colors.green,
@@ -85,6 +86,34 @@ class _StudentExamState extends State<StudentExam> {
     );
   }
 
+  Widget questionButton(int index) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 8.0),
+      child: ElevatedButton(
+        onPressed: () {
+          // TODO: go to question with that index.
+        },
+        child: Text(
+          '${index + 1}',
+          style: const TextStyle(fontSize: sizes.btnXSmall),
+        ),
+        style: ElevatedButton.styleFrom(
+          primary: Colors.redAccent,
+        ),
+      ),
+    );
+  }
+
+  Row questionButtons() {
+    return Row(
+      children: [
+        questionButton(0),
+        questionButton(1),
+        questionButton(2),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,14 +125,14 @@ class _StudentExamState extends State<StudentExam> {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
+            questionButtons(),
+            const SizedBox(height: 16.0),
             QuestionContainer(),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  nextQuestionButton(),
-                ],
-              ),
+            const SizedBox(height: 16.0),
+            Column(
+              children: [
+                nextQuestionButton(),
+              ],
             ),
           ],
         ),
