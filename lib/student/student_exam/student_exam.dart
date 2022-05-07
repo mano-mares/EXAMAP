@@ -1,4 +1,3 @@
-import 'package:examap/admin/add_question/open_question/open_question_form.dart';
 import 'package:examap/models/exam.dart';
 import 'package:examap/models/questions/code_correction/code_correction_question.dart';
 import 'package:examap/models/questions/multiple_choice/answer.dart';
@@ -74,19 +73,26 @@ class _StudentExamState extends State<StudentExam> {
   Widget questionForm() {
     Question question = exam.questions[currentQuestion];
     if (question is OpenQuestion) {
-      return openQuestionForm(questionText: question.questionText);
+      return openQuestionForm(
+        questionText: question.questionText,
+        maxPoint: question.maxPoint,
+      );
     } else if (question is CodeCorrectionQuestion) {
-      return codeCorrectionForm(questionText: question.questionText);
+      return codeCorrectionForm(
+        questionText: question.questionText,
+        maxPoint: question.maxPoint,
+      );
     } else if (question is MultipleChoiceQuestion) {
       return multipleChoiceForm(
           questionText: question.questionText,
+          maxPoint: question.maxPoint,
           answers: question.possibleAnswers);
     } else {
-      return Text('Something went wrong...');
+      return const Text('Something went wrong...');
     }
   }
 
-  Form openQuestionForm({required String questionText}) {
+  Form openQuestionForm({required String questionText, required int maxPoint}) {
     return Form(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -94,7 +100,7 @@ class _StudentExamState extends State<StudentExam> {
           Container(
             margin: const EdgeInsets.symmetric(vertical: 16.0),
             child: Text(
-              '${currentQuestion + 1}. $questionText',
+              '${currentQuestion + 1}. $questionText ($maxPoint ptn.)',
               style: const TextStyle(
                 fontSize: sizes.medium,
                 fontWeight: FontWeight.bold,
@@ -114,7 +120,8 @@ class _StudentExamState extends State<StudentExam> {
     );
   }
 
-  Form codeCorrectionForm({required String questionText}) {
+  Form codeCorrectionForm(
+      {required String questionText, required int maxPoint}) {
     return Form(
         child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -122,7 +129,7 @@ class _StudentExamState extends State<StudentExam> {
         Container(
           margin: const EdgeInsets.symmetric(vertical: 16.0),
           child: Text(
-            '${currentQuestion + 1}. Pas de code aan zodat dit zou werken.',
+            '${currentQuestion + 1}. Pas de code aan zodat dit zou werken. ($maxPoint ptn.)',
             style: const TextStyle(
               fontSize: sizes.medium,
               fontWeight: FontWeight.bold,
@@ -152,7 +159,9 @@ class _StudentExamState extends State<StudentExam> {
   }
 
   Form multipleChoiceForm(
-      {required String questionText, required List<Answer> answers}) {
+      {required String questionText,
+      required int maxPoint,
+      required List<Answer> answers}) {
     return Form(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -160,7 +169,7 @@ class _StudentExamState extends State<StudentExam> {
           Container(
             margin: const EdgeInsets.symmetric(vertical: 16.0),
             child: Text(
-              '${currentQuestion + 1}. $questionText',
+              '${currentQuestion + 1}. $questionText ($maxPoint ptn.)',
               style: const TextStyle(
                 fontSize: sizes.medium,
                 fontWeight: FontWeight.bold,
