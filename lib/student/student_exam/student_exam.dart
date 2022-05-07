@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:examap/models/exam.dart';
 import 'package:examap/models/questions/code_correction/code_correction_question.dart';
 import 'package:examap/models/questions/multiple_choice/answer.dart';
@@ -18,6 +20,9 @@ class StudentExam extends StatefulWidget {
 class _StudentExamState extends State<StudentExam> {
   late Exam exam;
   late int currentQuestion;
+  late Timer timer;
+  int start = 120;
+
   List<bool> isChecked = [false, false, false];
 
   @override
@@ -27,6 +32,25 @@ class _StudentExamState extends State<StudentExam> {
     setState(() {
       currentQuestion = 0;
     });
+    startTimer();
+  }
+
+  void startTimer() {
+    const oneSec = Duration(seconds: 1);
+    timer = Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (start == 0) {
+          setState(() {
+            timer.cancel();
+          });
+        } else {
+          setState(() {
+            start--;
+          });
+        }
+      },
+    );
   }
 
   Exam getExam() {
@@ -315,9 +339,13 @@ class _StudentExamState extends State<StudentExam> {
           children: [
             questionButtons(),
             Container(
-              margin: const EdgeInsets.only(top: 16.0, bottom: 32.0),
-              child: questionForm(),
+              margin: const EdgeInsets.only(top: 16.0, bottom: 8.0),
+              child: Text(
+                'Resterende tijd: $start',
+                style: const TextStyle(fontSize: sizes.small),
+              ),
             ),
+            questionForm(),
             Column(
               children: [
                 currentQuestion >= (exam.questions.length - 1)
@@ -329,5 +357,11 @@ class _StudentExamState extends State<StudentExam> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 }
