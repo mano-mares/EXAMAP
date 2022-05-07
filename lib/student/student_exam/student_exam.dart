@@ -16,14 +16,19 @@ class StudentExam extends StatefulWidget {
 }
 
 class _StudentExamState extends State<StudentExam> {
-  Exam? exam;
+  late Exam exam;
+  List<Widget> questionButtonsList = [];
 
   @override
   void initState() {
     super.initState();
     exam = getExam();
+
     print('-------');
     print(exam);
+    for (int i = 0; i < exam.questions.length; i++) {
+      questionButtonsList.add(questionButton(i));
+    }
   }
 
   Exam getExam() {
@@ -135,11 +140,7 @@ class _StudentExamState extends State<StudentExam> {
 
   Row questionButtons() {
     return Row(
-      children: [
-        questionButton(0),
-        questionButton(1),
-        questionButton(2),
-      ],
+      children: questionButtonsList,
     );
   }
 
