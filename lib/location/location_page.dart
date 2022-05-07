@@ -2,8 +2,10 @@
 // https://doctorcodetutorial.blogspot.com/2021/03/make-map-app-using-flutter.html
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../app_bar/my_app_bar.dart';
+import 'simple_osm.dart';
 import 'strings.dart' as strings;
 import '../res/style/my_fontsize.dart' as sizes;
 import 'my_map.dart';
@@ -38,20 +40,26 @@ class _LocationPageState extends State<LocationPage> {
               child: SizedBox(
                 width: 800.0,
                 height: 500.0,
-                child: MapApp(), 
+                child: const SimpleOSM(),
               ),
               padding: const EdgeInsets.only(bottom: 20.0),
             ),
             Container(
               child: Text(
                 strings.address +
-                    "Ellermanstraat 33, Antwerpen" , //TODO: replace with variable of correct address
+                    "Ellermanstraat 33, Antwerpen", //TODO: replace with variable of correct address
                 style: TextStyle(
                   fontSize: sizes.medium,
                 ),
               ),
               padding: const EdgeInsets.only(bottom: 50.0),
             ),
+            ElevatedButton(
+                onPressed: (() {
+                  print("-------------------");
+                  SimpleOSMState().start();
+                }),
+                child: const Text("Get Location"))
           ],
         ),
       ),

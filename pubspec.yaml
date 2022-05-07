@@ -36,25 +36,13 @@ dependencies:
   cupertino_icons: ^1.0.2
   provider: ^6.0.2
   uuid: ^3.0.6
-  # flutter_osm_plugin: ^0.33.0+2
-
-  flutter_map: any
-  # user_location: any
-  # flutter_map_location_marker: any
-  # flutter_map_location: any
-  # geolocator: any
-  # geocoding: any
-  geocoder: any
-  tuple: ^1.0.2
-  latlong: ^0.6.1
-  positioned_tap_detector_2: ^1.0.0
-  transparent_image: ^1.0.0
-  async: ^2.1.0
-  flutter_image: ^3.0.0
-  vector_math: ^2.0.0
-  proj4dart: ^1.0.4
-  meta: ^1.1.0
-  collection: ^1.14.0
+  flutter_osm_plugin: ^0.33.0+2
+  # flutter_map: any
+  geolocator: any
+  geocoder2: ^1.1.0
+  geocoding: any
+  # tuple: ^1.0.2
+  # latlong: ^0.6.1
 
 dev_dependencies:
   flutter_test:
