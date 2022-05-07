@@ -1,3 +1,4 @@
+import 'package:examap/admin/add_question/open_question/open_question_form.dart';
 import 'package:examap/models/exam.dart';
 import 'package:examap/models/questions/code_correction/code_correction_question.dart';
 import 'package:examap/models/questions/multiple_choice/answer.dart';
@@ -35,6 +36,12 @@ class _StudentExamState extends State<StudentExam> {
     dummyExam.subject = 'Intro Mobile';
     dummyExam.timeLimit = '2:30';
     List<Question> questions = [
+      for (int i = 0; i < 10; i++)
+        OpenQuestion(
+            id: '${i + 10}',
+            questionText: 'Filler vraag $i',
+            maxPoint: i + 5,
+            questionType: 'Open vraag'),
       OpenQuestion(
         id: '1',
         questionText: 'Leg het verschil uit tussen een stack en een heap.',
@@ -87,7 +94,7 @@ class _StudentExamState extends State<StudentExam> {
           Container(
             margin: const EdgeInsets.symmetric(vertical: 16.0),
             child: Text(
-              questionText,
+              '${currentQuestion + 1}. $questionText',
               style: const TextStyle(
                 fontSize: sizes.medium,
                 fontWeight: FontWeight.bold,
@@ -114,9 +121,9 @@ class _StudentExamState extends State<StudentExam> {
       children: [
         Container(
           margin: const EdgeInsets.symmetric(vertical: 16.0),
-          child: const Text(
-            'Pas de code aan zodat dit zou werken.',
-            style: TextStyle(
+          child: Text(
+            '${currentQuestion + 1}. Pas de code aan zodat dit zou werken.',
+            style: const TextStyle(
               fontSize: sizes.medium,
               fontWeight: FontWeight.bold,
             ),
@@ -153,7 +160,7 @@ class _StudentExamState extends State<StudentExam> {
           Container(
             margin: const EdgeInsets.symmetric(vertical: 16.0),
             child: Text(
-              questionText,
+              '${currentQuestion + 1}. $questionText',
               style: const TextStyle(
                 fontSize: sizes.medium,
                 fontWeight: FontWeight.bold,
@@ -208,31 +215,32 @@ class _StudentExamState extends State<StudentExam> {
     );
   }
 
-  Widget questionButton(int index) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8.0),
-      child: ElevatedButton(
-        onPressed: () {
-          setState(() {
+  ElevatedButton questionButton(int index) {
+    return ElevatedButton(
+      onPressed: () {
+        setState(
+          () {
             currentQuestion = index;
-          });
-        },
-        child: Text(
-          '${index + 1}',
-          style: const TextStyle(fontSize: sizes.btnXSmall),
-        ),
-        style: ElevatedButton.styleFrom(
-          primary: currentQuestion == index
-              ? const Color.fromARGB(255, 176, 6, 6)
-              : Colors.red,
-        ),
+          },
+        );
+      },
+      child: Text(
+        '${index + 1}',
+        style: const TextStyle(fontSize: sizes.btnXSmall),
+      ),
+      style: ElevatedButton.styleFrom(
+        primary: currentQuestion == index
+            ? const Color.fromARGB(255, 176, 6, 6)
+            : Colors.red,
       ),
     );
   }
 
-  Row questionButtons() {
-    return Row(
-      children: [
+  Wrap questionButtons() {
+    return Wrap(
+      spacing: 8.0, // gap between adjacent chips
+      runSpacing: 8.0, // gap between lines
+      children: <Widget>[
         for (int i = 0; i < exam.questions.length; i++) questionButton(i)
       ],
     );
