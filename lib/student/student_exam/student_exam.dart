@@ -17,6 +17,7 @@ class StudentExam extends StatefulWidget {
 
 class _StudentExamState extends State<StudentExam> {
   late Exam exam;
+  late int currentQuestion;
   List<bool> isChecked = [false, false, false];
 
   @override
@@ -26,6 +27,10 @@ class _StudentExamState extends State<StudentExam> {
 
     print('-------');
     print(exam);
+
+    setState(() {
+      currentQuestion = 0;
+    });
   }
 
   Exam getExam() {
@@ -34,12 +39,6 @@ class _StudentExamState extends State<StudentExam> {
     dummyExam.subject = 'Intro Mobile';
     dummyExam.timeLimit = '2:30';
     List<Question> questions = [
-      OpenQuestion(
-        id: '1',
-        questionText: 'Leg het verschil uit tussen een stack en een heap.',
-        maxPoint: 5,
-        questionType: 'Open vraag',
-      ),
       OpenQuestion(
         id: '1',
         questionText: 'Leg het verschil uit tussen een stack en een heap.',
@@ -74,19 +73,35 @@ class _StudentExamState extends State<StudentExam> {
       //color: const Color.fromARGB(255, 245, 241, 241),
       child: Padding(
         padding: const EdgeInsets.all(0.0),
-//        child: OpenQuestionForm(questionText: 'Wat is het zin van het leven?'),
+        child: questionForm(),
+        //child: OpenQuestionForm(questionText: 'Wat is het zin van het leven?'),
         // child: CodeCorrectionForm(
         //     questionText: "system.out.println('hello'world);"),
-        child: MultipleChoiceForm(
-          questionText: exam.questions[2].questionText,
-          answers: [
-            Answer(answerText: 'c++', isCorrect: false),
-            Answer(answerText: 'c--', isCorrect: true),
-            Answer(answerText: 'c#', isCorrect: false),
-          ],
-        ),
+        // child: MultipleChoiceForm(
+        //   questionText: exam.questions[2].questionText,
+        //   answers: [
+        //     Answer(answerText: 'c++', isCorrect: false),
+        //     Answer(answerText: 'c--', isCorrect: true),
+        //     Answer(answerText: 'c#', isCorrect: false),
+        //   ],
+        // ),
       ),
     );
+  }
+
+  Widget questionForm() {
+    Question question = exam.questions[currentQuestion];
+    if (question is OpenQuestion) {
+      return OpenQuestionForm(questionText: question.questionText);
+    } else if (question is CodeCorrectionQuestion) {
+      return CodeCorrectionForm(questionText: question.questionText);
+    } else if (question is MultipleChoiceQuestion) {
+      return MultipleChoiceForm(
+          questionText: question.questionText,
+          answers: question.possibleAnswers);
+    } else {
+      return Text('Oops');
+    }
   }
 
   Form OpenQuestionForm({required String questionText}) {
@@ -203,7 +218,9 @@ class _StudentExamState extends State<StudentExam> {
   ElevatedButton nextQuestionButton() {
     return ElevatedButton(
       onPressed: () {
-        // TODO: go to next question.
+        setState(() {
+          currentQuestion++;
+        });
       },
       child: const Text(
         "Volgende vraag",
