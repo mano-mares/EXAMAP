@@ -64,13 +64,6 @@ class _StudentExamState extends State<StudentExam> {
     return dummyExam;
   }
 
-  // Widget questionContainer() {
-  //   return Padding(
-  //     padding: const EdgeInsets.all(0.0),
-  //     child: questionForm(),
-  //   );
-  // }
-
   Widget questionForm() {
     Question question = exam.questions[currentQuestion];
     if (question is OpenQuestion) {
@@ -82,7 +75,7 @@ class _StudentExamState extends State<StudentExam> {
           questionText: question.questionText,
           answers: question.possibleAnswers);
     } else {
-      return Text('Oops');
+      return Text('Something went wrong...');
     }
   }
 
@@ -243,6 +236,26 @@ class _StudentExamState extends State<StudentExam> {
     );
   }
 
+  Widget finishExamButton() {
+    return Column(
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            // TODO: show confirmation pop up.
+          },
+          child: const Text(
+            "Beëindig het examen",
+            style: TextStyle(fontSize: sizes.btnSmall),
+          ),
+          style: ElevatedButton.styleFrom(
+            primary: Colors.red,
+            padding: const EdgeInsets.all(32.0),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -257,13 +270,13 @@ class _StudentExamState extends State<StudentExam> {
             questionButtons(),
             Container(
               margin: const EdgeInsets.only(top: 16.0, bottom: 32.0),
-              child: Expanded(
-                child: questionForm(),
-              ),
+              child: questionForm(),
             ),
             Column(
               children: [
-                nextQuestionButton(),
+                currentQuestion >= (exam.questions.length - 1)
+                    ? finishExamButton()
+                    : nextQuestionButton(),
               ],
             ),
           ],
