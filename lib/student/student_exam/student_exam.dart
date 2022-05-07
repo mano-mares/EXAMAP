@@ -184,25 +184,28 @@ class _StudentExamState extends State<StudentExam> {
   }
 
   Widget checkboxAnswer({required int index, required String answerText}) {
-    return Row(
-      children: [
-        Checkbox(
-          value: isChecked[index],
-          onChanged: (bool? value) {
-            setState(
-              () {
-                isChecked[index] = value!;
-              },
-            );
-          },
-        ),
-        Text(
-          answerText,
-          style: const TextStyle(
-            fontSize: sizes.small,
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        children: [
+          Checkbox(
+            value: isChecked[index],
+            onChanged: (bool? value) {
+              setState(
+                () {
+                  isChecked[index] = value!;
+                },
+              );
+            },
           ),
-        ),
-      ],
+          Text(
+            answerText,
+            style: const TextStyle(
+              fontSize: sizes.small,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
