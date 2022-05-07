@@ -222,7 +222,9 @@ class _StudentExamState extends State<StudentExam> {
           style: const TextStyle(fontSize: sizes.btnXSmall),
         ),
         style: ElevatedButton.styleFrom(
-          primary: Colors.redAccent,
+          primary: currentQuestion == index
+              ? const Color.fromARGB(255, 176, 6, 6)
+              : Colors.red,
         ),
       ),
     );
