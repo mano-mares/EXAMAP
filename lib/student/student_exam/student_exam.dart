@@ -24,10 +24,6 @@ class _StudentExamState extends State<StudentExam> {
   void initState() {
     super.initState();
     exam = getExam();
-
-    print('-------');
-    print(exam);
-
     setState(() {
       currentQuestion = 0;
     });
@@ -68,35 +64,21 @@ class _StudentExamState extends State<StudentExam> {
     return dummyExam;
   }
 
-  Container QuestionContainer() {
-    return Container(
-      //color: const Color.fromARGB(255, 245, 241, 241),
-      child: Padding(
-        padding: const EdgeInsets.all(0.0),
-        child: questionForm(),
-        //child: OpenQuestionForm(questionText: 'Wat is het zin van het leven?'),
-        // child: CodeCorrectionForm(
-        //     questionText: "system.out.println('hello'world);"),
-        // child: MultipleChoiceForm(
-        //   questionText: exam.questions[2].questionText,
-        //   answers: [
-        //     Answer(answerText: 'c++', isCorrect: false),
-        //     Answer(answerText: 'c--', isCorrect: true),
-        //     Answer(answerText: 'c#', isCorrect: false),
-        //   ],
-        // ),
-      ),
-    );
-  }
+  // Widget questionContainer() {
+  //   return Padding(
+  //     padding: const EdgeInsets.all(0.0),
+  //     child: questionForm(),
+  //   );
+  // }
 
   Widget questionForm() {
     Question question = exam.questions[currentQuestion];
     if (question is OpenQuestion) {
-      return OpenQuestionForm(questionText: question.questionText);
+      return openQuestionForm(questionText: question.questionText);
     } else if (question is CodeCorrectionQuestion) {
-      return CodeCorrectionForm(questionText: question.questionText);
+      return codeCorrectionForm(questionText: question.questionText);
     } else if (question is MultipleChoiceQuestion) {
-      return MultipleChoiceForm(
+      return multipleChoiceForm(
           questionText: question.questionText,
           answers: question.possibleAnswers);
     } else {
@@ -104,7 +86,7 @@ class _StudentExamState extends State<StudentExam> {
     }
   }
 
-  Form OpenQuestionForm({required String questionText}) {
+  Form openQuestionForm({required String questionText}) {
     return Form(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -132,7 +114,7 @@ class _StudentExamState extends State<StudentExam> {
     );
   }
 
-  Form CodeCorrectionForm({required String questionText}) {
+  Form codeCorrectionForm({required String questionText}) {
     return Form(
         child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -169,7 +151,7 @@ class _StudentExamState extends State<StudentExam> {
     ));
   }
 
-  Form MultipleChoiceForm(
+  Form multipleChoiceForm(
       {required String questionText, required List<Answer> answers}) {
     return Form(
       child: Column(
@@ -238,7 +220,9 @@ class _StudentExamState extends State<StudentExam> {
       padding: const EdgeInsets.only(right: 8.0),
       child: ElevatedButton(
         onPressed: () {
-          // TODO: go to question with that index.
+          setState(() {
+            currentQuestion = index;
+          });
         },
         child: Text(
           '${index + 1}',
@@ -263,7 +247,7 @@ class _StudentExamState extends State<StudentExam> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${exam?.subject}'),
+        title: Text(exam.subject),
         centerTitle: true,
       ),
       body: Padding(
@@ -274,7 +258,7 @@ class _StudentExamState extends State<StudentExam> {
             Container(
               margin: const EdgeInsets.only(top: 16.0, bottom: 32.0),
               child: Expanded(
-                child: QuestionContainer(),
+                child: questionForm(),
               ),
             ),
             Column(
