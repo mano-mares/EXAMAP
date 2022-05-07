@@ -17,8 +17,6 @@ class StudentExam extends StatefulWidget {
 
 class _StudentExamState extends State<StudentExam> {
   late Exam exam;
-  List<Widget> questionButtonsList = [];
-
   List<bool> isChecked = [false, false, false];
 
   @override
@@ -28,9 +26,6 @@ class _StudentExamState extends State<StudentExam> {
 
     print('-------');
     print(exam);
-    for (int i = 0; i < exam.questions.length; i++) {
-      questionButtonsList.add(questionButton(i));
-    }
   }
 
   Exam getExam() {
@@ -39,6 +34,12 @@ class _StudentExamState extends State<StudentExam> {
     dummyExam.subject = 'Intro Mobile';
     dummyExam.timeLimit = '2:30';
     List<Question> questions = [
+      OpenQuestion(
+        id: '1',
+        questionText: 'Leg het verschil uit tussen een stack en een heap.',
+        maxPoint: 5,
+        questionType: 'Open vraag',
+      ),
       OpenQuestion(
         id: '1',
         questionText: 'Leg het verschil uit tussen een stack en een heap.',
@@ -235,7 +236,9 @@ class _StudentExamState extends State<StudentExam> {
 
   Row questionButtons() {
     return Row(
-      children: questionButtonsList,
+      children: [
+        for (int i = 0; i < exam.questions.length; i++) questionButton(i)
+      ],
     );
   }
 
