@@ -259,9 +259,7 @@ class _StudentExamState extends State<StudentExam> {
     return Column(
       children: [
         ElevatedButton(
-          onPressed: () {
-            // TODO: show confirmation pop up.
-          },
+          onPressed: () => showEndExamDialog(),
           child: const Text(
             "Beëindig het examen",
             style: TextStyle(fontSize: sizes.btnSmall),
@@ -272,6 +270,32 @@ class _StudentExamState extends State<StudentExam> {
           ),
         ),
       ],
+    );
+  }
+
+  void showEndExamDialog() {
+    showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Examen eindigen'),
+        content: const Text(
+            'Ben je zeker dat je je examen wilt indienen? Je kan het daarna niet meer aanpassen.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Sluit'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              // TODO: end exam
+            },
+            child: const Text(
+              "Examen indienen",
+              style: TextStyle(fontSize: sizes.btnXSmall),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
