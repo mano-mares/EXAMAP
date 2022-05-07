@@ -63,10 +63,39 @@ class _StudentExamState extends State<StudentExam> {
 
   Container QuestionContainer() {
     return Container(
-      padding: EdgeInsets.only(top: 16.0),
-      width: 500,
-      height: 500,
-      color: Colors.green,
+      //color: const Color.fromARGB(255, 245, 241, 241),
+      child: Padding(
+        padding: const EdgeInsets.all(0.0),
+        child: OpenQuestionForm(),
+      ),
+    );
+  }
+
+  Form OpenQuestionForm() {
+    return Form(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 16.0),
+            child: const Text(
+              'Wat is het zin van het leven?',
+              style: TextStyle(
+                fontSize: sizes.medium,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          TextFormField(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+            ),
+            keyboardType: TextInputType.multiline,
+            minLines: 10,
+            maxLines: 10,
+          ),
+        ],
+      ),
     );
   }
 
@@ -126,9 +155,12 @@ class _StudentExamState extends State<StudentExam> {
         child: ListView(
           children: [
             questionButtons(),
-            const SizedBox(height: 16.0),
-            QuestionContainer(),
-            const SizedBox(height: 16.0),
+            Container(
+              margin: const EdgeInsets.only(top: 16.0, bottom: 32.0),
+              child: Expanded(
+                child: QuestionContainer(),
+              ),
+            ),
             Column(
               children: [
                 nextQuestionButton(),
