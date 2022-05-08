@@ -2,6 +2,9 @@ import 'package:examap/create_exam/create_exam_form/exam_questions_list.dart';
 import 'package:examap/models/exam.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:examap/firebase_options.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../strings.dart' as strings;
 import '../../res/style/my_fontsize.dart' as sizes;
@@ -20,9 +23,13 @@ class _CreateExamFormState extends State<CreateExamForm> {
   late TextEditingController _nameController;
   late TextEditingController _timeController;
 
+  late FirebaseFirestore firestore;
+
   @override
   void initState() {
     super.initState();
+    Firebase.initializeApp(options: DefaultFirebaseOptions.android);
+    loadFirestore();
     _nameController = TextEditingController();
     _timeController = TextEditingController(text: _parseTime(_initialTime));
   }
@@ -32,6 +39,10 @@ class _CreateExamFormState extends State<CreateExamForm> {
     _nameController.dispose();
     _timeController.dispose();
     super.dispose();
+  }
+
+  void loadFirestore() async {
+    firestore = FirebaseFirestore.instance;
   }
 
   void _selectTime() async {
@@ -85,9 +96,27 @@ class _CreateExamFormState extends State<CreateExamForm> {
           behavior: SnackBarBehavior.floating,
         ),
       );
-
+      final examObject = <String, dynamic>{
+        "subject": "Intro mobile",
+        "time_limit": "2:30",
+      };
       // TODO: sync exam to firebase
+      // firestore
+      //     .collection("exam")
+      //     .add(examObject)
+      //     .then((DocumentReference doc) => print('Succes'));
+      //Make collection + time
 
+      //Write name + time to DB
+      for (var i = 0; i < exam.questions.length; i++) {
+        if (exam.questions[i].questionType == strings.multipleChoice) {
+          print("Multiple choice");
+        } else if (exam.questions[i].questionType == strings.codeCorrection) {
+          print("Code correction");
+        } else {
+          print("Open question");
+        }
+      }
       // Clear questions list.
       exam.questions.clear();
     }

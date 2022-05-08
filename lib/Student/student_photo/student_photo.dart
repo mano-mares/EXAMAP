@@ -75,23 +75,32 @@ class _StudentPhotoState extends State<StudentPhoto> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Start examen'),
-        content: const Text('Na het bevestigen begint je examen'),
+        title: const Text(
+          'Start examen',
+          style: TextStyle(fontSize: fontSizes.medium),
+        ),
+        content: const Text(
+          'Na het bevestigen begint je examen',
+          style: TextStyle(fontSize: fontSizes.small),
+        ),
         actions: [
           TextButton(
-            child: const Text('Sluit'),
+            child: const Text(
+              'Sluit',
+              style: TextStyle(fontSize: fontSizes.small),
+            ),
             onPressed: () => Navigator.pop(context),
           ),
-          Container(
-            padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
-            child: ElevatedButton(
-              onPressed: uploadPhoto,
-              child: const Text(
+          ElevatedButton(
+            onPressed: uploadPhoto,
+            child: const Padding(
+              padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
+              child: Text(
                 "Bevestig",
                 style: TextStyle(fontSize: fontSizes.btnMedium),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -118,72 +127,76 @@ class _StudentPhotoState extends State<StudentPhoto> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                padding: const EdgeInsets.fromLTRB(10, 50, 10, 40),
-                width: 450,
-                child: const Text(
-                  "Voor de bevestiging van je identiteit vragen we je om een foto te nemen van jou met je studentenkaart",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: fontSizes.subTitle,
+              Expanded(
+                flex: 1,
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(10, 50, 10, 40),
+                  width: 450,
+                  child: const Text(
+                    "Voor de bevestiging van je identiteit vragen we je om een foto te nemen van jou met je studentenkaart",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: fontSizes.subTitle,
+                    ),
                   ),
                 ),
               ),
               isPhotoTaken
-                  ? SizedBox(
-                      height: 750,
-                      width: 420,
+                  ? Expanded(
+                      flex: 4,
                       child: Image.file(
                         File(image!.path),
                       ),
                     )
-                  : Column(
-                      children: [
-                        SizedBox(
-                          height: 750,
-                          width: 420,
-                          child: controller == null
-                              ? const Center(child: Text("Loading Camera..."))
-                              : !controller!.value.isInitialized
-                                  ? const Center(
-                                      child: CircularProgressIndicator(),
-                                    )
-                                  : CameraPreview(controller!),
-                        ),
-                      ],
+                  : Expanded(
+                      flex: 4,
+                      child: Padding(
+                        padding: const EdgeInsets.only(),
+                        child: controller == null
+                            ? const Center(child: Text("Loading Camera..."))
+                            : !controller!.value.isInitialized
+                                ? const Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : CameraPreview(controller!),
+                      ),
                     ),
-              Container(
-                padding: const EdgeInsets.only(top: 30),
-                alignment: Alignment.center,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    isPhotoTaken
-                        ? FloatingActionButton(
-                            onPressed: retakePhoto,
-                            child: const Icon(Icons.replay_rounded),
-                          )
-                        : const Text(""),
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: FloatingActionButton(
-                          onPressed: takePhoto,
-                          child: const Icon(Icons.camera)),
-                    ),
-                    isPhotoTaken
-                        ? ElevatedButton(
-                            onPressed: confirmPhoto,
-                            child: Container(
-                              padding: const EdgeInsets.all(15),
-                              child: const Text(
-                                "Bevestig",
-                                style: TextStyle(fontSize: fontSizes.btnMedium),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  padding: const EdgeInsets.only(top: 30),
+                  alignment: Alignment.center,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      isPhotoTaken
+                          ? FloatingActionButton(
+                              onPressed: retakePhoto,
+                              child: const Icon(Icons.replay_rounded),
+                            )
+                          : const Text(""),
+                      Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: FloatingActionButton(
+                            onPressed: takePhoto,
+                            child: const Icon(Icons.camera)),
+                      ),
+                      isPhotoTaken
+                          ? ElevatedButton(
+                              onPressed: confirmPhoto,
+                              child: Container(
+                                padding: const EdgeInsets.all(15),
+                                child: const Text(
+                                  "Bevestig",
+                                  style:
+                                      TextStyle(fontSize: fontSizes.btnMedium),
+                                ),
                               ),
-                            ),
-                          )
-                        : const Text(""),
-                  ],
+                            )
+                          : const Text(""),
+                    ],
+                  ),
                 ),
               ),
             ],
