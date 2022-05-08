@@ -21,7 +21,7 @@ class _StudentExamState extends State<StudentExam> {
   late Exam exam;
   late int currentQuestion;
   late Timer timer;
-  int start = 120;
+  late int startInSeconds;
 
   List<bool> isChecked = [false, false, false];
 
@@ -32,32 +32,53 @@ class _StudentExamState extends State<StudentExam> {
     setState(() {
       currentQuestion = 0;
     });
+    getStartTime(exam.timeLimit);
     startTimer();
   }
 
+  // timeLimit format: "2:30 uur", "0:45 uur", "12:00 uur", etc.
+  void getStartTime(String timeLimit) {
+    // Split the string.
+    dynamic time = timeLimit.split('uur')[0].split(':');
+    int hour = int.parse(time[0]);
+    int minute = int.parse(time[1]);
+
+    // Convert hour and minutes to total seconds.
+    Duration countdownDuration =
+        Duration(hours: hour, minutes: minute, seconds: 0);
+    startInSeconds = countdownDuration.inSeconds;
+  }
+
   void startTimer() {
+    // Timer ticking down a second.
     const oneSec = Duration(seconds: 1);
     timer = Timer.periodic(
       oneSec,
       (Timer timer) {
-        if (start == 0) {
+        if (startInSeconds == 0) {
           setState(() {
             timer.cancel();
+            // TODO: show timer ended popup.
           });
         } else {
           setState(() {
-            start--;
+            startInSeconds--;
           });
         }
       },
     );
   }
 
+  // Format total seconds in HH:MM:SS
+  String formatTime(int seconds) {
+    return '${(Duration(seconds: seconds))}'.split('.')[0].padLeft(8, '0');
+  }
+
   Exam getExam() {
     // TODO: get exam from firestore.
     Exam dummyExam = Exam();
     dummyExam.subject = 'Intro Mobile';
-    dummyExam.timeLimit = '2:30';
+    dummyExam.timeLimit = '0:1 uur';
     List<Question> questions = [
       for (int i = 0; i < 10; i++)
         OpenQuestion(
@@ -341,7 +362,7 @@ class _StudentExamState extends State<StudentExam> {
             Container(
               margin: const EdgeInsets.only(top: 16.0),
               child: Text(
-                'Resterende tijd: $start',
+                'Resterende tijd: ${formatTime(startInSeconds)}',
                 style: const TextStyle(fontSize: sizes.small),
               ),
             ),
