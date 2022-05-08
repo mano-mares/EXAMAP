@@ -339,13 +339,14 @@ class _StudentExamState extends State<StudentExam> {
           children: [
             questionButtons(),
             Container(
-              margin: const EdgeInsets.only(top: 16.0, bottom: 8.0),
+              margin: const EdgeInsets.only(top: 16.0),
               child: Text(
                 'Resterende tijd: $start',
                 style: const TextStyle(fontSize: sizes.small),
               ),
             ),
             questionForm(),
+            const SizedBox(height: 16.0),
             Column(
               children: [
                 currentQuestion >= (exam.questions.length - 1)
