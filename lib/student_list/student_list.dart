@@ -51,9 +51,9 @@ class _StudentListState extends State<StudentList> {
       // TO DO
       // Reference the correct Exam
       CollectionReference studentStore = firestore!
-          .collection("exam2")
-          .doc("Python Development")
-          .collection("students");
+          .collection(strings.headCollection)
+          .doc(strings.headCollectionDoc)
+          .collection(strings.studentCollection);
 
       await getData(studentStore);
     }
