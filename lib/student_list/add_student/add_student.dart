@@ -39,9 +39,9 @@ class _StudentListAddState extends State<StudentListAdd> {
     // TO DO
     // Reference the correct Exam
     QuerySnapshot querySnapshot = await firestore
-        .collection("exam2")
-        .doc("Python Development")
-        .collection("students")
+        .collection(strings.headCollection)
+        .doc(strings.headCollectionDoc)
+        .collection(strings.studentCollection)
         .get();
     // Get data from docs and convert map to List
     final allData = querySnapshot.docs.map((doc) => doc.id).toList().join(", ");
@@ -71,9 +71,9 @@ class _StudentListAddState extends State<StudentListAdd> {
       students.studentList.add(student.trim());
       if (!studentStore.contains(student)) {
         firestore
-            .collection("exam2")
-            .doc("Python Development")
-            .collection("students")
+            .collection(strings.headCollection)
+            .doc(strings.headCollectionDoc)
+            .collection(strings.studentCollection)
             .doc(student)
             .set(studentObject, SetOptions(merge: true));
       }
@@ -90,9 +90,9 @@ class _StudentListAddState extends State<StudentListAdd> {
       students.studentList.add(student.trim());
       if (studentStore.contains(student)) {
         firestore
-            .collection("exam2")
-            .doc("Python Development")
-            .collection("students")
+            .collection(strings.headCollection)
+            .doc(strings.headCollectionDoc)
+            .collection(strings.studentCollection)
             .doc(student)
             .delete();
       }
