@@ -45,7 +45,7 @@ class _StudentListAddState extends State<StudentListAdd> {
         .get();
     // Get data from docs and convert map to List
     final allData = querySnapshot.docs.map((doc) => doc.id).toList().join(", ");
-    print(allData);
+    // print(allData);
 
     return allData.toString();
   }
@@ -68,35 +68,45 @@ class _StudentListAddState extends State<StudentListAdd> {
     List<String> rawStudList = studentController.text.split(",");
 
     for (var student in rawStudList) {
-      students.studentList.add(student.trim());
+      String studTrim = student.trim();
+      students.studentList.add(studTrim);
       if (!studentStore.contains(student)) {
         firestore
             .collection(strings.headCollection)
             .doc(strings.headCollectionDoc)
             .collection(strings.studentCollection)
-            .doc(student)
+            .doc(studTrim.toLowerCase())
             .set(studentObject, SetOptions(merge: true));
       }
     }
   }
 
   void _deleteStudent() async {
-    students.studentList = [];
+    // students.studentList = [];
     String studentStore = await getData();
+    List<String> rawStudList = [];
 
-    List<String> rawStudList = studentController.text.split(",");
+    // if (!studentController.text.contains(",")) {
+    //   rawStudList = [studentController.text];
+    // }
+
+    rawStudList = studentController.text.split(",");
 
     for (var student in rawStudList) {
-      students.studentList.add(student.trim());
-      if (studentStore.contains(student)) {
+      String studTrim = student.trim();
+      // students.studentList.add(studTrimmed);
+      if (studentStore.contains(studTrim.toLowerCase())) {
         firestore
             .collection(strings.headCollection)
             .doc(strings.headCollectionDoc)
             .collection(strings.studentCollection)
-            .doc(student)
+            .doc(studTrim)
             .delete();
+        // print(studTrim);
       }
     }
+
+    // studentController.text = await getData();
   }
 
   @override

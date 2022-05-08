@@ -39,7 +39,7 @@ class _StudentListState extends State<StudentList> {
     QuerySnapshot querySnapshot = await studentStore.get();
     // Get data from docs and convert map to List
     final allData = querySnapshot.docs.map((doc) => doc.id).toList().join(", ");
-    print(allData);
+    // print(allData);
 
     studentController.text = allData.toString();
   }
@@ -61,9 +61,12 @@ class _StudentListState extends State<StudentList> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color.fromARGB(255, 245, 241, 241),
-      child: Column(children: [
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Edit Students"),
+        centerTitle: true,
+      ),
+      body: Column(children: [
         Padding(
             padding: const EdgeInsets.only(
                 left: 128, right: 128, top: 128, bottom: 50),
