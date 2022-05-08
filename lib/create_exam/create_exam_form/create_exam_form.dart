@@ -96,25 +96,37 @@ class _CreateExamFormState extends State<CreateExamForm> {
           behavior: SnackBarBehavior.floating,
         ),
       );
-      final examObject = <String, dynamic>{
-        "subject": "Intro mobile",
-        "time_limit": "2:30",
-      };
       // TODO: sync exam to firebase
-      // firestore
-      //     .collection("exam")
-      //     .add(examObject)
-      //     .then((DocumentReference doc) => print('Succes'));
-      //Make collection + time
-
-      //Write name + time to DB
+      final collectionExam = <String, dynamic>{
+        "subject": _nameController.text.trim(),
+        "time_limit": _timeController.text.trim(),
+      };
+      //make collection + doc
+      firestore
+          .collection("exam")
+          .doc(_nameController.text.trim())
+          .set(collectionExam);
+      var questionPrint;
+      //loop through questions
       for (var i = 0; i < exam.questions.length; i++) {
+        questionPrint = "question_" + (i + 1).toString();
         if (exam.questions[i].questionType == strings.multipleChoice) {
-          print("Multiple choice");
+          final multipleChoice = <String, dynamic>{};
         } else if (exam.questions[i].questionType == strings.codeCorrection) {
-          print("Code correction");
+          // final codeCorrection = <String, dynamic>{"answer_text":exam.questions[i].};
+          // firestore.collection("exam").doc(_nameController.text.trim()).collection("questions").doc(questionPrint).set()
         } else {
-          print("Open question");
+          final openQuestion = <String, dynamic>{
+            "max_point": exam.questions[i].maxPoint,
+            "question_text": exam.questions[i].questionText,
+            "question_type": "OQ"
+          };
+          firestore
+              .collection("exam")
+              .doc(_nameController.text.trim())
+              .collection("questions")
+              .doc(questionPrint)
+              .set(openQuestion);
         }
       }
       // Clear questions list.
