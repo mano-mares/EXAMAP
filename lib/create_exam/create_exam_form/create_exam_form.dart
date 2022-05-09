@@ -104,15 +104,10 @@ class _CreateExamFormState extends State<CreateExamForm> {
         "time_limit": _timeController.text.trim(),
       };
       //make collection + doc
-      firestore
-          .collection("exam")
-          .doc(_nameController.text.trim())
-          .set(collectionExam);
+      firestore.collection("EXAMAP").doc("exam").set(collectionExam);
       var questionPrint;
-      var questionRef = firestore
-          .collection("exam")
-          .doc(_nameController.text.trim())
-          .collection("questions");
+      var questionRef =
+          firestore.collection("EXAMAP").doc("exam").collection("questions");
       //loop through questions
       for (var i = 0; i < exam.questions.length; i++) {
         //doc
