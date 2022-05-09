@@ -1,7 +1,12 @@
 import 'package:examap/create_exam/create_exam_form/exam_questions_list.dart';
 import 'package:examap/models/exam.dart';
+import 'package:examap/models/questions/code_correction/code_correction_question.dart';
+import 'package:examap/models/questions/multiple_choice/multiple_choice_question.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:examap/firebase_options.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../strings.dart' as strings;
 import '../../res/style/my_fontsize.dart' as sizes;
@@ -20,9 +25,13 @@ class _CreateExamFormState extends State<CreateExamForm> {
   late TextEditingController _nameController;
   late TextEditingController _timeController;
 
+  late FirebaseFirestore firestore;
+
   @override
   void initState() {
     super.initState();
+    Firebase.initializeApp(options: DefaultFirebaseOptions.android);
+    loadFirestore();
     _nameController = TextEditingController();
     _timeController = TextEditingController(text: _parseTime(_initialTime));
   }
@@ -32,6 +41,10 @@ class _CreateExamFormState extends State<CreateExamForm> {
     _nameController.dispose();
     _timeController.dispose();
     super.dispose();
+  }
+
+  void loadFirestore() async {
+    firestore = FirebaseFirestore.instance;
   }
 
   void _selectTime() async {
@@ -86,8 +99,69 @@ class _CreateExamFormState extends State<CreateExamForm> {
         ),
       );
 
-      // TODO: sync exam to firebase
+      final collectionExam = <String, dynamic>{
+        "subject": _nameController.text.trim(),
+        "time_limit": _timeController.text.trim(),
+      };
+      //make collection + doc
+      firestore
+          .collection("exam")
+          .doc(_nameController.text.trim())
+          .set(collectionExam);
+      var questionPrint;
+      var questionRef = firestore
+          .collection("exam")
+          .doc(_nameController.text.trim())
+          .collection("questions");
+      //loop through questions
+      for (var i = 0; i < exam.questions.length; i++) {
+        //doc
+        questionPrint = "question_" + (i + 1).toString();
+        //Multiple Choice
+        if (exam.questions[i].questionType == strings.multipleChoice) {
+          MultipleChoiceQuestion currentQuestion =
+              exam.questions[i] as MultipleChoiceQuestion;
+          var arrayAnswers = [];
+          for (var y = 0; y < currentQuestion.possibleAnswers.length; y++) {
+            var subAnswers = <String, dynamic>{
+              "answer_text": currentQuestion.possibleAnswers[y].answerText,
+              "is_correct": currentQuestion.possibleAnswers[y].isCorrect,
+            };
+            arrayAnswers.add(subAnswers);
+            // firestore.collection("exam").doc(_nameController.text.trim()).collection("questions").doc(questionPrint).set(data)
+          }
+          var multipleChoice = <String, dynamic>{
+            "max_point": currentQuestion.maxPoint,
+            "question_text": currentQuestion.questionText,
+            "question_type": "MC",
+            "answers": arrayAnswers,
+          };
+          questionRef.doc(questionPrint).set(multipleChoice);
+        }
 
+        //Code Correction
+        else if (exam.questions[i].questionType == strings.codeCorrection) {
+          CodeCorrectionQuestion currentQuestion =
+              exam.questions[i] as CodeCorrectionQuestion;
+          var codeCorrection = <String, dynamic>{
+            "answer_text": currentQuestion.answerText,
+            "max_point": currentQuestion.maxPoint,
+            "question_text": currentQuestion.questionText,
+            "question_type": "CC"
+          };
+          questionRef.doc(questionPrint).set(codeCorrection);
+        }
+
+        //Open Question
+        else {
+          var openQuestion = <String, dynamic>{
+            "max_point": exam.questions[i].maxPoint,
+            "question_text": exam.questions[i].questionText,
+            "question_type": "OQ"
+          };
+          questionRef.doc(questionPrint).set(openQuestion);
+        }
+      }
       // Clear questions list.
       exam.questions.clear();
     }
