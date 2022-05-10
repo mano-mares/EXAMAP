@@ -1,3 +1,4 @@
+import 'package:examap/correct_exam/choose_student_correction.dart';
 import 'package:examap/create_exam/create_exam.dart';
 import 'package:flutter/material.dart';
 
@@ -43,8 +44,8 @@ class HomePageDocent extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(240, 80),
                 primary: Colors.red,
-                textStyle:
-                    const TextStyle(fontSize: sizes.text, fontWeight: FontWeight.bold),
+                textStyle: const TextStyle(
+                    fontSize: sizes.text, fontWeight: FontWeight.bold),
               ),
               onPressed: () {
                 Navigator.push(
@@ -61,10 +62,17 @@ class HomePageDocent extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(240, 80),
                 primary: Colors.red,
-                textStyle:
-                    const TextStyle(fontSize: sizes.text, fontWeight: FontWeight.bold),
+                textStyle: const TextStyle(
+                    fontSize: sizes.text, fontWeight: FontWeight.bold),
               ),
-              onPressed: () {}, //TODO: Redirect to Examen verbeteren page
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ChooseStudentCorrection(),
+                  ),
+                );
+              }, //TODO: Redirect to Examen verbeteren page
             ),
             const SizedBox(height: 20),
             ElevatedButton(
@@ -72,8 +80,8 @@ class HomePageDocent extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(240, 80),
                 primary: Colors.red,
-                textStyle:
-                    const TextStyle(fontSize: sizes.text, fontWeight: FontWeight.bold),
+                textStyle: const TextStyle(
+                    fontSize: sizes.text, fontWeight: FontWeight.bold),
               ),
               onPressed: () {}, //TODO: Redirect to Studenten lijst page
             ),
