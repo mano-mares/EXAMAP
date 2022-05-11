@@ -25,6 +25,10 @@ class _StudentExamState extends State<StudentExam> {
   late int startInSeconds;
   late List<Map<String, dynamic>> _answers;
   final TextEditingController openQuestionController = TextEditingController();
+  final TextEditingController codeCorrectionController =
+      TextEditingController();
+  final TextEditingController multipleChoiceController =
+      TextEditingController();
 
   List<bool> isChecked = [false, false, false];
 
@@ -94,7 +98,7 @@ class _StudentExamState extends State<StudentExam> {
     dummyExam.subject = 'Intro Mobile';
     dummyExam.timeLimit = '0:10 uur';
     List<Question> questions = [
-      for (int i = 0; i < 10; i++)
+      for (int i = 0; i < 3; i++)
         OpenQuestion(
             id: '${i + 10}',
             questionText: 'Filler vraag $i',
@@ -113,6 +117,13 @@ class _StudentExamState extends State<StudentExam> {
         maxPoint: 3,
         questionType: 'Code correctie',
       ),
+      CodeCorrectionQuestion(
+        id: '2',
+        questionText: "MAIN",
+        answerText: "main",
+        maxPoint: 15,
+        questionType: 'Code correctie',
+      ),
       MultipleChoiceQuestion(
         id: '3',
         questionText: 'Wat is geen programmeertaal?',
@@ -122,6 +133,17 @@ class _StudentExamState extends State<StudentExam> {
           Answer(answerText: 'c++', isCorrect: false),
           Answer(answerText: 'c--', isCorrect: true),
           Answer(answerText: 'c#', isCorrect: false),
+        ],
+      ),
+      MultipleChoiceQuestion(
+        id: '3',
+        questionText: 'Wat is wel een programmeertaal?',
+        maxPoint: 5,
+        questionType: 'Meerkeuze',
+        possibleAnswers: [
+          Answer(answerText: 'rattlesnake', isCorrect: false),
+          Answer(answerText: 'anaconda', isCorrect: false),
+          Answer(answerText: 'python', isCorrect: true),
         ],
       ),
     ];
@@ -142,6 +164,8 @@ class _StudentExamState extends State<StudentExam> {
       return codeCorrectionForm(
         questionText: question.questionText,
         maxPoint: question.maxPoint,
+        index: currentQuestion,
+        controller: codeCorrectionController,
       );
     } else if (question is MultipleChoiceQuestion) {
       return multipleChoiceForm(
@@ -153,11 +177,12 @@ class _StudentExamState extends State<StudentExam> {
     }
   }
 
-  Form openQuestionForm(
-      {required String questionText,
-      required int maxPoint,
-      required int index,
-      required TextEditingController controller}) {
+  Form openQuestionForm({
+    required String questionText,
+    required int maxPoint,
+    required int index,
+    required TextEditingController controller,
+  }) {
     return Form(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -198,8 +223,12 @@ class _StudentExamState extends State<StudentExam> {
     );
   }
 
-  Form codeCorrectionForm(
-      {required String questionText, required int maxPoint}) {
+  Form codeCorrectionForm({
+    required String questionText,
+    required int maxPoint,
+    required int index,
+    required TextEditingController controller,
+  }) {
     return Form(
         child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -224,6 +253,7 @@ class _StudentExamState extends State<StudentExam> {
         Container(
           margin: const EdgeInsets.only(top: 16.0),
           child: TextFormField(
+            controller: controller,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
             ),
@@ -237,7 +267,11 @@ class _StudentExamState extends State<StudentExam> {
           children: [
             currentQuestion >= (exam.questions.length - 1)
                 ? finishExamButton()
-                : nextQuestionButton(),
+                : nextQuestionButton(
+                    index: index,
+                    answerText: controller.text,
+                    questionType: 'CC',
+                  ),
           ],
         ),
       ],
@@ -340,11 +374,13 @@ class _StudentExamState extends State<StudentExam> {
       onPressed: () {
         // TODO: store the answer of the current question in a list.
         _updateAnswers(index, answerText, questionType);
-        print('--PRINT ALL ANSWERS');
+        print('--PRINT ALL ANSWERS--');
         print(_answers);
         setState(() {
           currentQuestion++;
+          // Clear the text field.
           openQuestionController.text = "";
+          codeCorrectionController.text = "";
         });
       },
       child: const Text(
@@ -475,6 +511,8 @@ class _StudentExamState extends State<StudentExam> {
   void dispose() {
     timer.cancel();
     openQuestionController.dispose();
+    codeCorrectionController.dispose();
+    multipleChoiceController.dispose();
     super.dispose();
   }
 }
