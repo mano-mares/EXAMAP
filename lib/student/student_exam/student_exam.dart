@@ -6,6 +6,7 @@ import 'package:examap/models/questions/multiple_choice/answer.dart';
 import 'package:examap/models/questions/multiple_choice/multiple_choice_question.dart';
 import 'package:examap/models/questions/open_question/open_question.dart';
 import 'package:examap/models/questions/question.dart';
+import 'package:examap/student/student_exam/submit_exam_page.dart';
 import 'package:flutter/material.dart';
 
 import '../../res/style/my_fontsize.dart' as sizes;
@@ -58,7 +59,7 @@ class _StudentExamState extends State<StudentExam> {
         if (startInSeconds == 0) {
           setState(() {
             timer.cancel();
-            // TODO: show timer ended popup.
+            goToEndExamPage();
           });
         } else {
           setState(() {
@@ -330,12 +331,15 @@ class _StudentExamState extends State<StudentExam> {
             'Ben je zeker dat je je examen wilt indienen? Je kan het daarna niet meer aanpassen.'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.pop(context);
+            },
             child: const Text('Sluit'),
           ),
           ElevatedButton(
             onPressed: () {
-              // TODO: end exam
+              Navigator.pop(context);
+              goToEndExamPage();
             },
             child: const Text(
               "Examen indienen",
@@ -345,6 +349,13 @@ class _StudentExamState extends State<StudentExam> {
         ],
       ),
     );
+  }
+
+  void goToEndExamPage() {
+    // Push new page and remove all previous pages
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const SubmitExamPage()),
+        ((route) => false));
   }
 
   @override
