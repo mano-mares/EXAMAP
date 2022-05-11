@@ -59,8 +59,18 @@ class _StudentExamState extends State<StudentExam> {
         if (startInSeconds == 0) {
           setState(() {
             timer.cancel();
-            goToEndExamPage();
           });
+          // Show snackbar
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Tijd is op!"),
+              duration: Duration(milliseconds: 3000),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+
+          // Go to submit exam.
+          goToEndExamPage();
         } else {
           setState(() {
             startInSeconds--;
