@@ -27,8 +27,6 @@ class _StudentExamState extends State<StudentExam> {
   final TextEditingController openQuestionController = TextEditingController();
   final TextEditingController codeCorrectionController =
       TextEditingController();
-  final TextEditingController multipleChoiceController =
-      TextEditingController();
 
   List<bool> isChecked = [false, false, false];
 
@@ -560,7 +558,6 @@ class _StudentExamState extends State<StudentExam> {
     timer.cancel();
     openQuestionController.dispose();
     codeCorrectionController.dispose();
-    multipleChoiceController.dispose();
     super.dispose();
   }
 }
