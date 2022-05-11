@@ -416,16 +416,21 @@ class _StudentExamState extends State<StudentExam> {
   }) {
     return ElevatedButton(
       onPressed: () {
-        // TODO: store the answer of the current question in a list.
-        _updateAnswers(index, answerText, questionType, possibleAnswers);
-        print('--PRINT ALL ANSWERS--');
-        print(_answers);
         setState(() {
+          // Store/update the answers of the student in a list.
+          _updateAnswers(index, answerText, questionType, possibleAnswers);
+          print('--PRINT ALL ANSWERS--');
+          print(_answers);
+
+          // Next question.
           currentQuestion++;
-          // Clear the text field.
-          openQuestionController.text = "";
-          codeCorrectionController.text = "";
-          isChecked = [false, false, false];
+
+          // TODO: if already answered, show the answer in the text field from the answers list.
+          setAnswer(currentQuestion);
+          // // Clear the text field.
+          // openQuestionController.text = "";
+          // codeCorrectionController.text = "";
+          // isChecked = [false, false, false];
         });
       },
       child: const Text(
@@ -439,13 +444,76 @@ class _StudentExamState extends State<StudentExam> {
     );
   }
 
+  void setAnswer(int index) {
+    String? foundId;
+    String? foundType;
+    String id = "question_${index + 1}";
+    // Check if the answer is already stored.
+    for (var map in _answers) {
+      if (map.containsKey("id")) {
+        if (map["id"] == id) {
+          foundId = id;
+          foundType = map["type"];
+          print("Found answer $foundId");
+          break;
+        }
+      }
+    }
+
+    // Exit if not already answered.
+    if (foundId == null) {
+      print("Clear text field");
+      // Clear the text field.
+      openQuestionController.text = "";
+      codeCorrectionController.text = "";
+      isChecked = [false, false, false];
+      return;
+    }
+
+    print('get answer from $foundType');
+
+    switch (foundType) {
+      case 'OQ':
+        Map<String, dynamic> getAnswer =
+            _answers.where((element) => element["id"] == id).first;
+        String answer = getAnswer["student_answer"];
+        print(answer);
+        openQuestionController.text = answer;
+        break;
+      case 'CC':
+        Map<String, dynamic> getAnswer =
+            _answers.where((element) => element["id"] == id).first;
+        String answer = getAnswer["student_answer"];
+        print(answer);
+        openQuestionController.text = answer;
+        break;
+      case 'MC':
+        // TODO: do this.
+        print("IN MC");
+        Map<String, dynamic> getAnswer =
+            _answers.where((element) => element["id"] == id).first;
+        List<Map<String, dynamic>> getStudentAnswersMultipleChoice =
+            getAnswer["student_answers"];
+        print(getStudentAnswersMultipleChoice);
+        for (int i = 0; i < getStudentAnswersMultipleChoice.length; i++) {
+          isChecked[i] = getStudentAnswersMultipleChoice[i]["answer"];
+        }
+        break;
+      default:
+    }
+
+    // If there is an answer, set the text field
+  }
+
   ElevatedButton questionButton(int index) {
     return ElevatedButton(
       onPressed: () {
         setState(
           () {
+            print("Go to question $index");
             currentQuestion = index;
             // TODO: if already answered, show the answer in the text field from the answers list.
+            setAnswer(currentQuestion);
           },
         );
       },
