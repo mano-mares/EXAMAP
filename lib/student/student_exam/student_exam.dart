@@ -23,6 +23,7 @@ class _StudentExamState extends State<StudentExam> {
   late int currentQuestion;
   late Timer timer;
   late int startInSeconds;
+  late List<Map<String, dynamic>> _answers;
 
   List<bool> isChecked = [false, false, false];
 
@@ -32,6 +33,7 @@ class _StudentExamState extends State<StudentExam> {
     exam = getExam();
     setState(() {
       currentQuestion = 0;
+      _answers = [];
     });
     getStartTime(exam.timeLimit);
     startTimer();
@@ -132,6 +134,7 @@ class _StudentExamState extends State<StudentExam> {
       return openQuestionForm(
         questionText: question.questionText,
         maxPoint: question.maxPoint,
+        index: currentQuestion,
       );
     } else if (question is CodeCorrectionQuestion) {
       return codeCorrectionForm(
@@ -148,7 +151,11 @@ class _StudentExamState extends State<StudentExam> {
     }
   }
 
-  Form openQuestionForm({required String questionText, required int maxPoint}) {
+  Form openQuestionForm({
+    required String questionText,
+    required int maxPoint,
+    required int index,
+  }) {
     return Form(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -171,9 +178,39 @@ class _StudentExamState extends State<StudentExam> {
             minLines: 10,
             maxLines: 10,
           ),
+          const SizedBox(height: 16.0),
+          Column(
+            children: [
+              currentQuestion >= (exam.questions.length - 1)
+                  ? finishExamButton()
+                  : nextQuestionButton(),
+            ],
+          ),
         ],
       ),
     );
+  }
+
+  void _onUpdate(int index, String val) {
+    int foundKey = -1;
+    for (var map in _answers) {
+      if (map.containsKey("id")) {
+        if (map["id"] == index) {
+          foundKey = index;
+          break;
+        }
+      }
+    }
+    if (-1 != foundKey) {
+      _answers.removeWhere((map) {
+        return map["id"] == foundKey;
+      });
+    }
+    Map<String, dynamic> json = {
+      "id": index,
+      "value": val,
+    };
+    _answers.add(json);
   }
 
   Form codeCorrectionForm(
@@ -210,6 +247,14 @@ class _StudentExamState extends State<StudentExam> {
             maxLines: 10,
           ),
         ),
+        const SizedBox(height: 16.0),
+        Column(
+          children: [
+            currentQuestion >= (exam.questions.length - 1)
+                ? finishExamButton()
+                : nextQuestionButton(),
+          ],
+        ),
       ],
     ));
   }
@@ -233,7 +278,15 @@ class _StudentExamState extends State<StudentExam> {
             ),
           ),
           for (int i = 0; i < answers.length; i++)
-            checkboxAnswer(index: i, answerText: answers[i].answerText!)
+            checkboxAnswer(index: i, answerText: answers[i].answerText!),
+          const SizedBox(height: 16.0),
+          Column(
+            children: [
+              currentQuestion >= (exam.questions.length - 1)
+                  ? finishExamButton()
+                  : nextQuestionButton(),
+            ],
+          ),
         ],
       ),
     );
@@ -268,6 +321,7 @@ class _StudentExamState extends State<StudentExam> {
   ElevatedButton nextQuestionButton() {
     return ElevatedButton(
       onPressed: () {
+        // TODO: store the answer of the current question.
         setState(() {
           currentQuestion++;
         });
@@ -389,13 +443,6 @@ class _StudentExamState extends State<StudentExam> {
             ),
             questionForm(),
             const SizedBox(height: 16.0),
-            Column(
-              children: [
-                currentQuestion >= (exam.questions.length - 1)
-                    ? finishExamButton()
-                    : nextQuestionButton(),
-              ],
-            ),
           ],
         ),
       ),
