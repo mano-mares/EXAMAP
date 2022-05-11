@@ -1,4 +1,5 @@
 import 'package:examap/create_exam/create_exam.dart';
+import 'package:examap/student_list/student_list.dart';
 import 'package:flutter/material.dart';
 
 import '../app_bar/my_app_bar.dart';
@@ -43,8 +44,8 @@ class HomePageDocent extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(240, 80),
                 primary: Colors.red,
-                textStyle:
-                    const TextStyle(fontSize: sizes.text, fontWeight: FontWeight.bold),
+                textStyle: const TextStyle(
+                    fontSize: sizes.text, fontWeight: FontWeight.bold),
               ),
               onPressed: () {
                 Navigator.push(
@@ -61,8 +62,8 @@ class HomePageDocent extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(240, 80),
                 primary: Colors.red,
-                textStyle:
-                    const TextStyle(fontSize: sizes.text, fontWeight: FontWeight.bold),
+                textStyle: const TextStyle(
+                    fontSize: sizes.text, fontWeight: FontWeight.bold),
               ),
               onPressed: () {}, //TODO: Redirect to Examen verbeteren page
             ),
@@ -72,10 +73,17 @@ class HomePageDocent extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(240, 80),
                 primary: Colors.red,
-                textStyle:
-                    const TextStyle(fontSize: sizes.text, fontWeight: FontWeight.bold),
+                textStyle: const TextStyle(
+                    fontSize: sizes.text, fontWeight: FontWeight.bold),
               ),
-              onPressed: () {}, //TODO: Redirect to Studenten lijst page
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const StudentList(),
+                  ),
+                );
+              },
             ),
           ],
         ),
