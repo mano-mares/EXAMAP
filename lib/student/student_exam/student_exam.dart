@@ -344,6 +344,7 @@ class _StudentExamState extends State<StudentExam> {
         print(_answers);
         setState(() {
           currentQuestion++;
+          openQuestionController.text = "";
         });
       },
       child: const Text(
