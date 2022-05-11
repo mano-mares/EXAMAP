@@ -381,6 +381,7 @@ class _StudentExamState extends State<StudentExam> {
           // Clear the text field.
           openQuestionController.text = "";
           codeCorrectionController.text = "";
+          isChecked = [false, false, false];
         });
       },
       child: const Text(
@@ -400,6 +401,7 @@ class _StudentExamState extends State<StudentExam> {
         setState(
           () {
             currentQuestion = index;
+            // TODO: if already answered, show the answer in the text field from the answers list.
           },
         );
       },
