@@ -1,9 +1,7 @@
-import 'dart:ui';
 import 'package:examap/student_list/add_student/add_student.dart';
 import 'package:flutter/material.dart';
 
 import './strings.dart' as strings;
-import '../Student/choose_student_number/students.dart' as students;
 import '../res/style/my_fontsize.dart' as sizes;
 
 import 'package:firebase_core/firebase_core.dart';
@@ -63,7 +61,7 @@ class _StudentListState extends State<StudentList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Edit Students"),
+        title: const Text("Bewerk Studenten"),
         centerTitle: true,
       ),
       body: Column(children: [
@@ -91,7 +89,7 @@ class _StudentListState extends State<StudentList> {
                     style: TextStyle(fontSize: sizes.btnSmall)),
                 style: ElevatedButton.styleFrom(
                   primary: Colors.red,
-                  fixedSize: const Size(165, 50),
+                  fixedSize: const Size(185, 50),
                 )),
             ElevatedButton(
               onPressed: () {
@@ -106,7 +104,7 @@ class _StudentListState extends State<StudentList> {
                   style: TextStyle(fontSize: sizes.btnSmall)),
               style: ElevatedButton.styleFrom(
                 primary: Colors.red,
-                fixedSize: const Size(155, 50),
+                fixedSize: const Size(200, 50),
               ),
             ),
           ],

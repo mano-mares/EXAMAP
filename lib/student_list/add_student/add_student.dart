@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 
 import '../strings.dart' as strings;
@@ -36,13 +35,14 @@ class _StudentListAddState extends State<StudentListAdd> {
 
   Future<String> getData() async {
     // Get docs from collection reference
-    // TO DO
+    // TODO
     // Reference the correct Exam
     QuerySnapshot querySnapshot = await firestore
         .collection(strings.headCollection)
         .doc(strings.headCollectionDoc)
         .collection(strings.studentCollection)
         .get();
+
     // Get data from docs and convert map to List
     final allData = querySnapshot.docs.map((doc) => doc.id).toList().join(", ");
     // print(allData);
@@ -76,19 +76,23 @@ class _StudentListAddState extends State<StudentListAdd> {
             .doc(strings.headCollectionDoc)
             .collection(strings.studentCollection)
             .doc(studTrim.toLowerCase())
-            .set(studentObject, SetOptions(merge: true));
+            .set(studentObject, SetOptions(merge: true))
+            // Confirmation message
+            .whenComplete(() => _generateSnackbar(strings.addedStudent));
       }
     }
   }
 
+  void _generateSnackbar(String text) {
+    final snackBar = SnackBar(content: Text(text));
+    // Find the ScaffoldMessenger in the widget tree
+    // and use it to show a SnackBar.
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   void _deleteStudent() async {
-    // students.studentList = [];
     String studentStore = await getData();
     List<String> rawStudList = [];
-
-    // if (!studentController.text.contains(",")) {
-    //   rawStudList = [studentController.text];
-    // }
 
     rawStudList = studentController.text.split(",");
 
@@ -101,19 +105,21 @@ class _StudentListAddState extends State<StudentListAdd> {
             .doc(strings.headCollectionDoc)
             .collection(strings.studentCollection)
             .doc(studTrim)
-            .delete();
+            .delete()
+            // Confirmation message
+            .whenComplete(() => _generateSnackbar(strings.removedStudent));
         // print(studTrim);
+      } else {
+        _generateSnackbar(strings.unknownStudenterror);
       }
     }
-
-    // studentController.text = await getData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Edit Students"),
+        title: const Text(strings.editStudentTitle),
         centerTitle: true,
       ),
       body: Column(children: [
@@ -140,7 +146,7 @@ class _StudentListAddState extends State<StudentListAdd> {
                 style: TextStyle(fontSize: sizes.btnSmall)),
             style: ElevatedButton.styleFrom(
               primary: Colors.red,
-              fixedSize: const Size(155, 50),
+              fixedSize: const Size(210, 50),
             ),
           ),
           ElevatedButton(
@@ -149,7 +155,7 @@ class _StudentListAddState extends State<StudentListAdd> {
                 style: TextStyle(fontSize: sizes.btnSmall)),
             style: ElevatedButton.styleFrom(
               primary: Colors.red,
-              fixedSize: const Size(180, 50),
+              fixedSize: const Size(215, 50),
             ),
           ),
         ])
