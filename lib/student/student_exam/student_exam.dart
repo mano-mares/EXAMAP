@@ -24,6 +24,7 @@ class _StudentExamState extends State<StudentExam> {
   late Timer timer;
   late int startInSeconds;
   late List<Map<String, dynamic>> _answers;
+  final TextEditingController openQuestionController = TextEditingController();
 
   List<bool> isChecked = [false, false, false];
 
@@ -91,7 +92,7 @@ class _StudentExamState extends State<StudentExam> {
     // TODO: get exam from firestore.
     Exam dummyExam = Exam();
     dummyExam.subject = 'Intro Mobile';
-    dummyExam.timeLimit = '0:1 uur';
+    dummyExam.timeLimit = '0:10 uur';
     List<Question> questions = [
       for (int i = 0; i < 10; i++)
         OpenQuestion(
@@ -135,6 +136,7 @@ class _StudentExamState extends State<StudentExam> {
         questionText: question.questionText,
         maxPoint: question.maxPoint,
         index: currentQuestion,
+        controller: openQuestionController,
       );
     } else if (question is CodeCorrectionQuestion) {
       return codeCorrectionForm(
@@ -151,11 +153,11 @@ class _StudentExamState extends State<StudentExam> {
     }
   }
 
-  Form openQuestionForm({
-    required String questionText,
-    required int maxPoint,
-    required int index,
-  }) {
+  Form openQuestionForm(
+      {required String questionText,
+      required int maxPoint,
+      required int index,
+      required TextEditingController controller}) {
     return Form(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -171,6 +173,7 @@ class _StudentExamState extends State<StudentExam> {
             ),
           ),
           TextFormField(
+            controller: controller,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
             ),
@@ -183,34 +186,16 @@ class _StudentExamState extends State<StudentExam> {
             children: [
               currentQuestion >= (exam.questions.length - 1)
                   ? finishExamButton()
-                  : nextQuestionButton(),
+                  : nextQuestionButton(
+                      index: index,
+                      answerText: controller.text,
+                      questionType: 'OQ',
+                    ),
             ],
           ),
         ],
       ),
     );
-  }
-
-  void _onUpdate(int index, String val) {
-    int foundKey = -1;
-    for (var map in _answers) {
-      if (map.containsKey("id")) {
-        if (map["id"] == index) {
-          foundKey = index;
-          break;
-        }
-      }
-    }
-    if (-1 != foundKey) {
-      _answers.removeWhere((map) {
-        return map["id"] == foundKey;
-      });
-    }
-    Map<String, dynamic> json = {
-      "id": index,
-      "value": val,
-    };
-    _answers.add(json);
   }
 
   Form codeCorrectionForm(
@@ -318,10 +303,45 @@ class _StudentExamState extends State<StudentExam> {
     );
   }
 
-  ElevatedButton nextQuestionButton() {
+  void _updateAnswers(int index, String value, String questionType) {
+    String? foundId;
+    String id = "question_${index + 1}";
+
+    // Check if the answer is already stored.
+    for (var map in _answers) {
+      if (map.containsKey("id")) {
+        if (map["id"] == id) {
+          foundId = id;
+          break;
+        }
+      }
+    }
+    //print("KEY FOUND $foundId");
+
+    // Remove the answer if answer exists.
+    if (foundId != null) {
+      _answers.removeWhere((map) {
+        return map["id"] == foundId;
+      });
+    }
+
+    // Add the new answer.
+    Map<String, dynamic> json = {
+      "id": id,
+      "student_answer": value,
+      "type": questionType,
+    };
+    _answers.add(json);
+  }
+
+  ElevatedButton nextQuestionButton(
+      {int index = -1, String answerText = "idk", String questionType = "OQ"}) {
     return ElevatedButton(
       onPressed: () {
-        // TODO: store the answer of the current question.
+        // TODO: store the answer of the current question in a list.
+        _updateAnswers(index, answerText, questionType);
+        print('--PRINT ALL ANSWERS');
+        print(_answers);
         setState(() {
           currentQuestion++;
         });
@@ -387,6 +407,7 @@ class _StudentExamState extends State<StudentExam> {
   }
 
   void showEndExamDialog() {
+    // TODO: sort the answers.
     showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
@@ -452,6 +473,7 @@ class _StudentExamState extends State<StudentExam> {
   @override
   void dispose() {
     timer.cancel();
+    openQuestionController.dispose();
     super.dispose();
   }
 }
