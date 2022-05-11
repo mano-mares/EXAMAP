@@ -223,7 +223,7 @@ class _StudentExamState extends State<StudentExam> {
                   ? finishExamButton()
                   : nextQuestionButton(
                       index: index,
-                      answerText: controller.text,
+                      studentAnswer: controller.text,
                       questionType: 'OQ',
                     ),
             ],
@@ -279,7 +279,7 @@ class _StudentExamState extends State<StudentExam> {
                 ? finishExamButton()
                 : nextQuestionButton(
                     index: index,
-                    answerText: controller.text,
+                    studentAnswer: controller.text,
                     questionType: 'CC',
                   ),
           ],
@@ -356,7 +356,7 @@ class _StudentExamState extends State<StudentExam> {
   // Store/update the answers of the student.
   void _updateAnswers(
     int index,
-    String value,
+    String studentAnswer,
     String questionType,
     List<Answer> possibleAnswers,
   ) {
@@ -380,6 +380,8 @@ class _StudentExamState extends State<StudentExam> {
       });
     }
 
+    print("found question with type $questionType");
+
     // Add the new answer.
     Map<String, dynamic> json;
     if (questionType == 'MC') {
@@ -401,7 +403,7 @@ class _StudentExamState extends State<StudentExam> {
     } else {
       json = {
         "id": id,
-        "student_answer": value,
+        "student_answer": studentAnswer,
         "type": questionType,
       };
     }
@@ -410,7 +412,7 @@ class _StudentExamState extends State<StudentExam> {
 
   ElevatedButton nextQuestionButton({
     int index = -1,
-    String answerText = "idk",
+    String studentAnswer = "idk",
     String questionType = "OQ",
     List<Answer> possibleAnswers = const [],
   }) {
@@ -418,19 +420,14 @@ class _StudentExamState extends State<StudentExam> {
       onPressed: () {
         setState(() {
           // Store/update the answers of the student in a list.
-          _updateAnswers(index, answerText, questionType, possibleAnswers);
+          _updateAnswers(index, studentAnswer, questionType, possibleAnswers);
           print('--PRINT ALL ANSWERS--');
           print(_answers);
 
           // Next question.
           currentQuestion++;
 
-          // TODO: if already answered, show the answer in the text field from the answers list.
           setAnswer(currentQuestion);
-          // // Clear the text field.
-          // openQuestionController.text = "";
-          // codeCorrectionController.text = "";
-          // isChecked = [false, false, false];
         });
       },
       child: const Text(
@@ -485,7 +482,7 @@ class _StudentExamState extends State<StudentExam> {
             _answers.where((element) => element["id"] == id).first;
         String answer = getAnswer["student_answer"];
         print(answer);
-        openQuestionController.text = answer;
+        codeCorrectionController.text = answer;
         break;
       case 'MC':
         // TODO: do this.
