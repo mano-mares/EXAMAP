@@ -1,10 +1,13 @@
+import 'package:examap/student/choose_student_number/students.dart';
 import 'package:flutter/material.dart';
 
 class CorrectExam extends StatefulWidget {
-  const CorrectExam({Key? key}) : super(key: key);
+  const CorrectExam({Key? key, this.studentNumber}) : super(key: key);
 
   @override
   State<CorrectExam> createState() => _CorrectExamState();
+
+  final studentNumber;
 }
 
 class _CorrectExamState extends State<CorrectExam> {
@@ -24,9 +27,13 @@ class _CorrectExamState extends State<CorrectExam> {
           ),
           title: const Text('Student'),
         ),
-        body: Column(children: [
-          Container(),
-        ]),
+        body: Column(
+          children: [
+            Container(
+              child: Text(widget.studentNumber),
+            ),
+          ],
+        ),
       ),
     );
   }

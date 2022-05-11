@@ -1,3 +1,4 @@
+import 'package:examap/correct_exam/correct_exam.dart';
 import 'package:flutter/material.dart';
 import '../res/style/my_fontsize.dart' as sizes;
 import 'package:firebase_core/firebase_core.dart';
@@ -26,6 +27,17 @@ class _ChooseStudentCorrection extends State<ChooseStudentCorrection> {
 
   void chooseStudent() {
     print("Choose student");
+  }
+
+  void navigateToStudentCorrection() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const CorrectExam(
+          studentNumber: "S107983",
+        ),
+      ),
+    );
   }
 
   final items = List.generate(70, (counter) => 'Item: $counter');
@@ -102,36 +114,47 @@ class _ChooseStudentCorrection extends State<ChooseStudentCorrection> {
                       padding: const EdgeInsets.fromLTRB(80, 30, 80, 30),
                       child: SizedBox(
                         height: 200,
-                        child: ListView.separated(
-                            separatorBuilder: (context, index) =>
-                                const Divider(color: Colors.black26),
-                            itemCount: items.length,
-                            itemBuilder: (context, index) {
-                              final item = items[index];
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    item,
-                                    style:
-                                        const TextStyle(fontSize: sizes.xSmall),
-                                  ),
-                                  const Text(
-                                    "Punten",
-                                    style: TextStyle(
-                                        color: Colors.black38,
-                                        fontSize: sizes.xSmall),
-                                  ),
-                                  InkWell(
-                                    child: const Icon(Icons.arrow_forward_ios),
-                                    onTap: () {
-                                      // TODO: Go to student correct exam page
-                                    },
-                                  ),
-                                ],
-                              );
-                            }),
+                        child: StreamBuilder<QuerySnapshot>(
+                          stream: firestore
+                              .collection('EXAMAP')
+                              .doc('exam')
+                              .collection('students')
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return ListView.separated(
+                                  separatorBuilder: (context, index) =>
+                                      const Divider(color: Colors.black26),
+                                  itemCount: items.length,
+                                  itemBuilder: (context, index) {
+                                    final item = items[index];
+                                    return Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          item,
+                                          style: const TextStyle(
+                                              fontSize: sizes.xSmall),
+                                        ),
+                                        const Text(
+                                          "Punten",
+                                          style: TextStyle(
+                                              color: Colors.black38,
+                                              fontSize: sizes.xSmall),
+                                        ),
+                                        InkWell(
+                                            child: const Icon(
+                                                Icons.arrow_forward_ios),
+                                            onTap: navigateToStudentCorrection),
+                                      ],
+                                    );
+                                  });
+                            } else {
+                              return const Icon(Icons.downloading_rounded);
+                            }
+                          },
+                        ),
                       ),
                     ),
                   ],
