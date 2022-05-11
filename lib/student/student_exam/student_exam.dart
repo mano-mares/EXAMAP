@@ -137,6 +137,17 @@ class _StudentExamState extends State<StudentExam> {
       ),
       MultipleChoiceQuestion(
         id: '3',
+        questionText: 'Wat is een dier?',
+        maxPoint: 2,
+        questionType: 'Meerkeuze',
+        possibleAnswers: [
+          Answer(answerText: 'hond', isCorrect: true),
+          Answer(answerText: 'kast', isCorrect: false),
+          Answer(answerText: 'muur', isCorrect: false),
+        ],
+      ),
+      MultipleChoiceQuestion(
+        id: '3',
         questionText: 'Wat is wel een programmeertaal?',
         maxPoint: 5,
         questionType: 'Meerkeuze',
@@ -171,7 +182,8 @@ class _StudentExamState extends State<StudentExam> {
       return multipleChoiceForm(
           questionText: question.questionText,
           maxPoint: question.maxPoint,
-          answers: question.possibleAnswers);
+          index: currentQuestion,
+          possibleAnswers: question.possibleAnswers);
     } else {
       return const Text('Something went wrong...');
     }
@@ -281,7 +293,8 @@ class _StudentExamState extends State<StudentExam> {
   Form multipleChoiceForm(
       {required String questionText,
       required int maxPoint,
-      required List<Answer> answers}) {
+      required int index,
+      required List<Answer> possibleAnswers}) {
     return Form(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -296,14 +309,19 @@ class _StudentExamState extends State<StudentExam> {
               ),
             ),
           ),
-          for (int i = 0; i < answers.length; i++)
-            checkboxAnswer(index: i, answerText: answers[i].answerText!),
+          for (int i = 0; i < possibleAnswers.length; i++)
+            checkboxAnswer(
+                index: i, answerText: possibleAnswers[i].answerText!),
           const SizedBox(height: 16.0),
           Column(
             children: [
               currentQuestion >= (exam.questions.length - 1)
                   ? finishExamButton()
-                  : nextQuestionButton(),
+                  : nextQuestionButton(
+                      index: index,
+                      questionType: 'MC',
+                      possibleAnswers: possibleAnswers,
+                    ),
             ],
           ),
         ],
@@ -337,7 +355,12 @@ class _StudentExamState extends State<StudentExam> {
     );
   }
 
-  void _updateAnswers(int index, String value, String questionType) {
+  void _updateAnswers(
+    int index,
+    String value,
+    String questionType,
+    List<Answer> possibleAnswers,
+  ) {
     String? foundId;
     String id = "question_${index + 1}";
 
@@ -350,7 +373,6 @@ class _StudentExamState extends State<StudentExam> {
         }
       }
     }
-    //print("KEY FOUND $foundId");
 
     // Remove the answer if answer exists.
     if (foundId != null) {
@@ -360,20 +382,45 @@ class _StudentExamState extends State<StudentExam> {
     }
 
     // Add the new answer.
-    Map<String, dynamic> json = {
-      "id": id,
-      "student_answer": value,
-      "type": questionType,
-    };
+    Map<String, dynamic> json;
+    if (questionType == 'MC') {
+      json = {
+        "id": id,
+        "student_answers": {
+          {
+            "text": possibleAnswers[0].answerText,
+            "answer": isChecked[0],
+          },
+          {
+            "text": possibleAnswers[1].answerText,
+            "answer": isChecked[1],
+          },
+          {
+            "text": possibleAnswers[2].answerText,
+            "answer": isChecked[2],
+          },
+        }
+      };
+    } else {
+      json = {
+        "id": id,
+        "student_answer": value,
+        "type": questionType,
+      };
+    }
     _answers.add(json);
   }
 
-  ElevatedButton nextQuestionButton(
-      {int index = -1, String answerText = "idk", String questionType = "OQ"}) {
+  ElevatedButton nextQuestionButton({
+    int index = -1,
+    String answerText = "idk",
+    String questionType = "OQ",
+    List<Answer> possibleAnswers = const [],
+  }) {
     return ElevatedButton(
       onPressed: () {
         // TODO: store the answer of the current question in a list.
-        _updateAnswers(index, answerText, questionType);
+        _updateAnswers(index, answerText, questionType, possibleAnswers);
         print('--PRINT ALL ANSWERS--');
         print(_answers);
         setState(() {
