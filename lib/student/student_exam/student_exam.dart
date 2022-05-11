@@ -355,6 +355,7 @@ class _StudentExamState extends State<StudentExam> {
     );
   }
 
+  // Store/update the answers of the student.
   void _updateAnswers(
     int index,
     String value,
@@ -384,22 +385,20 @@ class _StudentExamState extends State<StudentExam> {
     // Add the new answer.
     Map<String, dynamic> json;
     if (questionType == 'MC') {
+      // Create a mapping of the answers of the student.
+      List<Map<String, dynamic>> studentAnswers = [];
+      for (int i = 0; i < possibleAnswers.length; i++) {
+        Map<String, dynamic> answer = {
+          'text': possibleAnswers[i].answerText,
+          'answer': isChecked[i],
+        };
+
+        studentAnswers.add(answer);
+      }
       json = {
         "id": id,
-        "student_answers": {
-          {
-            "text": possibleAnswers[0].answerText,
-            "answer": isChecked[0],
-          },
-          {
-            "text": possibleAnswers[1].answerText,
-            "answer": isChecked[1],
-          },
-          {
-            "text": possibleAnswers[2].answerText,
-            "answer": isChecked[2],
-          },
-        }
+        "type": questionType,
+        "student_answers": studentAnswers,
       };
     } else {
       json = {
