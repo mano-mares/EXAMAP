@@ -34,8 +34,6 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("ANSWERS OF THE STUDENT");
-    print(widget.answers);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Examen indienen'),
@@ -44,25 +42,22 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            const Center(
-              child: Text(
-                'Overzicht vragen',
-                style: TextStyle(
-                  fontSize: sizes.medium,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            ElevatedButton(
+        child: Align(
+          alignment: Alignment.center,
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            child: ElevatedButton(
               onPressed: () => _submitExam(),
               child: const Text(
                 'Indienen',
                 style: TextStyle(fontSize: sizes.btnMedium),
               ),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.red,
+                padding: const EdgeInsets.all(16.0),
+              ),
             ),
-          ],
+          ),
         ),
       ),
     );
