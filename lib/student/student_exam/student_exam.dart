@@ -19,31 +19,51 @@ class StudentExam extends StatefulWidget {
 }
 
 class _StudentExamState extends State<StudentExam> {
-  late Exam exam;
-  late int currentQuestion;
-  late Timer timer;
-  late int startInSeconds;
-  late List<Map<String, dynamic>> _answers;
   final TextEditingController openQuestionController = TextEditingController();
   final TextEditingController codeCorrectionController =
       TextEditingController();
 
-  List<bool> isChecked = [false, false, false];
+  // The exam that the student will fill in.
+  Exam? _exam;
+
+  // Timer of the exam.
+  Timer? _timer;
+  int? _counterInSeconds;
+
+  // Index of the current question of the exam.
+  int? _currentQuestionIndex;
+
+  // All the questions of the exam.
+  List<Question>? _questions;
+
+  // The answers of the student in this list.
+  List<Map<String, dynamic>>? _answers;
+
+  // The state of the MC answers of the student.
+  List<bool>? _isChecked;
 
   @override
   void initState() {
     super.initState();
-    exam = getExam();
+    _exam ??= getExam();
+    int? counterInSeconds = getStartTime(_exam!.timeLimit);
     setState(() {
-      currentQuestion = 0;
-      _answers = [];
+      // Assign 0 to _currentQuestion if _currentQuestion is null.
+      _currentQuestionIndex ??= 0;
+
+      // Start value of the timer of the exam.
+      _counterInSeconds ??= counterInSeconds;
+
+      // Initial state of the checkboxes are unchecked.
+      _isChecked ??= [false, false, false];
+      _questions ??= _exam?.questions;
+      _answers ??= [];
     });
-    getStartTime(exam.timeLimit);
     startTimer();
   }
 
-  // timeLimit format: "2:30 uur", "0:45 uur", "12:00 uur", etc.
-  void getStartTime(String timeLimit) {
+  // TimeLimit format: "2:30 uur", "0:45 uur", "12:00 uur", etc.
+  int getStartTime(String timeLimit) {
     // Split the string.
     dynamic time = timeLimit.split('uur')[0].split(':');
     int hour = int.parse(time[0]);
@@ -52,20 +72,21 @@ class _StudentExamState extends State<StudentExam> {
     // Convert hour and minutes to total seconds.
     Duration countdownDuration =
         Duration(hours: hour, minutes: minute, seconds: 0);
-    startInSeconds = countdownDuration.inSeconds;
+    return countdownDuration.inSeconds;
   }
 
+  // A timer that is ticking down a second.
   void startTimer() {
-    // Timer ticking down a second.
     const oneSec = Duration(seconds: 1);
-    timer = Timer.periodic(
+    _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
-        if (startInSeconds == 0) {
+        if (_counterInSeconds! <= 0) {
           setState(() {
             timer.cancel();
           });
-          // Show snackbar
+
+          // Show snackbar that the timer has run out.
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("Tijd is op!"),
@@ -78,7 +99,8 @@ class _StudentExamState extends State<StudentExam> {
           goToEndExamPage();
         } else {
           setState(() {
-            startInSeconds--;
+            // Decrease the counter.
+            _counterInSeconds = _counterInSeconds! - 1;
           });
         }
       },
@@ -161,26 +183,27 @@ class _StudentExamState extends State<StudentExam> {
   }
 
   Widget questionForm() {
-    Question question = exam.questions[currentQuestion];
+    // Get the current question.
+    Question question = _questions![_currentQuestionIndex!];
     if (question is OpenQuestion) {
       return openQuestionForm(
         questionText: question.questionText,
         maxPoint: question.maxPoint,
-        index: currentQuestion,
+        index: _currentQuestionIndex!,
         controller: openQuestionController,
       );
     } else if (question is CodeCorrectionQuestion) {
       return codeCorrectionForm(
         questionText: question.questionText,
         maxPoint: question.maxPoint,
-        index: currentQuestion,
+        index: _currentQuestionIndex!,
         controller: codeCorrectionController,
       );
     } else if (question is MultipleChoiceQuestion) {
       return multipleChoiceForm(
           questionText: question.questionText,
           maxPoint: question.maxPoint,
-          index: currentQuestion,
+          index: _currentQuestionIndex!,
           possibleAnswers: question.possibleAnswers);
     } else {
       return const Text('Something went wrong...');
@@ -200,7 +223,7 @@ class _StudentExamState extends State<StudentExam> {
           Container(
             margin: const EdgeInsets.symmetric(vertical: 16.0),
             child: Text(
-              '${currentQuestion + 1}. $questionText ($maxPoint ptn.)',
+              '${_currentQuestionIndex! + 1}. $questionText ($maxPoint ptn.)',
               style: const TextStyle(
                 fontSize: sizes.medium,
                 fontWeight: FontWeight.bold,
@@ -219,7 +242,7 @@ class _StudentExamState extends State<StudentExam> {
           const SizedBox(height: 16.0),
           Column(
             children: [
-              currentQuestion >= (exam.questions.length - 1)
+              _currentQuestionIndex! >= (_questions!.length - 1)
                   ? finishExamButton()
                   : nextQuestionButton(
                       index: index,
@@ -246,7 +269,7 @@ class _StudentExamState extends State<StudentExam> {
         Container(
           margin: const EdgeInsets.symmetric(vertical: 16.0),
           child: Text(
-            '${currentQuestion + 1}. Pas de code aan zodat dit zou werken. ($maxPoint ptn.)',
+            '${_currentQuestionIndex! + 1}. Pas de code aan zodat dit zou werken. ($maxPoint ptn.)',
             style: const TextStyle(
               fontSize: sizes.medium,
               fontWeight: FontWeight.bold,
@@ -275,7 +298,7 @@ class _StudentExamState extends State<StudentExam> {
         const SizedBox(height: 16.0),
         Column(
           children: [
-            currentQuestion >= (exam.questions.length - 1)
+            _currentQuestionIndex! >= (_questions!.length - 1)
                 ? finishExamButton()
                 : nextQuestionButton(
                     index: index,
@@ -300,7 +323,7 @@ class _StudentExamState extends State<StudentExam> {
           Container(
             margin: const EdgeInsets.symmetric(vertical: 16.0),
             child: Text(
-              '${currentQuestion + 1}. $questionText ($maxPoint ptn.)',
+              '${_currentQuestionIndex! + 1}. $questionText ($maxPoint ptn.)',
               style: const TextStyle(
                 fontSize: sizes.medium,
                 fontWeight: FontWeight.bold,
@@ -313,7 +336,7 @@ class _StudentExamState extends State<StudentExam> {
           const SizedBox(height: 16.0),
           Column(
             children: [
-              currentQuestion >= (exam.questions.length - 1)
+              _currentQuestionIndex! >= (_questions!.length - 1)
                   ? finishExamButton()
                   : nextQuestionButton(
                       index: index,
@@ -333,13 +356,12 @@ class _StudentExamState extends State<StudentExam> {
       child: Row(
         children: [
           Checkbox(
-            value: isChecked[index],
+            value: _isChecked![index],
             onChanged: (bool? value) {
-              setState(
-                () {
-                  isChecked[index] = value!;
-                },
-              );
+              setState(() {
+                // Set the state of the MC checkboxes.
+                _isChecked![index] = value!;
+              });
             },
           ),
           Text(
@@ -364,7 +386,7 @@ class _StudentExamState extends State<StudentExam> {
     String id = "question_${index + 1}";
 
     // Check if the answer is already stored.
-    for (var map in _answers) {
+    for (var map in _answers!) {
       if (map.containsKey("id")) {
         if (map["id"] == id) {
           foundId = id;
@@ -375,7 +397,7 @@ class _StudentExamState extends State<StudentExam> {
 
     // Remove the answer if answer exists.
     if (foundId != null) {
-      _answers.removeWhere((map) {
+      _answers?.removeWhere((map) {
         return map["id"] == foundId;
       });
     }
@@ -390,7 +412,7 @@ class _StudentExamState extends State<StudentExam> {
       for (int i = 0; i < possibleAnswers.length; i++) {
         Map<String, dynamic> answer = {
           'text': possibleAnswers[i].answerText,
-          'answer': isChecked[i],
+          'answer': _isChecked![i],
         };
 
         studentAnswers.add(answer);
@@ -407,7 +429,7 @@ class _StudentExamState extends State<StudentExam> {
         "type": questionType,
       };
     }
-    _answers.add(json);
+    _answers?.add(json);
   }
 
   ElevatedButton nextQuestionButton({
@@ -421,13 +443,13 @@ class _StudentExamState extends State<StudentExam> {
         setState(() {
           // Store/update the answers of the student in a list.
           _updateAnswers(index, studentAnswer, questionType, possibleAnswers);
-          print('--PRINT ALL ANSWERS--');
+
           print(_answers);
 
           // Next question.
-          currentQuestion++;
+          _currentQuestionIndex = _currentQuestionIndex! + 1;
 
-          setAnswer(currentQuestion);
+          setAnswer(_currentQuestionIndex!);
         });
       },
       child: const Text(
@@ -446,7 +468,7 @@ class _StudentExamState extends State<StudentExam> {
     String? foundType;
     String id = "question_${index + 1}";
     // Check if the answer is already stored.
-    for (var map in _answers) {
+    for (var map in _answers!) {
       if (map.containsKey("id")) {
         if (map["id"] == id) {
           foundId = id;
@@ -463,7 +485,7 @@ class _StudentExamState extends State<StudentExam> {
       // Clear the text field.
       openQuestionController.text = "";
       codeCorrectionController.text = "";
-      isChecked = [false, false, false];
+      _isChecked = [false, false, false];
       return;
     }
 
@@ -472,14 +494,14 @@ class _StudentExamState extends State<StudentExam> {
     switch (foundType) {
       case 'OQ':
         Map<String, dynamic> getAnswer =
-            _answers.where((element) => element["id"] == id).first;
+            _answers!.where((element) => element["id"] == id).first;
         String answer = getAnswer["student_answer"];
         print(answer);
         openQuestionController.text = answer;
         break;
       case 'CC':
         Map<String, dynamic> getAnswer =
-            _answers.where((element) => element["id"] == id).first;
+            _answers!.where((element) => element["id"] == id).first;
         String answer = getAnswer["student_answer"];
         print(answer);
         codeCorrectionController.text = answer;
@@ -488,12 +510,12 @@ class _StudentExamState extends State<StudentExam> {
         // TODO: do this.
         print("IN MC");
         Map<String, dynamic> getAnswer =
-            _answers.where((element) => element["id"] == id).first;
+            _answers!.where((element) => element["id"] == id).first;
         List<Map<String, dynamic>> getStudentAnswersMultipleChoice =
             getAnswer["student_answers"];
         print(getStudentAnswersMultipleChoice);
         for (int i = 0; i < getStudentAnswersMultipleChoice.length; i++) {
-          isChecked[i] = getStudentAnswersMultipleChoice[i]["answer"];
+          _isChecked![i] = getStudentAnswersMultipleChoice[i]["answer"];
         }
         break;
       default:
@@ -508,9 +530,10 @@ class _StudentExamState extends State<StudentExam> {
         setState(
           () {
             print("Go to question $index");
-            currentQuestion = index;
+            _currentQuestionIndex = index;
             // TODO: if already answered, show the answer in the text field from the answers list.
-            setAnswer(currentQuestion);
+            //_updateAnswers(index, studentAnswer, questionType, possibleAnswers);
+            setAnswer(_currentQuestionIndex!);
           },
         );
       },
@@ -519,7 +542,7 @@ class _StudentExamState extends State<StudentExam> {
         style: const TextStyle(fontSize: sizes.btnXSmall),
       ),
       style: ElevatedButton.styleFrom(
-        primary: currentQuestion == index
+        primary: _currentQuestionIndex == index
             ? const Color.fromARGB(255, 176, 6, 6)
             : Colors.red,
       ),
@@ -531,7 +554,7 @@ class _StudentExamState extends State<StudentExam> {
       spacing: 8.0, // gap between adjacent chips
       runSpacing: 8.0, // gap between lines
       children: <Widget>[
-        for (int i = 0; i < exam.questions.length; i++) questionButton(i)
+        for (int i = 0; i < _questions!.length; i++) questionButton(i)
       ],
     );
   }
@@ -595,7 +618,7 @@ class _StudentExamState extends State<StudentExam> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(exam.subject),
+        title: Text(_exam!.subject),
         centerTitle: true,
       ),
       body: Padding(
@@ -606,7 +629,7 @@ class _StudentExamState extends State<StudentExam> {
             Container(
               margin: const EdgeInsets.only(top: 16.0),
               child: Text(
-                'Resterende tijd: ${formatTime(startInSeconds)}',
+                'Resterende tijd: ${formatTime(_counterInSeconds!)}',
                 style: const TextStyle(fontSize: sizes.small),
               ),
             ),
@@ -620,7 +643,7 @@ class _StudentExamState extends State<StudentExam> {
 
   @override
   void dispose() {
-    timer.cancel();
+    _timer?.cancel();
     openQuestionController.dispose();
     codeCorrectionController.dispose();
     super.dispose();
