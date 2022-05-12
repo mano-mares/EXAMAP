@@ -100,69 +100,6 @@ class _ChooseStudentCorrection extends State<ChooseStudentCorrection> {
                         Padding(
                           padding: EdgeInsets.fromLTRB(80, 20, 0, 0),
                           child: Text(
-                            "Verbeterd",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontSize: sizes.medium,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Text(""),
-                        Text("")
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(80, 30, 80, 30),
-                      child: SizedBox(
-                        height: 200,
-                        child: StreamBuilder<QuerySnapshot>(
-                          stream: firestore
-                              .collection('EXAMAP')
-                              .doc('exam')
-                              .collection('students')
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData) {
-                              return const CircularProgressIndicator();
-                            } else {
-                              return ListView(
-                                children: snapshot.data!.docs.map((doc) {
-                                  return Card(
-                                    child: ListTile(
-                                      title: Text(doc.id),
-                                      trailing:
-                                          const Icon(Icons.arrow_forward_ios),
-                                      onTap: () =>
-                                          navigateToStudentCorrection(doc.id),
-                                    ),
-                                  );
-                                }).toList(),
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 60, 20, 40),
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.black12,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      children: const [
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(80, 20, 0, 0),
-                          child: Text(
                             "Niet verbeterd",
                             textAlign: TextAlign.left,
                             style: TextStyle(
@@ -191,13 +128,86 @@ class _ChooseStudentCorrection extends State<ChooseStudentCorrection> {
                               return ListView(
                                 children: snapshot.data!.docs.map((doc) {
                                   return Card(
-                                    child: ListTile(
-                                        title: Text(
-                                            "${doc.id}     ${doc.get("exam_result")}/20"),
-                                        trailing: doc.get('exam_result') > 9
-                                            ? const Text("Geslaagd")
-                                            : const Text("Niet geslaagd")),
+                                    child: doc.get("exam_completed") == true &&
+                                            doc.get("exam_is_corrected") ==
+                                                false
+                                        ? ListTile(
+                                            title: Text(doc.id),
+                                            trailing: const Icon(
+                                                Icons.arrow_forward_ios),
+                                            onTap: () =>
+                                                navigateToStudentCorrection(
+                                                    doc.id),
+                                          )
+                                        : null,
                                   );
+                                }).toList(),
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 60, 20, 40),
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.black12,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: const [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(80, 20, 0, 0),
+                          child: Text(
+                            "Verbeterd",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                fontSize: sizes.medium,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Text(""),
+                        Text("")
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(80, 30, 80, 30),
+                      child: SizedBox(
+                        height: 200,
+                        child: StreamBuilder<QuerySnapshot>(
+                          stream: firestore
+                              .collection('EXAMAP')
+                              .doc('exam')
+                              .collection('students')
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return const CircularProgressIndicator();
+                            } else {
+                              return ListView(
+                                children: snapshot.data!.docs.map((doc) {
+                                  return Card(
+                                      child: doc.get("exam_completed") ==
+                                                  true &&
+                                              doc.get("exam_is_corrected") ==
+                                                  true
+                                          ? ListTile(
+                                              title: Text(
+                                                  "${doc.id}     ${doc.get("exam_result")}/20"),
+                                              trailing: doc.get('exam_result') >
+                                                      9
+                                                  ? const Text("Geslaagd")
+                                                  : const Text("Niet geslaagd"))
+                                          : null);
                                 }).toList(),
                               );
                             }
