@@ -26,10 +26,6 @@ class _ChooseStudentCorrection extends State<ChooseStudentCorrection> {
     firestore = FirebaseFirestore.instance;
   }
 
-  void chooseStudent() {
-    print("Choose student");
-  }
-
   void navigateToStudentCorrection(var inputStudentNumber) {
     Navigator.push(
       context,
@@ -45,7 +41,7 @@ class _ChooseStudentCorrection extends State<ChooseStudentCorrection> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Correct exam',
+      title: 'Correction list',
       theme: ThemeData(primarySwatch: Colors.red),
       home: Scaffold(
         backgroundColor: Colors.white,
