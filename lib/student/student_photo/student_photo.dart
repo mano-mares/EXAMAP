@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:examap/student/student_exam/student_exam.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -92,7 +93,17 @@ class _StudentPhotoState extends State<StudentPhoto> {
             onPressed: () => Navigator.pop(context),
           ),
           ElevatedButton(
-            onPressed: uploadPhoto,
+            onPressed: () {
+              uploadPhoto();
+
+              // Push student exam page and remove all previous pages
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => const StudentExam(),
+                ),
+                ((route) => false),
+              );
+            },
             child: const Padding(
               padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
               child: Text(
