@@ -19,6 +19,7 @@ class _ChooseStudentCorrection extends State<ChooseStudentCorrection> {
   void initState() {
     super.initState();
     Firebase.initializeApp(options: DefaultFirebaseOptions.android);
+    loadFirestore();
   }
 
   void loadFirestore() {
@@ -29,12 +30,12 @@ class _ChooseStudentCorrection extends State<ChooseStudentCorrection> {
     print("Choose student");
   }
 
-  void navigateToStudentCorrection() {
+  void navigateToStudentCorrection(var inputStudentNumber) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const CorrectExam(
-          studentNumber: "S107983",
+        builder: (context) => CorrectExam(
+          studentNumber: inputStudentNumber,
         ),
       ),
     );
@@ -99,6 +100,69 @@ class _ChooseStudentCorrection extends State<ChooseStudentCorrection> {
                         Padding(
                           padding: EdgeInsets.fromLTRB(80, 20, 0, 0),
                           child: Text(
+                            "Verbeterd",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                fontSize: sizes.medium,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Text(""),
+                        Text("")
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(80, 30, 80, 30),
+                      child: SizedBox(
+                        height: 200,
+                        child: StreamBuilder<QuerySnapshot>(
+                          stream: firestore
+                              .collection('EXAMAP')
+                              .doc('exam')
+                              .collection('students')
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return const CircularProgressIndicator();
+                            } else {
+                              return ListView(
+                                children: snapshot.data!.docs.map((doc) {
+                                  return Card(
+                                    child: ListTile(
+                                      title: Text(doc.id),
+                                      trailing:
+                                          const Icon(Icons.arrow_forward_ios),
+                                      onTap: () =>
+                                          navigateToStudentCorrection(doc.id),
+                                    ),
+                                  );
+                                }).toList(),
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 60, 20, 40),
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.black12,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: const [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(80, 20, 0, 0),
+                          child: Text(
                             "Niet verbeterd",
                             textAlign: TextAlign.left,
                             style: TextStyle(
@@ -122,102 +186,23 @@ class _ChooseStudentCorrection extends State<ChooseStudentCorrection> {
                               .snapshots(),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
-                              return ListView.separated(
-                                  separatorBuilder: (context, index) =>
-                                      const Divider(color: Colors.black26),
-                                  itemCount: items.length,
-                                  itemBuilder: (context, index) {
-                                    final item = items[index];
-                                    return Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          item,
-                                          style: const TextStyle(
-                                              fontSize: sizes.xSmall),
-                                        ),
-                                        const Text(
-                                          "Punten",
-                                          style: TextStyle(
-                                              color: Colors.black38,
-                                              fontSize: sizes.xSmall),
-                                        ),
-                                        InkWell(
-                                            child: const Icon(
-                                                Icons.arrow_forward_ios),
-                                            onTap: navigateToStudentCorrection),
-                                      ],
-                                    );
-                                  });
+                              return const CircularProgressIndicator();
                             } else {
-                              return const Icon(Icons.downloading_rounded);
+                              return ListView(
+                                children: snapshot.data!.docs.map((doc) {
+                                  return Card(
+                                    child: ListTile(
+                                        title: Text(
+                                            "${doc.id}     ${doc.get("exam_result")}/20"),
+                                        trailing: doc.get('exam_result') > 9
+                                            ? const Text("Geslaagd")
+                                            : const Text("Niet geslaagd")),
+                                  );
+                                }).toList(),
+                              );
                             }
                           },
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.black12,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      children: const [
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(80, 20, 0, 0),
-                          child: Text(
-                            "Verbeterd",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontSize: sizes.medium,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Text(""),
-                        Text("")
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(80, 30, 80, 30),
-                      child: SizedBox(
-                        height: 200,
-                        child: ListView.separated(
-                            separatorBuilder: (context, index) =>
-                                const Divider(color: Colors.black26),
-                            itemCount: items.length,
-                            itemBuilder: (context, index) {
-                              final item = items[index];
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    item,
-                                    style:
-                                        const TextStyle(fontSize: sizes.xSmall),
-                                  ),
-                                  const Text(
-                                    "2/20",
-                                    style: TextStyle(
-                                      fontSize: sizes.xSmall,
-                                    ),
-                                  ),
-                                  // Check if isPassed
-                                  const Text("Geslaagd"),
-                                ],
-                              );
-                            }),
                       ),
                     ),
                   ],
