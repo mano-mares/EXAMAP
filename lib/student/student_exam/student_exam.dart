@@ -155,7 +155,7 @@ class _StudentExamState extends State<StudentExam> {
         id: '3',
         questionText: 'Wat is geen programmeertaal?',
         maxPoint: 2,
-        questionType: 'Meerkeuze',
+        questionType: 'MC',
         possibleAnswers: [
           Answer(answerText: 'c++', isCorrect: false),
           Answer(answerText: 'c--', isCorrect: true),
@@ -352,23 +352,27 @@ class _StudentExamState extends State<StudentExam> {
     // 1. Check if the answer is already in the list.
     String? foundId;
     final id = "question_${_currentQuestionIndex! + 1}";
-    print('Find question with id $id');
     for (var map in _answers!) {
       if (map.containsKey("id")) {
         if (map["id"] == id) {
-          // 2.1 If so, change the answer in the list.
-          foundId ??= id;
+          // 2.1 TODO: If so, change the answer in the list.
+          foundId = id;
           print('Found question with id $id');
-          return;
+          break;
         }
       }
     }
 
-    // _answers?.removeWhere((map) {
-    //   return map["id"] == foundId;
-    // });
+    if (foundId != null) {
+      print('REMOVE ANSWER $foundId');
+      _answers!.removeWhere((map) {
+        return map["id"] == foundId;
+      });
+      print(_answers);
+    }
 
     // 2.2 If not, append the answer to the list.
+    print('STORE ANSWER ${_currentQuestionIndex! + 1}');
     Map<String, dynamic> json = {};
     switch (_currentQuestion!.questionType) {
       case 'OQ':
@@ -422,7 +426,6 @@ class _StudentExamState extends State<StudentExam> {
       print('---ANSWERS---');
       print(_answers);
 
-      _currentQuestionIndex = _currentQuestionIndex! + 1;
       // // Get the current question.
       // _currentQuestion = _questions?[_currentQuestionIndex!];
 
@@ -434,10 +437,94 @@ class _StudentExamState extends State<StudentExam> {
     });
   }
 
+  void setAnswers() {
+    print('RETRIEVE ANSWER FROM QUESTION ${_currentQuestionIndex! + 1}');
+    String? foundId;
+    String? foundType;
+    final id = "question_${_currentQuestionIndex! + 1}";
+    // Check if the answer is already stored.
+    for (var map in _answers!) {
+      if (map.containsKey("id")) {
+        if (map["id"] == id) {
+          // Check if the answer is empty
+          foundId = id;
+          foundType = map["type"];
+          // if (foundType != 'MC' && (map["student_answer"] == "")) {
+          //   foundId = null;
+          // }
+          print("Found the answer $foundId");
+          break;
+        }
+      }
+    }
+
+    // Exit if not already answered.
+    if (foundId == null) {
+      print("NO ANSWER FOUND");
+      print("Clear text field...");
+
+      setState(() {
+        // Clear the text field.
+        openQuestionController.text = "";
+        codeCorrectionController.text = "";
+        _isChecked = [false, false, false];
+      });
+      return;
+    }
+
+    //print('get answer from $foundType');
+    print('SETTING ANSWER');
+    switch (foundType) {
+      case 'OQ':
+        Map<String, dynamic> getAnswer =
+            _answers!.where((element) => element["id"] == id).first;
+        String answer = getAnswer["student_answer"];
+        print(answer);
+        setState(() {
+          openQuestionController.text = answer;
+        });
+        break;
+      case 'CC':
+        Map<String, dynamic> getAnswer =
+            _answers!.where((element) => element["id"] == id).first;
+        String answer = getAnswer["student_answer"];
+        print(answer);
+        setState(() {
+          codeCorrectionController.text = answer;
+        });
+        break;
+      case 'MC':
+        print("IN MC");
+        Map<String, dynamic> getAnswer =
+            _answers!.where((element) => element["id"] == id).first;
+        List<Map<String, dynamic>> getStudentAnswersMultipleChoice =
+            getAnswer["student_answers"];
+        print(getStudentAnswersMultipleChoice);
+        setState(() {
+          for (int i = 0; i < getStudentAnswersMultipleChoice.length; i++) {
+            _isChecked![i] =
+                getStudentAnswersMultipleChoice[i]["student_answer"];
+          }
+        });
+        break;
+      default:
+    }
+
+    // If there is an answer, set the text field
+  }
+
   ElevatedButton nextQuestionButton() {
     return ElevatedButton(
       onPressed: () {
+        // Store answers
         updateAnswers();
+
+        setState(() {
+          _currentQuestionIndex = _currentQuestionIndex! + 1;
+        });
+
+        // On the new question, see if the field is already filled in.
+        setAnswers();
       },
       child: const Text(
         "Volgende vraag",
@@ -450,79 +537,19 @@ class _StudentExamState extends State<StudentExam> {
     );
   }
 
-  void setAnswer(int index) {
-    String? foundId;
-    String? foundType;
-    String id = "question_${index + 1}";
-    // Check if the answer is already stored.
-    for (var map in _answers!) {
-      if (map.containsKey("id")) {
-        if (map["id"] == id) {
-          foundId = id;
-          foundType = map["type"];
-          print("Found answer $foundId");
-          break;
-        }
-      }
-    }
-
-    // Exit if not already answered.
-    if (foundId == null) {
-      print("Clear text field");
-      // Clear the text field.
-      openQuestionController.text = "";
-      codeCorrectionController.text = "";
-      _isChecked = [false, false, false];
-      return;
-    }
-
-    print('get answer from $foundType');
-
-    switch (foundType) {
-      case 'OQ':
-        Map<String, dynamic> getAnswer =
-            _answers!.where((element) => element["id"] == id).first;
-        String answer = getAnswer["student_answer"];
-        print(answer);
-        openQuestionController.text = answer;
-        break;
-      case 'CC':
-        Map<String, dynamic> getAnswer =
-            _answers!.where((element) => element["id"] == id).first;
-        String answer = getAnswer["student_answer"];
-        print(answer);
-        codeCorrectionController.text = answer;
-        break;
-      case 'MC':
-        // TODO: do this.
-        print("IN MC");
-        Map<String, dynamic> getAnswer =
-            _answers!.where((element) => element["id"] == id).first;
-        List<Map<String, dynamic>> getStudentAnswersMultipleChoice =
-            getAnswer["student_answers"];
-        print(getStudentAnswersMultipleChoice);
-        for (int i = 0; i < getStudentAnswersMultipleChoice.length; i++) {
-          _isChecked![i] = getStudentAnswersMultipleChoice[i]["answer"];
-        }
-        break;
-      default:
-    }
-
-    // If there is an answer, set the text field
-  }
-
   ElevatedButton questionButton(int index) {
     return ElevatedButton(
       onPressed: () {
-        setState(
-          () {
-            print("Go to question $index");
-            _currentQuestionIndex = index;
-            // TODO: if already answered, show the answer in the text field from the answers list.
-            //_updateAnswers(index, studentAnswer, questionType, possibleAnswers);
-            //setAnswer(_currentQuestionIndex!);
-          },
-        );
+        // Store answers
+        updateAnswers();
+
+        setState(() {
+          print("GO TO QUESTION ${index + 1}");
+          _currentQuestionIndex = index;
+        });
+
+        // On the new question, see if the field is already filled in.
+        setAnswers();
       },
       child: Text(
         '${index + 1}',
