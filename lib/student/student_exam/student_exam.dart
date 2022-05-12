@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 
 import '../../res/style/my_fontsize.dart' as sizes;
 
+enum QuestionType { OQ, CC, MC }
+
 class StudentExam extends StatefulWidget {
   const StudentExam({Key? key}) : super(key: key);
 
@@ -129,27 +131,27 @@ class _StudentExamState extends State<StudentExam> {
         id: '1',
         questionText: 'Leg het verschil uit tussen een stack en een heap.',
         maxPoint: 5,
-        questionType: 'OQ',
+        questionType: QuestionType.OQ.name,
       ),
       CodeCorrectionQuestion(
         id: '2',
         questionText: "console('hello')",
         answerText: "console.log('hello')",
         maxPoint: 3,
-        questionType: 'CC',
+        questionType: QuestionType.CC.name,
       ),
       CodeCorrectionQuestion(
         id: '2',
         questionText: "MAIN",
         answerText: "main",
         maxPoint: 15,
-        questionType: 'CC',
+        questionType: QuestionType.CC.name,
       ),
       MultipleChoiceQuestion(
         id: '3',
         questionText: 'Wat is geen programmeertaal?',
         maxPoint: 2,
-        questionType: 'MC',
+        questionType: QuestionType.MC.name,
         possibleAnswers: [
           Answer(answerText: 'c++', isCorrect: false),
           Answer(answerText: 'c--', isCorrect: true),
@@ -160,7 +162,7 @@ class _StudentExamState extends State<StudentExam> {
         id: '3',
         questionText: 'Wat is een dier?',
         maxPoint: 2,
-        questionType: 'MC',
+        questionType: QuestionType.MC.name,
         possibleAnswers: [
           Answer(answerText: 'hond', isCorrect: true),
           Answer(answerText: 'kast', isCorrect: false),
@@ -171,7 +173,7 @@ class _StudentExamState extends State<StudentExam> {
         id: '3',
         questionText: 'Wat is wel een programmeertaal?',
         maxPoint: 5,
-        questionType: 'MC',
+        questionType: QuestionType.MC.name,
         possibleAnswers: [
           Answer(answerText: 'rattlesnake', isCorrect: false),
           Answer(answerText: 'anaconda', isCorrect: false),
@@ -349,37 +351,37 @@ class _StudentExamState extends State<StudentExam> {
     for (var map in _answers!) {
       if (map.containsKey("id")) {
         if (map["id"] == id) {
-          // 2.1 TODO: If so, change the answer in the list.
           foundId = id;
-          print('Found question with id $id');
           break;
         }
       }
     }
 
     if (foundId != null) {
-      print('REMOVE ANSWER $foundId');
       _answers!.removeWhere((map) {
         return map["id"] == foundId;
       });
-      print(_answers);
     }
 
     // 2.2 If not, append the answer to the list.
-    print('STORE ANSWER ${_currentQuestionIndex! + 1}');
     Map<String, dynamic> json = {};
-    switch (_currentQuestion!.questionType) {
-      case 'OQ':
+
+    // Do this or else everything breaks (idk why)
+    QuestionType currentQuestionType =
+        convertToQuestionType(_currentQuestion!.questionType);
+
+    switch (currentQuestionType) {
+      case QuestionType.OQ:
         OpenQuestion currentQuestion = _currentQuestion as OpenQuestion;
         json = {
           'id': id,
           'max_point': currentQuestion.maxPoint,
           'question_text': currentQuestion.questionText,
           'student_answer': openQuestionController.text,
-          'type': currentQuestion.questionType,
+          'type': QuestionType.OQ.name,
         };
         break;
-      case 'CC':
+      case QuestionType.CC:
         CodeCorrectionQuestion currentQuestion =
             _currentQuestion as CodeCorrectionQuestion;
         json = {
@@ -388,10 +390,10 @@ class _StudentExamState extends State<StudentExam> {
           'question_text': currentQuestion.questionText,
           'student_answer': codeCorrectionController.text,
           'teacher_answer': currentQuestion.answerText,
-          'type': currentQuestion.questionType,
+          'type': QuestionType.CC.name,
         };
         break;
-      case 'MC':
+      case QuestionType.MC:
         MultipleChoiceQuestion currentQuestion =
             _currentQuestion as MultipleChoiceQuestion;
         // Create a mapping of the answers of the student.
@@ -406,7 +408,7 @@ class _StudentExamState extends State<StudentExam> {
         }
         json = {
           'id': id,
-          'type': currentQuestion.questionType,
+          'type': QuestionType.MC.name,
           'student_answers': studentAnswers,
           'teacher_answers': currentQuestion.possibleAnswers,
         };
@@ -417,22 +419,23 @@ class _StudentExamState extends State<StudentExam> {
 
     setState(() {
       _answers!.add(json);
-      print('---ANSWERS---');
-      print(_answers);
-
-      // // Get the current question.
-      // _currentQuestion = _questions?[_currentQuestionIndex!];
-
-      //print("current question is $_currentQuestion");
-      // print('CURRENT INDEX IS $_currentQuestionIndex');
-      // print("current question is $_currentQuestion");
-
-      //setAnswer(_currentQuestionIndex!);
     });
   }
 
+  QuestionType convertToQuestionType(String type) {
+    switch (type) {
+      case 'OQ':
+        return QuestionType.OQ;
+      case 'CC':
+        return QuestionType.CC;
+      case 'MC':
+        return QuestionType.MC;
+      default:
+        return QuestionType.OQ;
+    }
+  }
+
   void setAnswers() {
-    print('RETRIEVE ANSWER FROM QUESTION ${_currentQuestionIndex! + 1}');
     String? foundId;
     String? foundType;
     final id = "question_${_currentQuestionIndex! + 1}";
@@ -443,10 +446,6 @@ class _StudentExamState extends State<StudentExam> {
           // Check if the answer is empty
           foundId = id;
           foundType = map["type"];
-          // if (foundType != 'MC' && (map["student_answer"] == "")) {
-          //   foundId = null;
-          // }
-          print("Found the answer $foundId");
           break;
         }
       }
@@ -454,9 +453,6 @@ class _StudentExamState extends State<StudentExam> {
 
     // Exit if not already answered.
     if (foundId == null) {
-      print("NO ANSWER FOUND");
-      print("Clear text field...");
-
       setState(() {
         // Clear the text field.
         openQuestionController.text = "";
@@ -466,34 +462,26 @@ class _StudentExamState extends State<StudentExam> {
       return;
     }
 
-    //print('get answer from $foundType');
-    print('SETTING ANSWER');
-    switch (foundType) {
-      case 'OQ':
-        Map<String, dynamic> getAnswer =
-            _answers!.where((element) => element["id"] == id).first;
-        String answer = getAnswer["student_answer"];
-        print(answer);
+    // Do this or everything breaks, thanks enum.
+    QuestionType currentQuestionType = convertToQuestionType(foundType!);
+
+    // If student already answered the question, show answer in the form.
+    Map<String, dynamic> getAnswer =
+        _answers!.where((element) => element["id"] == id).first;
+    switch (currentQuestionType) {
+      case QuestionType.OQ:
         setState(() {
-          openQuestionController.text = answer;
+          openQuestionController.text = getAnswer["student_answer"];
         });
         break;
-      case 'CC':
-        Map<String, dynamic> getAnswer =
-            _answers!.where((element) => element["id"] == id).first;
-        String answer = getAnswer["student_answer"];
-        print(answer);
+      case QuestionType.CC:
         setState(() {
-          codeCorrectionController.text = answer;
+          codeCorrectionController.text = getAnswer["student_answer"];
         });
         break;
-      case 'MC':
-        print("IN MC");
-        Map<String, dynamic> getAnswer =
-            _answers!.where((element) => element["id"] == id).first;
+      case QuestionType.MC:
         List<Map<String, dynamic>> getStudentAnswersMultipleChoice =
             getAnswer["student_answers"];
-        print(getStudentAnswersMultipleChoice);
         setState(() {
           for (int i = 0; i < getStudentAnswersMultipleChoice.length; i++) {
             _isChecked![i] =
@@ -503,16 +491,15 @@ class _StudentExamState extends State<StudentExam> {
         break;
       default:
     }
-
-    // If there is an answer, set the text field
   }
 
   ElevatedButton nextQuestionButton() {
     return ElevatedButton(
       onPressed: () {
-        // Store answers
+        // Store/update the answers in the list.
         updateAnswers();
 
+        // Go to the next question.
         setState(() {
           _currentQuestionIndex = _currentQuestionIndex! + 1;
         });
@@ -537,8 +524,8 @@ class _StudentExamState extends State<StudentExam> {
         // Store answers
         updateAnswers();
 
+        // Go to the next question.
         setState(() {
-          print("GO TO QUESTION ${index + 1}");
           _currentQuestionIndex = index;
         });
 
@@ -633,8 +620,6 @@ class _StudentExamState extends State<StudentExam> {
 
   @override
   Widget build(BuildContext context) {
-    // print('CURRENT INDEX IS $_currentQuestionIndex');
-    // print("current question is $_currentQuestion");
     return Scaffold(
       appBar: AppBar(
         title: Text(_exam!.subject),
