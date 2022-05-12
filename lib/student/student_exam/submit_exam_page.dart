@@ -34,6 +34,8 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
 
   @override
   Widget build(BuildContext context) {
+    print("ANSWERS OF THE STUDENT");
+    print(widget.answers);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Examen indienen'),
