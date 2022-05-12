@@ -185,6 +185,7 @@ class _StudentExamState extends State<StudentExam> {
     return dummyExam;
   }
 
+  // Based on the question type, show the appropriate form.
   Widget questionForm() {
     _currentQuestion = _questions?[_currentQuestionIndex!];
     if (_currentQuestion is OpenQuestion) {
@@ -208,12 +209,24 @@ class _StudentExamState extends State<StudentExam> {
         children: [
           Container(
             margin: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Text(
-              '${_currentQuestionIndex! + 1}. ${_currentQuestion!.questionText} (${_currentQuestion!.maxPoint} ptn.)',
-              style: const TextStyle(
-                fontSize: sizes.medium,
-                fontWeight: FontWeight.bold,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${_currentQuestionIndex! + 1}. ${_currentQuestion!.questionText}',
+                  style: const TextStyle(
+                    fontSize: sizes.medium,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  'Open vraag (${_currentQuestion!.maxPoint} ptn.)',
+                  style: const TextStyle(
+                    fontSize: sizes.small,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ],
             ),
           ),
           TextFormField(
@@ -245,12 +258,24 @@ class _StudentExamState extends State<StudentExam> {
       children: [
         Container(
           margin: const EdgeInsets.symmetric(vertical: 16.0),
-          child: Text(
-            '${_currentQuestionIndex! + 1}. Pas de code aan zodat dit zou werken. (${_currentQuestion!.maxPoint} ptn.)',
-            style: const TextStyle(
-              fontSize: sizes.medium,
-              fontWeight: FontWeight.bold,
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${_currentQuestionIndex! + 1}. Pas de code aan zodat dit zou werken.',
+                style: const TextStyle(
+                  fontSize: sizes.medium,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                'Code correctie (${_currentQuestion!.maxPoint} ptn.)',
+                style: const TextStyle(
+                  fontSize: sizes.small,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ],
           ),
         ),
         Text(
@@ -293,12 +318,24 @@ class _StudentExamState extends State<StudentExam> {
         children: [
           Container(
             margin: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Text(
-              '${_currentQuestionIndex! + 1}. ${currentQuestion.questionText} (${currentQuestion.maxPoint} ptn.)',
-              style: const TextStyle(
-                fontSize: sizes.medium,
-                fontWeight: FontWeight.bold,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${_currentQuestionIndex! + 1}. ${currentQuestion.questionText}',
+                  style: const TextStyle(
+                    fontSize: sizes.medium,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  'Meerkeuze (${currentQuestion.maxPoint} ptn.)',
+                  style: const TextStyle(
+                    fontSize: sizes.small,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ],
             ),
           ),
           for (int i = 0; i < currentQuestion.possibleAnswers.length; i++)
