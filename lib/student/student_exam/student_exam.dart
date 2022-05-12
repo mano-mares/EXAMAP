@@ -30,12 +30,12 @@ class _StudentExamState extends State<StudentExam> {
   Timer? _timer;
   int? _counterInSeconds;
 
-  // Index of the current question of the exam.
-  int? _currentQuestionIndex;
-
   // All the questions of the exam.
   List<Question>? _questions;
-
+  // Current question student is right now.
+  Question? _currentQuestion;
+  // Index of the current question of the exam.
+  int? _currentQuestionIndex;
   // The answers of the student in this list.
   List<Map<String, dynamic>>? _answers;
 
@@ -46,24 +46,31 @@ class _StudentExamState extends State<StudentExam> {
   void initState() {
     super.initState();
     _exam ??= getExam();
-    int? counterInSeconds = getStartTime(_exam!.timeLimit);
+    _questions ??= _exam?.questions;
+    int? counterInSeconds = getStartTimeInSeconds(_exam!.timeLimit);
     setState(() {
       // Assign 0 to _currentQuestion if _currentQuestion is null.
       _currentQuestionIndex ??= 0;
+      // set the current question.
+      _currentQuestion ??= _questions![_currentQuestionIndex!];
 
       // Start value of the timer of the exam.
       _counterInSeconds ??= counterInSeconds;
 
+      // Initial state of the text fields are empty.
+      openQuestionController.text = "";
+      codeCorrectionController.text = "";
       // Initial state of the checkboxes are unchecked.
       _isChecked ??= [false, false, false];
-      _questions ??= _exam?.questions;
+
+      // Set empty answers of the student.
       _answers ??= [];
     });
     startTimer();
   }
 
   // TimeLimit format: "2:30 uur", "0:45 uur", "12:00 uur", etc.
-  int getStartTime(String timeLimit) {
+  int getStartTimeInSeconds(String timeLimit) {
     // Split the string.
     dynamic time = timeLimit.split('uur')[0].split(':');
     int hour = int.parse(time[0]);
@@ -118,31 +125,31 @@ class _StudentExamState extends State<StudentExam> {
     dummyExam.subject = 'Intro Mobile';
     dummyExam.timeLimit = '0:10 uur';
     List<Question> questions = [
-      for (int i = 0; i < 3; i++)
-        OpenQuestion(
-            id: '${i + 10}',
-            questionText: 'Filler vraag $i',
-            maxPoint: i + 5,
-            questionType: 'Open vraag'),
+      // for (int i = 0; i < 3; i++)
+      //   OpenQuestion(
+      //       id: '${i + 10}',
+      //       questionText: 'Filler vraag $i',
+      //       maxPoint: i + 5,
+      //       questionType: 'OQ'),
       OpenQuestion(
         id: '1',
         questionText: 'Leg het verschil uit tussen een stack en een heap.',
         maxPoint: 5,
-        questionType: 'Open vraag',
+        questionType: 'OQ',
       ),
       CodeCorrectionQuestion(
         id: '2',
         questionText: "console('hello')",
         answerText: "console.log('hello')",
         maxPoint: 3,
-        questionType: 'Code correctie',
+        questionType: 'CC',
       ),
       CodeCorrectionQuestion(
         id: '2',
         questionText: "MAIN",
         answerText: "main",
         maxPoint: 15,
-        questionType: 'Code correctie',
+        questionType: 'CC',
       ),
       MultipleChoiceQuestion(
         id: '3',
@@ -159,7 +166,7 @@ class _StudentExamState extends State<StudentExam> {
         id: '3',
         questionText: 'Wat is een dier?',
         maxPoint: 2,
-        questionType: 'Meerkeuze',
+        questionType: 'MC',
         possibleAnswers: [
           Answer(answerText: 'hond', isCorrect: true),
           Answer(answerText: 'kast', isCorrect: false),
@@ -170,7 +177,7 @@ class _StudentExamState extends State<StudentExam> {
         id: '3',
         questionText: 'Wat is wel een programmeertaal?',
         maxPoint: 5,
-        questionType: 'Meerkeuze',
+        questionType: 'MC',
         possibleAnswers: [
           Answer(answerText: 'rattlesnake', isCorrect: false),
           Answer(answerText: 'anaconda', isCorrect: false),
@@ -183,39 +190,22 @@ class _StudentExamState extends State<StudentExam> {
   }
 
   Widget questionForm() {
-    // Get the current question.
-    Question question = _questions![_currentQuestionIndex!];
-    if (question is OpenQuestion) {
-      return openQuestionForm(
-        questionText: question.questionText,
-        maxPoint: question.maxPoint,
-        index: _currentQuestionIndex!,
-        controller: openQuestionController,
-      );
-    } else if (question is CodeCorrectionQuestion) {
-      return codeCorrectionForm(
-        questionText: question.questionText,
-        maxPoint: question.maxPoint,
-        index: _currentQuestionIndex!,
-        controller: codeCorrectionController,
-      );
-    } else if (question is MultipleChoiceQuestion) {
-      return multipleChoiceForm(
-          questionText: question.questionText,
-          maxPoint: question.maxPoint,
-          index: _currentQuestionIndex!,
-          possibleAnswers: question.possibleAnswers);
+    _currentQuestion = _questions?[_currentQuestionIndex!];
+    if (_currentQuestion is OpenQuestion) {
+      _currentQuestion = _currentQuestion as OpenQuestion;
+      return openQuestionForm();
+    } else if (_currentQuestion is CodeCorrectionQuestion) {
+      _currentQuestion = _currentQuestion as CodeCorrectionQuestion;
+      return codeCorrectionForm();
+    } else if (_currentQuestion is MultipleChoiceQuestion) {
+      _currentQuestion = _currentQuestion as MultipleChoiceQuestion;
+      return multipleChoiceForm();
     } else {
       return const Text('Something went wrong...');
     }
   }
 
-  Form openQuestionForm({
-    required String questionText,
-    required int maxPoint,
-    required int index,
-    required TextEditingController controller,
-  }) {
+  Form openQuestionForm() {
     return Form(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -223,7 +213,7 @@ class _StudentExamState extends State<StudentExam> {
           Container(
             margin: const EdgeInsets.symmetric(vertical: 16.0),
             child: Text(
-              '${_currentQuestionIndex! + 1}. $questionText ($maxPoint ptn.)',
+              '${_currentQuestionIndex! + 1}. ${_currentQuestion!.questionText} (${_currentQuestion!.maxPoint} ptn.)',
               style: const TextStyle(
                 fontSize: sizes.medium,
                 fontWeight: FontWeight.bold,
@@ -231,7 +221,7 @@ class _StudentExamState extends State<StudentExam> {
             ),
           ),
           TextFormField(
-            controller: controller,
+            controller: openQuestionController,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
             ),
@@ -244,11 +234,7 @@ class _StudentExamState extends State<StudentExam> {
             children: [
               _currentQuestionIndex! >= (_questions!.length - 1)
                   ? finishExamButton()
-                  : nextQuestionButton(
-                      index: index,
-                      studentAnswer: controller.text,
-                      questionType: 'OQ',
-                    ),
+                  : nextQuestionButton(),
             ],
           ),
         ],
@@ -256,12 +242,7 @@ class _StudentExamState extends State<StudentExam> {
     );
   }
 
-  Form codeCorrectionForm({
-    required String questionText,
-    required int maxPoint,
-    required int index,
-    required TextEditingController controller,
-  }) {
+  Form codeCorrectionForm() {
     return Form(
         child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -269,7 +250,7 @@ class _StudentExamState extends State<StudentExam> {
         Container(
           margin: const EdgeInsets.symmetric(vertical: 16.0),
           child: Text(
-            '${_currentQuestionIndex! + 1}. Pas de code aan zodat dit zou werken. ($maxPoint ptn.)',
+            '${_currentQuestionIndex! + 1}. Pas de code aan zodat dit zou werken. (${_currentQuestion!.maxPoint} ptn.)',
             style: const TextStyle(
               fontSize: sizes.medium,
               fontWeight: FontWeight.bold,
@@ -277,7 +258,7 @@ class _StudentExamState extends State<StudentExam> {
           ),
         ),
         Text(
-          questionText,
+          _currentQuestion!.questionText,
           style: const TextStyle(
             fontSize: sizes.small,
             fontWeight: FontWeight.w200,
@@ -286,7 +267,7 @@ class _StudentExamState extends State<StudentExam> {
         Container(
           margin: const EdgeInsets.only(top: 16.0),
           child: TextFormField(
-            controller: controller,
+            controller: codeCorrectionController,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
             ),
@@ -300,22 +281,16 @@ class _StudentExamState extends State<StudentExam> {
           children: [
             _currentQuestionIndex! >= (_questions!.length - 1)
                 ? finishExamButton()
-                : nextQuestionButton(
-                    index: index,
-                    studentAnswer: controller.text,
-                    questionType: 'CC',
-                  ),
+                : nextQuestionButton(),
           ],
         ),
       ],
     ));
   }
 
-  Form multipleChoiceForm(
-      {required String questionText,
-      required int maxPoint,
-      required int index,
-      required List<Answer> possibleAnswers}) {
+  Form multipleChoiceForm() {
+    MultipleChoiceQuestion currentQuestion =
+        _currentQuestion as MultipleChoiceQuestion;
     return Form(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -323,26 +298,23 @@ class _StudentExamState extends State<StudentExam> {
           Container(
             margin: const EdgeInsets.symmetric(vertical: 16.0),
             child: Text(
-              '${_currentQuestionIndex! + 1}. $questionText ($maxPoint ptn.)',
+              '${_currentQuestionIndex! + 1}. ${currentQuestion.questionText} (${currentQuestion.maxPoint} ptn.)',
               style: const TextStyle(
                 fontSize: sizes.medium,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          for (int i = 0; i < possibleAnswers.length; i++)
+          for (int i = 0; i < currentQuestion.possibleAnswers.length; i++)
             checkboxAnswer(
-                index: i, answerText: possibleAnswers[i].answerText!),
+                index: i,
+                answerText: currentQuestion.possibleAnswers[i].answerText!),
           const SizedBox(height: 16.0),
           Column(
             children: [
               _currentQuestionIndex! >= (_questions!.length - 1)
                   ? finishExamButton()
-                  : nextQuestionButton(
-                      index: index,
-                      questionType: 'MC',
-                      possibleAnswers: possibleAnswers,
-                    ),
+                  : nextQuestionButton(),
             ],
           ),
         ],
@@ -376,81 +348,96 @@ class _StudentExamState extends State<StudentExam> {
   }
 
   // Store/update the answers of the student.
-  void _updateAnswers(
-    int index,
-    String studentAnswer,
-    String questionType,
-    List<Answer> possibleAnswers,
-  ) {
+  void updateAnswers() {
+    // 1. Check if the answer is already in the list.
     String? foundId;
-    String id = "question_${index + 1}";
-
-    // Check if the answer is already stored.
+    final id = "question_${_currentQuestionIndex! + 1}";
+    print('Find question with id $id');
     for (var map in _answers!) {
       if (map.containsKey("id")) {
         if (map["id"] == id) {
-          foundId = id;
-          break;
+          // 2.1 If so, change the answer in the list.
+          foundId ??= id;
+          print('Found question with id $id');
+          return;
         }
       }
     }
 
-    // Remove the answer if answer exists.
-    if (foundId != null) {
-      _answers?.removeWhere((map) {
-        return map["id"] == foundId;
-      });
-    }
+    // _answers?.removeWhere((map) {
+    //   return map["id"] == foundId;
+    // });
 
-    print("found question with type $questionType");
-
-    // Add the new answer.
-    Map<String, dynamic> json;
-    if (questionType == 'MC') {
-      // Create a mapping of the answers of the student.
-      List<Map<String, dynamic>> studentAnswers = [];
-      for (int i = 0; i < possibleAnswers.length; i++) {
-        Map<String, dynamic> answer = {
-          'text': possibleAnswers[i].answerText,
-          'answer': _isChecked![i],
+    // 2.2 If not, append the answer to the list.
+    Map<String, dynamic> json = {};
+    switch (_currentQuestion!.questionType) {
+      case 'OQ':
+        OpenQuestion currentQuestion = _currentQuestion as OpenQuestion;
+        json = {
+          'id': id,
+          'max_point': currentQuestion.maxPoint,
+          'question_text': currentQuestion.questionText,
+          'student_answer': openQuestionController.text,
+          'type': currentQuestion.questionType,
         };
+        break;
+      case 'CC':
+        CodeCorrectionQuestion currentQuestion =
+            _currentQuestion as CodeCorrectionQuestion;
+        json = {
+          'id': id,
+          'max_point': currentQuestion.maxPoint,
+          'question_text': currentQuestion.questionText,
+          'student_answer': codeCorrectionController.text,
+          'teacher_answer': currentQuestion.answerText,
+          'type': currentQuestion.questionType,
+        };
+        break;
+      case 'MC':
+        MultipleChoiceQuestion currentQuestion =
+            _currentQuestion as MultipleChoiceQuestion;
+        // Create a mapping of the answers of the student.
+        List<Map<String, dynamic>> studentAnswers = [];
+        for (int i = 0; i < currentQuestion.possibleAnswers.length; i++) {
+          Map<String, dynamic> studentAnswer = {
+            'answer_text': currentQuestion.possibleAnswers[i].answerText,
+            'student_answer': _isChecked![i],
+          };
 
-        studentAnswers.add(answer);
-      }
-      json = {
-        "id": id,
-        "type": questionType,
-        "student_answers": studentAnswers,
-      };
-    } else {
-      json = {
-        "id": id,
-        "student_answer": studentAnswer,
-        "type": questionType,
-      };
+          studentAnswers.add(studentAnswer);
+        }
+        json = {
+          'id': id,
+          'type': currentQuestion.questionType,
+          'student_answers': studentAnswers,
+          'teacher_answers': currentQuestion.possibleAnswers,
+        };
+        break;
+      default:
+        break;
     }
-    _answers?.add(json);
+
+    setState(() {
+      _answers!.add(json);
+      print('---ANSWERS---');
+      print(_answers);
+
+      _currentQuestionIndex = _currentQuestionIndex! + 1;
+      // // Get the current question.
+      // _currentQuestion = _questions?[_currentQuestionIndex!];
+
+      //print("current question is $_currentQuestion");
+      // print('CURRENT INDEX IS $_currentQuestionIndex');
+      // print("current question is $_currentQuestion");
+
+      //setAnswer(_currentQuestionIndex!);
+    });
   }
 
-  ElevatedButton nextQuestionButton({
-    int index = -1,
-    String studentAnswer = "idk",
-    String questionType = "OQ",
-    List<Answer> possibleAnswers = const [],
-  }) {
+  ElevatedButton nextQuestionButton() {
     return ElevatedButton(
       onPressed: () {
-        setState(() {
-          // Store/update the answers of the student in a list.
-          _updateAnswers(index, studentAnswer, questionType, possibleAnswers);
-
-          print(_answers);
-
-          // Next question.
-          _currentQuestionIndex = _currentQuestionIndex! + 1;
-
-          setAnswer(_currentQuestionIndex!);
-        });
+        updateAnswers();
       },
       child: const Text(
         "Volgende vraag",
@@ -533,7 +520,7 @@ class _StudentExamState extends State<StudentExam> {
             _currentQuestionIndex = index;
             // TODO: if already answered, show the answer in the text field from the answers list.
             //_updateAnswers(index, studentAnswer, questionType, possibleAnswers);
-            setAnswer(_currentQuestionIndex!);
+            //setAnswer(_currentQuestionIndex!);
           },
         );
       },
@@ -616,6 +603,8 @@ class _StudentExamState extends State<StudentExam> {
 
   @override
   Widget build(BuildContext context) {
+    // print('CURRENT INDEX IS $_currentQuestionIndex');
+    // print("current question is $_currentQuestion");
     return Scaffold(
       appBar: AppBar(
         title: Text(_exam!.subject),
