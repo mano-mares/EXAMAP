@@ -103,7 +103,7 @@ class _StudentExamState extends State<StudentExam> {
           );
 
           // Go to submit exam.
-          goToEndExamPage();
+          goToSubmitExamPage();
         } else {
           setState(() {
             // Decrease the counter.
@@ -125,12 +125,6 @@ class _StudentExamState extends State<StudentExam> {
     dummyExam.subject = 'Intro Mobile';
     dummyExam.timeLimit = '0:10 uur';
     List<Question> questions = [
-      // for (int i = 0; i < 3; i++)
-      //   OpenQuestion(
-      //       id: '${i + 10}',
-      //       questionText: 'Filler vraag $i',
-      //       maxPoint: i + 5,
-      //       questionType: 'OQ'),
       OpenQuestion(
         id: '1',
         questionText: 'Leg het verschil uit tussen een stack en een heap.',
@@ -577,7 +571,11 @@ class _StudentExamState extends State<StudentExam> {
     return Column(
       children: [
         ElevatedButton(
-          onPressed: () => showEndExamDialog(),
+          onPressed: () {
+            // Store answers
+            updateAnswers();
+            showEndExamDialog();
+          },
           child: const Text(
             "Beëindig het examen",
             style: TextStyle(fontSize: sizes.btnSmall),
@@ -609,7 +607,7 @@ class _StudentExamState extends State<StudentExam> {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
-              goToEndExamPage();
+              goToSubmitExamPage();
             },
             child: const Text(
               "Examen indienen",
@@ -621,10 +619,15 @@ class _StudentExamState extends State<StudentExam> {
     );
   }
 
-  void goToEndExamPage() {
+  void goToSubmitExamPage() {
     // Push new page and remove all previous pages
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => const SubmitExamPage()),
+        MaterialPageRoute(
+          builder: (context) => SubmitExamPage(
+            exam: _exam!,
+            answers: _answers!,
+          ),
+        ),
         ((route) => false));
   }
 
