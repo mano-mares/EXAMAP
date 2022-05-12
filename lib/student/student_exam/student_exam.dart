@@ -278,11 +278,28 @@ class _StudentExamState extends State<StudentExam> {
             ],
           ),
         ),
-        Text(
-          _currentQuestion!.questionText,
-          style: const TextStyle(
-            fontSize: sizes.small,
-            fontWeight: FontWeight.w200,
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 16.0),
+          child: Column(
+            children: [
+              const Text(
+                'Gegeven',
+                style: TextStyle(
+                  fontSize: sizes.medium,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(
+                height: 8.0,
+              ),
+              Text(
+                _currentQuestion!.questionText,
+                style: const TextStyle(
+                  fontSize: sizes.small,
+                  fontWeight: FontWeight.w200,
+                ),
+              ),
+            ],
           ),
         ),
         Container(
