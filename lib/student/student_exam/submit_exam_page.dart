@@ -1,9 +1,7 @@
-import 'dart:math';
-
 import 'package:examap/main.dart';
 import 'package:examap/models/exam.dart';
-import 'package:examap/models/questions/multiple_choice/answer.dart';
 import 'package:examap/student/student_state.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:examap/firebase_options.dart';
@@ -41,65 +39,40 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
   }
 
   _submitExam() async {
-    // TODO: write answers to firestore.
     String studentNumber = StudentState.studentNumber.trim().toLowerCase();
-    //print("Write answers to doc ${studentNumber}...");
 
-    // Get student doc
+    // Get students collection.
     final studentsRef = firestore
         .collection('dummy_data_examap')
         .doc('exam')
         .collection('students');
 
-    // Get studentdoc
-    final DocumentSnapshot studentDoc =
-        await studentsRef.doc(studentNumber).get();
-
-    print(studentDoc.id);
-    // Write answers to student doc
-    print(widget.answers);
-
     // Loop through answers
     var answers = widget.answers;
     for (int i = 0; i < answers.length; i++) {
       var currentAnswer = answers[i];
-      print('print answer');
-      print(currentAnswer);
-      print(currentAnswer[strings.questionType]);
+      String questionId = currentAnswer[strings.id];
+      dynamic answer;
       switch (currentAnswer[strings.questionType]) {
         case 'OQ':
-          var answer = <String, dynamic>{
+          answer = <String, dynamic>{
             strings.maxPoint: currentAnswer[strings.maxPoint],
             strings.questionText: currentAnswer[strings.questionText],
             strings.questionType: currentAnswer[strings.questionType],
             strings.studentAnswer: currentAnswer[strings.studentAnswer],
           };
-          // Write answer to collection answers in student doc
-          print("Writing answer to ${studentDoc.id}");
-          await studentsRef
-              .doc(studentDoc.id)
-              .collection('answers')
-              .doc(currentAnswer[strings.id])
-              .set(answer);
           break;
         case 'CC':
-          var answer = <String, dynamic>{
+          answer = <String, dynamic>{
             strings.maxPoint: currentAnswer[strings.maxPoint],
             strings.questionText: currentAnswer[strings.questionText],
             strings.questionType: currentAnswer[strings.questionType],
             strings.studentAnswer: currentAnswer[strings.studentAnswer],
             strings.teacherAnswer: currentAnswer[strings.teacherAnswer],
           };
-          // Write answer to collection answers in student doc
-          print("Writing answer to ${studentDoc.id}");
-          await studentsRef
-              .doc(studentDoc.id)
-              .collection('answers')
-              .doc(currentAnswer[strings.id])
-              .set(answer);
           break;
         case 'MC':
-          var answer = <String, dynamic>{
+          answer = <String, dynamic>{
             strings.maxPoint: currentAnswer[strings.maxPoint],
             strings.questionText: currentAnswer[strings.questionText],
             strings.questionType: currentAnswer[strings.questionType],
@@ -108,16 +81,19 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
             strings.teacherAnswers:
                 currentAnswer[strings.teacherAnswers] as List<dynamic>,
           };
-          // Write answer to collection answers in student doc
-          print("Writing answer to ${studentDoc.id}");
-          await studentsRef
-              .doc(studentDoc.id)
-              .collection('answers')
-              .doc(currentAnswer[strings.id])
-              .set(answer);
           break;
         default:
           break;
+      }
+      // Write answer to collection answers in student doc.
+      try {
+        await studentsRef
+            .doc(studentNumber)
+            .collection(strings.answers)
+            .doc(questionId)
+            .set(answer);
+      } catch (e) {
+        print('Something went wrong with send answers to firestore');
       }
     }
 
