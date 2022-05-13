@@ -1,5 +1,6 @@
 import 'package:examap/main.dart';
 import 'package:examap/models/exam.dart';
+import 'package:examap/student/student_state.dart';
 import 'package:flutter/material.dart';
 
 import '../../res/style/my_fontsize.dart' as sizes;
@@ -22,6 +23,8 @@ class SubmitExamPage extends StatefulWidget {
 class _SubmitExamPageState extends State<SubmitExamPage> {
   _submitExam() {
     // TODO: write answers to firestore.
+    String studentNumber = StudentState.studentNumber;
+    print("Write answers to doc ${studentNumber}...");
 
     // Go back to the main login page by replacing the page.
     Navigator.pushReplacement(
@@ -30,6 +33,9 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
         builder: (context) => const MyApp(),
       ),
     );
+
+    // Clear studentnumber.
+    StudentState.clear();
   }
 
   @override
