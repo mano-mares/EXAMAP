@@ -14,3 +14,4 @@ const String answerText = 'answer_text';
 const String answers = 'answers';
 const String isCorrect = 'is_correct';
 const String studentAnswer = 'student_answer';
+const String teacherAnswer = 'teacher_answer';

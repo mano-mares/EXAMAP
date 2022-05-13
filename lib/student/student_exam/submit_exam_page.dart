@@ -67,7 +67,7 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
       print(currentAnswer[strings.questionType]);
       switch (currentAnswer[strings.questionType]) {
         case 'OQ':
-          var OpenQuestion = <String, dynamic>{
+          var answer = <String, dynamic>{
             strings.maxPoint: currentAnswer[strings.maxPoint],
             strings.questionText: currentAnswer[strings.questionText],
             strings.questionType: currentAnswer[strings.questionType],
@@ -79,9 +79,23 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
               .doc(studentDoc.id)
               .collection('answers')
               .doc(currentAnswer[strings.id])
-              .set(OpenQuestion);
+              .set(answer);
           break;
         case 'CC':
+          var answer = <String, dynamic>{
+            strings.maxPoint: currentAnswer[strings.maxPoint],
+            strings.questionText: currentAnswer[strings.questionText],
+            strings.questionType: currentAnswer[strings.questionType],
+            strings.studentAnswer: currentAnswer[strings.studentAnswer],
+            strings.teacherAnswer: currentAnswer[strings.teacherAnswer],
+          };
+          // Write answer to collection answers in student doc
+          print("Writing answer to ${studentDoc.id}");
+          await studentsRef
+              .doc(studentDoc.id)
+              .collection('answers')
+              .doc(currentAnswer[strings.id])
+              .set(answer);
           break;
         case 'MC':
           break;
