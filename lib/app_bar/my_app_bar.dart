@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../authentication/popup_menu_button_logout.dart';
-import '../homepage_docent/strings.dart' as strings;
+import '../admin/homepage_docent/strings.dart' as strings;
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MyAppBar({Key? key}) : super(key: key);

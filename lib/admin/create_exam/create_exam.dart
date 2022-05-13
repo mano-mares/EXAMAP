@@ -1,4 +1,4 @@
-import 'package:examap/create_exam/create_exam_form/create_exam_form.dart';
+import 'package:examap/admin/create_exam/create_exam_form/create_exam_form.dart';
 import 'package:flutter/material.dart';
 
 import 'strings.dart' as strings;

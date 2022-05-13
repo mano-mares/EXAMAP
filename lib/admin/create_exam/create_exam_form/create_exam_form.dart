@@ -1,4 +1,4 @@
-import 'package:examap/create_exam/create_exam_form/exam_questions_list.dart';
+import 'package:examap/admin/create_exam/create_exam_form/exam_questions_list.dart';
 import 'package:examap/models/exam.dart';
 import 'package:examap/models/questions/code_correction/code_correction_question.dart';
 import 'package:examap/models/questions/multiple_choice/multiple_choice_question.dart';
@@ -9,7 +9,7 @@ import 'package:examap/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../strings.dart' as strings;
-import '../../res/style/my_fontsize.dart' as sizes;
+import '../../../res/style/my_fontsize.dart' as sizes;
 
 class CreateExamForm extends StatefulWidget {
   const CreateExamForm({Key? key}) : super(key: key);

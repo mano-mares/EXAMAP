@@ -4,10 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../models/exam.dart';
-import '../../models/questions/open_question/open_question.dart';
+import '../../../models/exam.dart';
+import '../../../models/questions/open_question/open_question.dart';
 import 'strings.dart' as strings;
-import '../../res/style/my_fontsize.dart' as sizes;
+import '../../../res/style/my_fontsize.dart' as sizes;
 
 class OpenQuestionForm extends StatefulWidget {
   const OpenQuestionForm({Key? key}) : super(key: key);

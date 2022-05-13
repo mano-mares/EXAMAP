@@ -1,4 +1,4 @@
-import 'package:examap/homepage_docent/homepage_docent.dart';
+import 'package:examap/admin/homepage_docent/homepage_docent.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 

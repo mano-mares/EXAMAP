@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../homepage_docent/strings.dart' as strings;
+import '../admin/homepage_docent/strings.dart' as strings;
 import '../main.dart';
 
 class PopupMenuButtonLogout extends StatelessWidget {
