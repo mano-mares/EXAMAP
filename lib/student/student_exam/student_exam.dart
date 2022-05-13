@@ -743,6 +743,13 @@ class _StudentExamState extends State<StudentExam> {
               ),
             ),
           );
+        } else if (snapshot.hasError) {
+          examPage = Scaffold(
+            appBar: AppBar(),
+            body: Center(
+              child: Text('Error: ${snapshot.error}'),
+            ),
+          );
         } else {
           // Displaying Loading Spinner to indicate waiting state
           examPage = Scaffold(
