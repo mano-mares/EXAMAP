@@ -539,7 +539,7 @@ class _StudentExamState extends State<StudentExam> {
         if (map["id"] == id) {
           // Check if the answer is empty
           foundId = id;
-          foundType = map["type"];
+          foundType = map["question_type"];
           break;
         }
       }

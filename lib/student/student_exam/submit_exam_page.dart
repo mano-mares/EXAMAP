@@ -1,7 +1,6 @@
 import 'package:examap/main.dart';
 import 'package:examap/models/exam.dart';
 import 'package:examap/student/student_state.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:examap/firebase_options.dart';
@@ -38,14 +37,14 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
     firestore = FirebaseFirestore.instance;
   }
 
-  _submitExam() async {
-    String studentNumber = StudentState.studentNumber.trim().toLowerCase();
+  Future<void> submitExam() async {
+    String studentNumber = StudentState.studentNumber.trim();
 
     // Get students collection.
     final studentsRef = firestore
-        .collection('dummy_data_examap')
-        .doc('exam')
-        .collection('students');
+        .collection(strings.headCollection)
+        .doc(strings.headCollectionDoc)
+        .collection(strings.studentsCollection);
 
     // Loop through answers
     var answers = widget.answers;
@@ -93,7 +92,7 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
             .doc(questionId)
             .set(answer);
       } catch (e) {
-        print('Something went wrong with send answers to firestore');
+        print('Something went wrong... Sending answers to firestore failed');
       }
     }
 
@@ -126,7 +125,7 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
           child: Container(
             width: MediaQuery.of(context).size.width,
             child: ElevatedButton(
-              onPressed: () async => await _submitExam(),
+              onPressed: () async => await submitExam(),
               child: const Text(
                 'Indienen',
                 style: TextStyle(fontSize: sizes.btnMedium),

@@ -2,6 +2,7 @@
 const String headCollection = "EXAMAP";
 const String headCollectionDoc = "exam";
 const String questionCollection = "questions";
+const String studentsCollection = "students";
 
 // Firestore fields
 const String subject = 'subject';
