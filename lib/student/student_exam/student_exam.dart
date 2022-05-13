@@ -483,19 +483,28 @@ class _StudentExamState extends State<StudentExam> {
             _currentQuestion as MultipleChoiceQuestion;
         // Create a mapping of the answers of the student.
         List<Map<String, dynamic>> studentAnswers = [];
+        List<Map<String, dynamic>> teacherAnswers = [];
         for (int i = 0; i < currentQuestion.possibleAnswers.length; i++) {
           Map<String, dynamic> studentAnswer = {
             'answer_text': currentQuestion.possibleAnswers[i].answerText,
             'student_answer': _isChecked![i],
           };
 
+          Map<String, dynamic> teacherAnswer = {
+            'answer_text': currentQuestion.possibleAnswers[i].answerText,
+            'teacher_answer': currentQuestion.possibleAnswers[i].isCorrect,
+          };
+
           studentAnswers.add(studentAnswer);
+          teacherAnswers.add(teacherAnswer);
         }
         json = {
           'id': id,
+          'max_point': currentQuestion.maxPoint,
+          'question_text': currentQuestion.questionText,
           'question_type': QuestionType.MC.name,
           'student_answers': studentAnswers,
-          'teacher_answers': currentQuestion.possibleAnswers,
+          'teacher_answers': teacherAnswers,
         };
         break;
       default:

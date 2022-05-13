@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:examap/main.dart';
 import 'package:examap/models/exam.dart';
+import 'package:examap/models/questions/multiple_choice/answer.dart';
 import 'package:examap/student/student_state.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -98,6 +99,22 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
               .set(answer);
           break;
         case 'MC':
+          var answer = <String, dynamic>{
+            strings.maxPoint: currentAnswer[strings.maxPoint],
+            strings.questionText: currentAnswer[strings.questionText],
+            strings.questionType: currentAnswer[strings.questionType],
+            strings.studentAnswers:
+                currentAnswer[strings.studentAnswers] as List<dynamic>,
+            strings.teacherAnswers:
+                currentAnswer[strings.teacherAnswers] as List<dynamic>,
+          };
+          // Write answer to collection answers in student doc
+          print("Writing answer to ${studentDoc.id}");
+          await studentsRef
+              .doc(studentDoc.id)
+              .collection('answers')
+              .doc(currentAnswer[strings.id])
+              .set(answer);
           break;
         default:
           break;
