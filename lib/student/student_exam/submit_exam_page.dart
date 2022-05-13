@@ -9,6 +9,7 @@ import 'package:examap/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../res/style/my_fontsize.dart' as sizes;
+import 'strings.dart' as strings;
 
 class SubmitExamPage extends StatefulWidget {
   final Exam exam;
@@ -47,14 +48,47 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
     final studentsRef = firestore
         .collection('dummy_data_examap')
         .doc('exam')
-        .collection('students')
-        .doc(studentNumber);
+        .collection('students');
 
     // Get studentdoc
-    final DocumentSnapshot studentDoc = await studentsRef.get();
+    final DocumentSnapshot studentDoc =
+        await studentsRef.doc(studentNumber).get();
 
     print(studentDoc.id);
     // Write answers to student doc
+    print(widget.answers);
+
+    // Loop through answers
+    var answers = widget.answers;
+    for (int i = 0; i < answers.length; i++) {
+      var currentAnswer = answers[i];
+      print('print answer');
+      print(currentAnswer);
+      print(currentAnswer[strings.questionType]);
+      switch (currentAnswer[strings.questionType]) {
+        case 'OQ':
+          var OpenQuestion = <String, dynamic>{
+            strings.maxPoint: currentAnswer[strings.maxPoint],
+            strings.questionText: currentAnswer[strings.questionText],
+            strings.questionType: currentAnswer[strings.questionType],
+            strings.studentAnswer: currentAnswer[strings.studentAnswer],
+          };
+          // Write answer to collection answers in student doc
+          print("Writing answer to ${studentDoc.id}");
+          await studentsRef
+              .doc(studentDoc.id)
+              .collection('answers')
+              .doc(currentAnswer[strings.id])
+              .set(OpenQuestion);
+          break;
+        case 'CC':
+          break;
+        case 'MC':
+          break;
+        default:
+          break;
+      }
+    }
 
     // Go back to the main login page by replacing the page.
     Navigator.pushReplacement(

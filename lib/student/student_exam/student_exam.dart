@@ -463,7 +463,7 @@ class _StudentExamState extends State<StudentExam> {
           'max_point': currentQuestion.maxPoint,
           'question_text': currentQuestion.questionText,
           'student_answer': openQuestionController.text,
-          'type': QuestionType.OQ.name,
+          'question_type': QuestionType.OQ.name,
         };
         break;
       case QuestionType.CC:
@@ -475,7 +475,7 @@ class _StudentExamState extends State<StudentExam> {
           'question_text': currentQuestion.questionText,
           'student_answer': codeCorrectionController.text,
           'teacher_answer': currentQuestion.answerText,
-          'type': QuestionType.CC.name,
+          'question_type': QuestionType.CC.name,
         };
         break;
       case QuestionType.MC:
@@ -493,7 +493,7 @@ class _StudentExamState extends State<StudentExam> {
         }
         json = {
           'id': id,
-          'type': QuestionType.MC.name,
+          'question_type': QuestionType.MC.name,
           'student_answers': studentAnswers,
           'teacher_answers': currentQuestion.possibleAnswers,
         };

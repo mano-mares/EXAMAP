@@ -13,3 +13,4 @@ const String questionType = 'question_type';
 const String answerText = 'answer_text';
 const String answers = 'answers';
 const String isCorrect = 'is_correct';
+const String studentAnswer = 'student_answer';
