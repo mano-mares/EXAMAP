@@ -18,16 +18,32 @@ class CorrectExam extends StatefulWidget {
 
 class _CorrectExamState extends State<CorrectExam> {
   late FirebaseFirestore firestore;
-
+  var output;
+  var totalGrade = 0;
   @override
   void initState() {
     super.initState();
     Firebase.initializeApp(options: DefaultFirebaseOptions.android);
     loadFirestore();
+    loadLeftExam();
   }
 
   void loadFirestore() {
     firestore = FirebaseFirestore.instance;
+  }
+
+  void loadLeftExam() async {
+    var querySnapshot = await firestore
+        .collection('dummy_data_examap')
+        .doc('exam')
+        .collection('students')
+        .doc(widget.studentNumber)
+        .get()
+        .then((value) {
+      Map data = value.data() as Map;
+      output = (data['times_left_exam']);
+    });
+    setState(() {});
   }
 
   @override
@@ -93,7 +109,7 @@ class _CorrectExamState extends State<CorrectExam> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(80, 30, 80, 30),
                         child: SizedBox(
-                          height: 200,
+                          height: 350,
                           child: StreamBuilder<QuerySnapshot>(
                             stream: firestore
                                 // TODO: Change to EXAMAP
@@ -110,11 +126,13 @@ class _CorrectExamState extends State<CorrectExam> {
                                 return ListView(
                                   children: snapshot.data!.docs.map((doc) {
                                     return Card(
-                                        child: ListTile(
-                                      title: Transform.translate(
-                                          offset: const Offset(0, 0),
-                                          child: doc.get("type") == "OQ"
-                                              ? Column(
+                                      child: ListTile(
+                                        title: doc.get("type") == "OQ"
+                                            ? Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        0, 15, 0, 15),
+                                                child: Column(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
@@ -127,29 +145,207 @@ class _CorrectExamState extends State<CorrectExam> {
                                                               sizes.small),
                                                     ),
                                                     Text(
-                                                        'Antwoord student: ${doc.get("student_answer")}'),
+                                                      'Antwoord student: ${doc.get("student_answer")}',
+                                                      style: const TextStyle(
+                                                          fontSize:
+                                                              sizes.small),
+                                                    ),
                                                   ],
-                                                )
-                                              : doc.get("type") == "CC"
-                                                  ? Text("dsqfq")
-                                                  : Column(
+                                                ),
+                                              )
+                                            : doc.get("type") == "CC"
+                                                ? Padding(
+                                                    padding: const EdgeInsets
+                                                        .fromLTRB(0, 15, 0, 15),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
-                                                        Text("MC"),
+                                                        Text(
+                                                          'Gegeven: ${doc.get("question_text")}',
+                                                          style: const TextStyle(
+                                                              fontSize:
+                                                                  sizes.small),
+                                                        ),
+                                                        Text(
+                                                          'Oplossing: ${doc.get("teacher_answer")}',
+                                                          style: const TextStyle(
+                                                              fontSize:
+                                                                  sizes.small),
+                                                        ),
+                                                        Text(
+                                                          'Antwoord student: ${doc.get("student_answer")}',
+                                                          style: const TextStyle(
+                                                              fontSize:
+                                                                  sizes.small),
+                                                        ),
                                                       ],
-                                                    )),
-                                      trailing: SizedBox(
-                                        width: 150,
-                                        child: Padding(
-                                          padding: EdgeInsets.all(0),
-                                          child: SpinBox(
-                                            min: 0,
-                                            max:
-                                                doc.get("max_point").toDouble(),
-                                            value: 0,
+                                                    ),
+                                                  )
+                                                : Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        '${doc.get("question_text")}',
+                                                        style: const TextStyle(
+                                                            fontSize:
+                                                                sizes.small),
+                                                      ),
+                                                      Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              doc.get("student_answers")[
+                                                                      0][
+                                                                  "answer_text"],
+                                                              style: const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize: sizes
+                                                                      .small),
+                                                            ),
+                                                            doc.get("student_answers")[
+                                                                        0][
+                                                                    "student_answer"]
+                                                                ? const Text(
+                                                                    "Student: Juist",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            sizes
+                                                                                .small))
+                                                                : const Text(
+                                                                    "Student: Fout",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            sizes.small)),
+                                                            doc.get("teacher_answers")[
+                                                                        0][
+                                                                    "teacher_answer"]
+                                                                ? const Text(
+                                                                    "Correct antwoord: Juist",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            sizes
+                                                                                .small))
+                                                                : const Text(
+                                                                    "Correct antwoord: Fout",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            sizes.small)),
+                                                          ]),
+                                                      Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              doc.get("student_answers")[
+                                                                      1][
+                                                                  "answer_text"],
+                                                              style: const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize: sizes
+                                                                      .small),
+                                                            ),
+                                                            doc.get("student_answers")[
+                                                                        1][
+                                                                    "student_answer"]
+                                                                ? const Text(
+                                                                    "Student: Juist",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            sizes
+                                                                                .small))
+                                                                : const Text(
+                                                                    "Student: Fout",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            sizes.small)),
+                                                            doc.get("teacher_answers")[
+                                                                        1][
+                                                                    "teacher_answer"]
+                                                                ? const Text(
+                                                                    "Correct antwoord: Juist",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            sizes
+                                                                                .small))
+                                                                : const Text(
+                                                                    "Correct antwoord: Fout",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            sizes.small)),
+                                                          ]),
+                                                      Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              doc.get("student_answers")[
+                                                                      2][
+                                                                  "answer_text"],
+                                                              style: const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize: sizes
+                                                                      .small),
+                                                            ),
+                                                            doc.get("student_answers")[
+                                                                        2][
+                                                                    "student_answer"]
+                                                                ? const Text(
+                                                                    "Student: Juist",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            sizes
+                                                                                .small))
+                                                                : const Text(
+                                                                    "Student: Fout",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            sizes.small)),
+                                                            doc.get("teacher_answers")[
+                                                                        2][
+                                                                    "teacher_answer"]
+                                                                ? const Text(
+                                                                    "Correct antwoord: Juist",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            sizes
+                                                                                .small))
+                                                                : const Text(
+                                                                    "Correct antwoord: Fout",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            sizes.small)),
+                                                          ]),
+                                                    ],
+                                                  ),
+                                        trailing: SizedBox(
+                                          width: 150,
+                                          child: Padding(
+                                            padding: EdgeInsets.all(0),
+                                            child: SpinBox(
+                                              min: 0,
+                                              max: doc
+                                                  .get("max_point")
+                                                  .toDouble(),
+                                              value: 0,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ));
+                                    );
                                   }).toList(),
                                 );
                               }
@@ -160,6 +356,39 @@ class _CorrectExamState extends State<CorrectExam> {
                     ],
                   ),
                 ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+                      child: Text(
+                        "Resultaat",
+                        style: TextStyle(fontSize: sizes.subTitle),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 150,
+                      height: 50,
+                      child: SpinBox(
+                        min: 0,
+                        max: 20,
+                        value: totalGrade.toDouble(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Text(
+                'Opmerking',
+                style: TextStyle(color: Colors.red, fontSize: 30),
+              ),
+              Text(
+                'Student ${widget.studentNumber} heeft ${output.toString()} keer het examen verlaten',
+                style:
+                    const TextStyle(fontSize: sizes.small, color: Colors.red),
               ),
             ],
           ),
