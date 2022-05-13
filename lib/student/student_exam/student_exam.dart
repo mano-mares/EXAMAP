@@ -15,6 +15,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:examap/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'strings.dart' as strings;
+
 enum QuestionType { OQ, CC, MC }
 
 class StudentExam extends StatefulWidget {
@@ -53,7 +55,6 @@ class _StudentExamState extends State<StudentExam> {
   @override
   void initState() {
     super.initState();
-    loadFirestore();
     setState(() {
       // Assign 0 to _currentQuestion if _currentQuestion is null.
       _currentQuestionIndex ??= 0;
@@ -71,9 +72,98 @@ class _StudentExamState extends State<StudentExam> {
   }
 
   Future<void> loadFirestore() async {
-    print('LOAD FIRESTORE');
     await Firebase.initializeApp(options: DefaultFirebaseOptions.android);
     firestore = FirebaseFirestore.instance;
+  }
+
+  // Get the exam questions from firestore.
+  Future<Exam> getExam() async {
+    await loadFirestore();
+    final DocumentReference documentReference = firestore
+        .collection(strings.headCollection)
+        .doc(strings.headCollectionDoc);
+    final CollectionReference collectionReference =
+        documentReference.collection(strings.questionCollection);
+
+    // Get the content of the exam document.
+    final DocumentSnapshot documentSnapshot = await documentReference.get();
+
+    // Create exam object
+    Exam exam = Exam();
+
+    // Load the exam
+    exam.subject = documentSnapshot['subject'];
+    exam.timeLimit = documentSnapshot['time_limit'];
+
+    // Get all docs from the collection questions
+    QuerySnapshot result = await collectionReference.get();
+
+    // Get data from question docs and convert map to List
+    final questions = result.docs.map(((doc) {
+      var question = doc.data() as Map;
+      question['id'] = doc.id; // Add document id
+      return question;
+    })).toList();
+
+    // Add the question to the exam.
+    for (var question in questions) {
+      QuestionType currentQuestionType =
+          convertToQuestionType(question[strings.questionType]);
+
+      // Get the fields of the current question doc.
+      final id = question[strings.id];
+      final questionText = question[strings.questionText];
+      final maxPoint = question[strings.maxPoint];
+      final questionType = question[strings.questionType];
+
+      switch (currentQuestionType) {
+        case QuestionType.OQ:
+          exam.addQuestion(
+            OpenQuestion(
+              id: id,
+              questionText: questionText,
+              maxPoint: maxPoint,
+              questionType: questionType,
+            ),
+          );
+          break;
+        case QuestionType.CC:
+          exam.addQuestion(
+            CodeCorrectionQuestion(
+              id: id,
+              questionText: questionText,
+              maxPoint: maxPoint,
+              questionType: questionType,
+              answerText: question[strings.answerText],
+            ),
+          );
+          break;
+        case QuestionType.MC:
+          List<dynamic> answers = question[strings.answers];
+          List<Answer> possibleAnswers = [];
+          for (var answer in answers) {
+            possibleAnswers.add(
+              Answer(
+                answerText: answer[strings.answerText],
+                isCorrect: answer[strings.isCorrect],
+              ),
+            );
+          }
+          exam.addQuestion(
+            MultipleChoiceQuestion(
+              id: id,
+              questionText: questionText,
+              maxPoint: maxPoint,
+              questionType: questionType,
+              possibleAnswers: possibleAnswers,
+            ),
+          );
+          break;
+        default:
+          break;
+      }
+    }
+    return exam;
   }
 
   // TimeLimit format: "2:30 uur", "0:45 uur", "12:00 uur", etc.
@@ -124,89 +214,6 @@ class _StudentExamState extends State<StudentExam> {
   // Format total seconds in HH:MM:SS
   String formatTime(int seconds) {
     return '${(Duration(seconds: seconds))}'.split('.')[0].padLeft(8, '0');
-  }
-
-  Future<Exam> getExam() {
-    // TODO: get exam from firestore.
-    // CollectionReference collectionReference = firestore
-    //     .collection('dummy_data_examap')
-    //     .doc('exam')
-    //     .collection('questions');
-
-    // // Get docs from collection reference
-    // QuerySnapshot querySnapshot = await collectionReference.get();
-
-    // // Get data from docs and convert map to List
-    // final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-
-    // print('FROM FIRESTORE');
-    // print(allData);
-
-    return Future.delayed(
-      const Duration(seconds: 2),
-      () {
-        Exam dummyExam = Exam();
-        dummyExam.subject = 'Intro Mobile';
-        dummyExam.timeLimit = '0:10 uur';
-        List<Question> questions = [
-          OpenQuestion(
-            id: '1',
-            questionText: 'Leg het verschil uit tussen een stack en een heap.',
-            maxPoint: 5,
-            questionType: QuestionType.OQ.name,
-          ),
-          CodeCorrectionQuestion(
-            id: '2',
-            questionText: "console('hello')",
-            answerText: "console.log('hello')",
-            maxPoint: 3,
-            questionType: QuestionType.CC.name,
-          ),
-          CodeCorrectionQuestion(
-            id: '2',
-            questionText: "MAIN",
-            answerText: "main",
-            maxPoint: 15,
-            questionType: QuestionType.CC.name,
-          ),
-          MultipleChoiceQuestion(
-            id: '3',
-            questionText: 'Wat is geen programmeertaal?',
-            maxPoint: 2,
-            questionType: QuestionType.MC.name,
-            possibleAnswers: [
-              Answer(answerText: 'c++', isCorrect: false),
-              Answer(answerText: 'c--', isCorrect: true),
-              Answer(answerText: 'c#', isCorrect: false),
-            ],
-          ),
-          MultipleChoiceQuestion(
-            id: '3',
-            questionText: 'Wat is een dier?',
-            maxPoint: 2,
-            questionType: QuestionType.MC.name,
-            possibleAnswers: [
-              Answer(answerText: 'hond', isCorrect: true),
-              Answer(answerText: 'kast', isCorrect: false),
-              Answer(answerText: 'muur', isCorrect: false),
-            ],
-          ),
-          MultipleChoiceQuestion(
-            id: '3',
-            questionText: 'Wat is wel een programmeertaal?',
-            maxPoint: 5,
-            questionType: QuestionType.MC.name,
-            possibleAnswers: [
-              Answer(answerText: 'rattlesnake', isCorrect: false),
-              Answer(answerText: 'anaconda', isCorrect: false),
-              Answer(answerText: 'python', isCorrect: true),
-            ],
-          ),
-        ];
-        dummyExam.questions = questions;
-        return dummyExam;
-      },
-    );
   }
 
   // Based on the question type, show the appropriate form.
