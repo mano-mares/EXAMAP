@@ -11,6 +11,12 @@ import 'package:flutter/material.dart';
 
 import '../../res/style/my_fontsize.dart' as sizes;
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:examap/firebase_options.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'strings.dart' as strings;
+
 enum QuestionType { OQ, CC, MC }
 
 class StudentExam extends StatefulWidget {
@@ -44,20 +50,14 @@ class _StudentExamState extends State<StudentExam> {
   // The state of the MC answers of the student.
   List<bool>? _isChecked;
 
+  late FirebaseFirestore firestore;
+
   @override
   void initState() {
     super.initState();
-    _exam ??= getExam();
-    _questions ??= _exam?.questions;
-    int? counterInSeconds = getStartTimeInSeconds(_exam!.timeLimit);
     setState(() {
       // Assign 0 to _currentQuestion if _currentQuestion is null.
       _currentQuestionIndex ??= 0;
-      // set the current question.
-      _currentQuestion ??= _questions![_currentQuestionIndex!];
-
-      // Start value of the timer of the exam.
-      _counterInSeconds ??= counterInSeconds;
 
       // Initial state of the text fields are empty.
       openQuestionController.text = "";
@@ -69,6 +69,101 @@ class _StudentExamState extends State<StudentExam> {
       _answers ??= [];
     });
     startTimer();
+  }
+
+  Future<void> loadFirestore() async {
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.android);
+    firestore = FirebaseFirestore.instance;
+  }
+
+  // Get the exam questions from firestore.
+  Future<Exam> getExam() async {
+    await loadFirestore();
+    final DocumentReference documentReference = firestore
+        .collection(strings.headCollection)
+        .doc(strings.headCollectionDoc);
+    final CollectionReference collectionReference =
+        documentReference.collection(strings.questionCollection);
+
+    // Get the content of the exam document.
+    final DocumentSnapshot documentSnapshot = await documentReference.get();
+
+    // Create exam object
+    Exam exam = Exam();
+
+    // Load the exam
+    exam.subject = documentSnapshot['subject'];
+    exam.timeLimit = documentSnapshot['time_limit'];
+
+    // Get all docs from the collection questions
+    QuerySnapshot result = await collectionReference.get();
+
+    // Get data from question docs and convert map to List
+    final questions = result.docs.map(((doc) {
+      var question = doc.data() as Map;
+      question['id'] = doc.id; // Add document id
+      return question;
+    })).toList();
+
+    // Add the question to the exam.
+    for (var question in questions) {
+      QuestionType currentQuestionType =
+          convertToQuestionType(question[strings.questionType]);
+
+      // Get the fields of the current question doc.
+      final id = question[strings.id];
+      final questionText = question[strings.questionText];
+      final maxPoint = question[strings.maxPoint];
+      final questionType = question[strings.questionType];
+
+      switch (currentQuestionType) {
+        case QuestionType.OQ:
+          exam.addQuestion(
+            OpenQuestion(
+              id: id,
+              questionText: questionText,
+              maxPoint: maxPoint,
+              questionType: questionType,
+            ),
+          );
+          break;
+        case QuestionType.CC:
+          exam.addQuestion(
+            CodeCorrectionQuestion(
+              id: id,
+              questionText: questionText,
+              maxPoint: maxPoint,
+              questionType: questionType,
+              answerText: question[strings.answerText],
+            ),
+          );
+          break;
+        case QuestionType.MC:
+          List<dynamic> answers = question[strings.answers];
+          List<Answer> possibleAnswers = [];
+          for (var answer in answers) {
+            possibleAnswers.add(
+              Answer(
+                answerText: answer[strings.answerText],
+                isCorrect: answer[strings.isCorrect],
+              ),
+            );
+          }
+          exam.addQuestion(
+            MultipleChoiceQuestion(
+              id: id,
+              questionText: questionText,
+              maxPoint: maxPoint,
+              questionType: questionType,
+              possibleAnswers: possibleAnswers,
+            ),
+          );
+          break;
+        default:
+          break;
+      }
+    }
+    return exam;
   }
 
   // TimeLimit format: "2:30 uur", "0:45 uur", "12:00 uur", etc.
@@ -119,70 +214,6 @@ class _StudentExamState extends State<StudentExam> {
   // Format total seconds in HH:MM:SS
   String formatTime(int seconds) {
     return '${(Duration(seconds: seconds))}'.split('.')[0].padLeft(8, '0');
-  }
-
-  Exam getExam() {
-    // TODO: get exam from firestore.
-    Exam dummyExam = Exam();
-    dummyExam.subject = 'Intro Mobile';
-    dummyExam.timeLimit = '0:10 uur';
-    List<Question> questions = [
-      OpenQuestion(
-        id: '1',
-        questionText: 'Leg het verschil uit tussen een stack en een heap.',
-        maxPoint: 5,
-        questionType: QuestionType.OQ.name,
-      ),
-      CodeCorrectionQuestion(
-        id: '2',
-        questionText: "console('hello')",
-        answerText: "console.log('hello')",
-        maxPoint: 3,
-        questionType: QuestionType.CC.name,
-      ),
-      CodeCorrectionQuestion(
-        id: '2',
-        questionText: "MAIN",
-        answerText: "main",
-        maxPoint: 15,
-        questionType: QuestionType.CC.name,
-      ),
-      MultipleChoiceQuestion(
-        id: '3',
-        questionText: 'Wat is geen programmeertaal?',
-        maxPoint: 2,
-        questionType: QuestionType.MC.name,
-        possibleAnswers: [
-          Answer(answerText: 'c++', isCorrect: false),
-          Answer(answerText: 'c--', isCorrect: true),
-          Answer(answerText: 'c#', isCorrect: false),
-        ],
-      ),
-      MultipleChoiceQuestion(
-        id: '3',
-        questionText: 'Wat is een dier?',
-        maxPoint: 2,
-        questionType: QuestionType.MC.name,
-        possibleAnswers: [
-          Answer(answerText: 'hond', isCorrect: true),
-          Answer(answerText: 'kast', isCorrect: false),
-          Answer(answerText: 'muur', isCorrect: false),
-        ],
-      ),
-      MultipleChoiceQuestion(
-        id: '3',
-        questionText: 'Wat is wel een programmeertaal?',
-        maxPoint: 5,
-        questionType: QuestionType.MC.name,
-        possibleAnswers: [
-          Answer(answerText: 'rattlesnake', isCorrect: false),
-          Answer(answerText: 'anaconda', isCorrect: false),
-          Answer(answerText: 'python', isCorrect: true),
-        ],
-      ),
-    ];
-    dummyExam.questions = questions;
-    return dummyExam;
   }
 
   // Based on the question type, show the appropriate form.
@@ -674,28 +705,62 @@ class _StudentExamState extends State<StudentExam> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(_exam!.subject),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            questionButtons(),
-            Container(
-              margin: const EdgeInsets.only(top: 16.0),
-              child: Text(
-                'Resterende tijd: ${formatTime(_counterInSeconds!)}',
-                style: const TextStyle(fontSize: sizes.small),
+    return FutureBuilder<Exam>(
+      // Future that needs to be resolved
+      // inorder to display something on the Canvas
+      future: getExam(), // a previously-obtained Future<Exam> or null
+      builder: (BuildContext context, AsyncSnapshot<Exam> snapshot) {
+        Widget examPage;
+        if (snapshot.hasData) {
+          // Extracting data from snapshot object
+          _exam = snapshot.data as Exam;
+          _questions ??= _exam?.questions;
+          int? counterInSeconds = getStartTimeInSeconds(_exam!.timeLimit);
+          _counterInSeconds ??=
+              counterInSeconds; // Start value of the timer of the exam.
+          _currentQuestion ??=
+              _questions![_currentQuestionIndex!]; // set the current question.
+          examPage = Scaffold(
+            appBar: AppBar(
+              title: Text(_exam!.subject),
+              centerTitle: true,
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ListView(
+                children: [
+                  questionButtons(),
+                  Container(
+                    margin: const EdgeInsets.only(top: 16.0),
+                    child: Text(
+                      'Resterende tijd: ${formatTime(_counterInSeconds!)}',
+                      style: const TextStyle(fontSize: sizes.small),
+                    ),
+                  ),
+                  questionForm(),
+                  const SizedBox(height: 16.0),
+                ],
               ),
             ),
-            questionForm(),
-            const SizedBox(height: 16.0),
-          ],
-        ),
-      ),
+          );
+        } else if (snapshot.hasError) {
+          examPage = Scaffold(
+            appBar: AppBar(),
+            body: Center(
+              child: Text('Error: ${snapshot.error}'),
+            ),
+          );
+        } else {
+          // Displaying Loading Spinner to indicate waiting state
+          examPage = Scaffold(
+            appBar: AppBar(),
+            body: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+        return examPage;
+      },
     );
   }
 
