@@ -1,8 +1,13 @@
 import 'package:examap/main.dart';
 import 'package:examap/models/exam.dart';
+import 'package:examap/student/student_state.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:examap/firebase_options.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../res/style/my_fontsize.dart' as sizes;
+import 'strings.dart' as strings;
 
 class SubmitExamPage extends StatefulWidget {
   final Exam exam;
@@ -20,8 +25,76 @@ class SubmitExamPage extends StatefulWidget {
 }
 
 class _SubmitExamPageState extends State<SubmitExamPage> {
-  _submitExam() {
-    // TODO: write answers to firestore.
+  late FirebaseFirestore firestore;
+
+  @override
+  void initState() {
+    Firebase.initializeApp(options: DefaultFirebaseOptions.android);
+    loadFirestore();
+  }
+
+  void loadFirestore() async {
+    firestore = FirebaseFirestore.instance;
+  }
+
+  Future<void> submitExam() async {
+    String studentNumber = StudentState.studentNumber.trim();
+
+    // Get students collection.
+    final studentsRef = firestore
+        .collection(strings.headCollection)
+        .doc(strings.headCollectionDoc)
+        .collection(strings.studentsCollection);
+
+    // Loop through answers
+    var answers = widget.answers;
+    for (int i = 0; i < answers.length; i++) {
+      var currentAnswer = answers[i];
+      String questionId = currentAnswer[strings.id];
+      dynamic answer;
+      switch (currentAnswer[strings.questionType]) {
+        case 'OQ':
+          answer = <String, dynamic>{
+            strings.maxPoint: currentAnswer[strings.maxPoint],
+            strings.questionText: currentAnswer[strings.questionText],
+            strings.questionType: currentAnswer[strings.questionType],
+            strings.studentAnswer: currentAnswer[strings.studentAnswer],
+          };
+          break;
+        case 'CC':
+          answer = <String, dynamic>{
+            strings.maxPoint: currentAnswer[strings.maxPoint],
+            strings.questionText: currentAnswer[strings.questionText],
+            strings.questionType: currentAnswer[strings.questionType],
+            strings.studentAnswer: currentAnswer[strings.studentAnswer],
+            strings.teacherAnswer: currentAnswer[strings.teacherAnswer],
+          };
+          break;
+        case 'MC':
+          answer = <String, dynamic>{
+            strings.maxPoint: currentAnswer[strings.maxPoint],
+            strings.questionText: currentAnswer[strings.questionText],
+            strings.questionType: currentAnswer[strings.questionType],
+            strings.studentAnswers:
+                currentAnswer[strings.studentAnswers] as List<dynamic>,
+            strings.teacherAnswers:
+                currentAnswer[strings.teacherAnswers] as List<dynamic>,
+          };
+          break;
+        default:
+          break;
+      }
+      // Write answer to collection answers in student doc.
+      try {
+        await studentsRef
+            .doc(studentNumber)
+            .collection(strings.answers)
+            .doc(questionId)
+            .set(answer);
+      } catch (e) {
+        print('Something went wrong... Sending answers to firestore failed');
+      }
+    }
 
     // Go back to the main login page by replacing the page.
     Navigator.pushReplacement(
@@ -30,12 +103,15 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
         builder: (context) => const MyApp(),
       ),
     );
+
+    // Clear studentnumber.
+    StudentState.clear();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("ANSWERS OF THE STUDENT");
-    print(widget.answers);
+    //print("ANSWERS OF THE STUDENT");
+    //print(widget.answers);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Examen indienen'),
@@ -49,7 +125,7 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
           child: Container(
             width: MediaQuery.of(context).size.width,
             child: ElevatedButton(
-              onPressed: () => _submitExam(),
+              onPressed: () async => await submitExam(),
               child: const Text(
                 'Indienen',
                 style: TextStyle(fontSize: sizes.btnMedium),

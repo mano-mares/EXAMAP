@@ -92,8 +92,8 @@ class _StudentExamState extends State<StudentExam> {
     Exam exam = Exam();
 
     // Load the exam
-    exam.subject = documentSnapshot['subject'];
-    exam.timeLimit = documentSnapshot['time_limit'];
+    exam.subject = documentSnapshot[strings.subject];
+    exam.timeLimit = documentSnapshot[strings.timeLimit];
 
     // Get all docs from the collection questions
     QuerySnapshot result = await collectionReference.get();
@@ -434,8 +434,8 @@ class _StudentExamState extends State<StudentExam> {
     String? foundId;
     final id = "question_${_currentQuestionIndex! + 1}";
     for (var map in _answers!) {
-      if (map.containsKey("id")) {
-        if (map["id"] == id) {
+      if (map.containsKey(strings.id)) {
+        if (map[strings.id] == id) {
           foundId = id;
           break;
         }
@@ -444,7 +444,7 @@ class _StudentExamState extends State<StudentExam> {
 
     if (foundId != null) {
       _answers!.removeWhere((map) {
-        return map["id"] == foundId;
+        return map[strings.id] == foundId;
       });
     }
 
@@ -459,23 +459,23 @@ class _StudentExamState extends State<StudentExam> {
       case QuestionType.OQ:
         OpenQuestion currentQuestion = _currentQuestion as OpenQuestion;
         json = {
-          'id': id,
-          'max_point': currentQuestion.maxPoint,
-          'question_text': currentQuestion.questionText,
-          'student_answer': openQuestionController.text,
-          'type': QuestionType.OQ.name,
+          strings.id: id,
+          strings.maxPoint: currentQuestion.maxPoint,
+          strings.questionText: currentQuestion.questionText,
+          strings.studentAnswer: openQuestionController.text,
+          strings.questionType: QuestionType.OQ.name,
         };
         break;
       case QuestionType.CC:
         CodeCorrectionQuestion currentQuestion =
             _currentQuestion as CodeCorrectionQuestion;
         json = {
-          'id': id,
-          'max_point': currentQuestion.maxPoint,
-          'question_text': currentQuestion.questionText,
-          'student_answer': codeCorrectionController.text,
-          'teacher_answer': currentQuestion.answerText,
-          'type': QuestionType.CC.name,
+          strings.id: id,
+          strings.maxPoint: currentQuestion.maxPoint,
+          strings.questionText: currentQuestion.questionText,
+          strings.studentAnswer: codeCorrectionController.text,
+          strings.teacherAnswer: currentQuestion.answerText,
+          strings.questionType: QuestionType.CC.name,
         };
         break;
       case QuestionType.MC:
@@ -483,19 +483,28 @@ class _StudentExamState extends State<StudentExam> {
             _currentQuestion as MultipleChoiceQuestion;
         // Create a mapping of the answers of the student.
         List<Map<String, dynamic>> studentAnswers = [];
+        List<Map<String, dynamic>> teacherAnswers = [];
         for (int i = 0; i < currentQuestion.possibleAnswers.length; i++) {
           Map<String, dynamic> studentAnswer = {
-            'answer_text': currentQuestion.possibleAnswers[i].answerText,
-            'student_answer': _isChecked![i],
+            strings.answerText: currentQuestion.possibleAnswers[i].answerText,
+            strings.studentAnswer: _isChecked![i],
+          };
+
+          Map<String, dynamic> teacherAnswer = {
+            strings.answerText: currentQuestion.possibleAnswers[i].answerText,
+            strings.teacherAnswer: currentQuestion.possibleAnswers[i].isCorrect,
           };
 
           studentAnswers.add(studentAnswer);
+          teacherAnswers.add(teacherAnswer);
         }
         json = {
-          'id': id,
-          'type': QuestionType.MC.name,
-          'student_answers': studentAnswers,
-          'teacher_answers': currentQuestion.possibleAnswers,
+          strings.id: id,
+          strings.maxPoint: currentQuestion.maxPoint,
+          strings.questionText: currentQuestion.questionText,
+          strings.questionType: QuestionType.MC.name,
+          strings.studentAnswers: studentAnswers,
+          strings.teacherAnswers: teacherAnswers,
         };
         break;
       default:
@@ -509,11 +518,11 @@ class _StudentExamState extends State<StudentExam> {
 
   QuestionType convertToQuestionType(String type) {
     switch (type) {
-      case 'OQ':
+      case strings.OQ:
         return QuestionType.OQ;
-      case 'CC':
+      case strings.CC:
         return QuestionType.CC;
-      case 'MC':
+      case strings.MC:
         return QuestionType.MC;
       default:
         return QuestionType.OQ;
@@ -526,11 +535,11 @@ class _StudentExamState extends State<StudentExam> {
     final id = "question_${_currentQuestionIndex! + 1}";
     // Check if the answer is already stored.
     for (var map in _answers!) {
-      if (map.containsKey("id")) {
-        if (map["id"] == id) {
+      if (map.containsKey(strings.id)) {
+        if (map[strings.id] == id) {
           // Check if the answer is empty
           foundId = id;
-          foundType = map["type"];
+          foundType = map[strings.questionType];
           break;
         }
       }
@@ -552,25 +561,25 @@ class _StudentExamState extends State<StudentExam> {
 
     // If student already answered the question, show answer in the form.
     Map<String, dynamic> getAnswer =
-        _answers!.where((element) => element["id"] == id).first;
+        _answers!.where((element) => element[strings.id] == id).first;
     switch (currentQuestionType) {
       case QuestionType.OQ:
         setState(() {
-          openQuestionController.text = getAnswer["student_answer"];
+          openQuestionController.text = getAnswer[strings.studentAnswer];
         });
         break;
       case QuestionType.CC:
         setState(() {
-          codeCorrectionController.text = getAnswer["student_answer"];
+          codeCorrectionController.text = getAnswer[strings.studentAnswer];
         });
         break;
       case QuestionType.MC:
         List<Map<String, dynamic>> getStudentAnswersMultipleChoice =
-            getAnswer["student_answers"];
+            getAnswer[strings.studentAnswers];
         setState(() {
           for (int i = 0; i < getStudentAnswersMultipleChoice.length; i++) {
             _isChecked![i] =
-                getStudentAnswersMultipleChoice[i]["student_answer"];
+                getStudentAnswersMultipleChoice[i][strings.studentAnswer];
           }
         });
         break;
@@ -593,7 +602,7 @@ class _StudentExamState extends State<StudentExam> {
         setAnswers();
       },
       child: const Text(
-        "Volgende vraag",
+        strings.nextQuestionButtonText,
         style: TextStyle(fontSize: sizes.btnSmall),
       ),
       style: ElevatedButton.styleFrom(
@@ -649,7 +658,7 @@ class _StudentExamState extends State<StudentExam> {
             showEndExamDialog();
           },
           child: const Text(
-            "Beëindig het examen",
+            strings.finishExamButtonText,
             style: TextStyle(fontSize: sizes.btnSmall),
           ),
           style: ElevatedButton.styleFrom(
@@ -662,19 +671,17 @@ class _StudentExamState extends State<StudentExam> {
   }
 
   void showEndExamDialog() {
-    // TODO: sort the answers.
     showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Examen eindigen'),
-        content: const Text(
-            'Ben je zeker dat je je examen wilt indienen? Je kan het daarna niet meer aanpassen.'),
+        title: const Text(strings.dialogTitle),
+        content: const Text(strings.dialogContent),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            child: const Text('Sluit'),
+            child: const Text(strings.dialogExitButton),
           ),
           ElevatedButton(
             onPressed: () {
@@ -682,7 +689,7 @@ class _StudentExamState extends State<StudentExam> {
               goToSubmitExamPage();
             },
             child: const Text(
-              "Examen indienen",
+              strings.submitExamButtonText,
               style: TextStyle(fontSize: sizes.btnXSmall),
             ),
           ),
