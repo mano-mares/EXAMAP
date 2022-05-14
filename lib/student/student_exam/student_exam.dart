@@ -777,10 +777,12 @@ class _StudentExamState extends State<StudentExam> with WidgetsBindingObserver {
       builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
         Widget examPage;
         if (snapshot.hasData) {
+          // Get the student position.
           Position position = snapshot.data as Position;
           String location =
               'Lat: ${position.latitude} , Long: ${position.longitude}';
           print(location);
+          StudentState.position = position; // Store the student position
           examPage = Scaffold(
             appBar: AppBar(
               title: Text(_exam!.subject),
