@@ -770,8 +770,9 @@ class _StudentExamState extends State<StudentExam> with WidgetsBindingObserver {
         ((route) => false));
   }
 
+  // The futurebuilder will retrieve the device coordinates
   Widget futureBuilderLocation() {
-    return FutureBuilder(
+    return FutureBuilder<Position>(
       future: getGeoLocationPosition(),
       builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
         Widget examPage;
@@ -814,8 +815,24 @@ class _StudentExamState extends State<StudentExam> with WidgetsBindingObserver {
           // Displaying Loading Spinner to indicate waiting state
           examPage = Scaffold(
             appBar: AppBar(),
-            body: const Center(
-              child: CircularProgressIndicator(),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const <Widget>[
+                  SizedBox(
+                    width: 60,
+                    height: 60,
+                    child: CircularProgressIndicator(),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: Text(
+                      'Retrieving current device location...',
+                      style: TextStyle(fontSize: sizes.medium),
+                    ),
+                  )
+                ],
+              ),
             ),
           );
         }
@@ -824,6 +841,7 @@ class _StudentExamState extends State<StudentExam> with WidgetsBindingObserver {
     );
   }
 
+  // The futurebuilder will retrieve the exam from firestore
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Exam>(
@@ -853,8 +871,24 @@ class _StudentExamState extends State<StudentExam> with WidgetsBindingObserver {
           // Displaying Loading Spinner to indicate waiting state
           examPage = Scaffold(
             appBar: AppBar(),
-            body: const Center(
-              child: CircularProgressIndicator(),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const <Widget>[
+                  SizedBox(
+                    width: 60,
+                    height: 60,
+                    child: CircularProgressIndicator(),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: Text(
+                      'Retrieving the exam...',
+                      style: TextStyle(fontSize: sizes.medium),
+                    ),
+                  )
+                ],
+              ),
             ),
           );
         }
