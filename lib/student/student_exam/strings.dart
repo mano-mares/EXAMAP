@@ -42,3 +42,6 @@ const String dialogTitle = 'Examen eindigen';
 const String dialogContent =
     'Ben je zeker dat je je examen wilt indienen? Je kan het daarna niet meer aanpassen.';
 const String dialogExitButton = 'Sluit';
+
+// Submit exam text
+const String info = 'Volgende gegevens zullen bewaard worden.';
