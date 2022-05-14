@@ -89,6 +89,7 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
         // Set fields in doc student.
         await studentsRef.doc(studentNumber).set(
           {
+            strings.address: StudentState.address,
             strings.examCompleted: true,
             strings.examIsCorrected: false,
             strings.examResult: 0,
@@ -140,6 +141,7 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
               Widget addressWidget;
               if (snapshot.hasData) {
                 String address = snapshot.data as String;
+                StudentState.address = address;
                 addressWidget = Text('Retrieved address: $address');
               } else if (snapshot.hasError) {
                 addressWidget = Text('Error!');
