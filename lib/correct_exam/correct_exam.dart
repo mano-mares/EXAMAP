@@ -127,7 +127,7 @@ class _CorrectExamState extends State<CorrectExam> {
                                   children: snapshot.data!.docs.map((doc) {
                                     return Card(
                                       child: ListTile(
-                                        title: doc.get("type") == "OQ"
+                                        title: doc.get("question_type") == "OQ"
                                             ? Padding(
                                                 padding:
                                                     const EdgeInsets.fromLTRB(
@@ -153,7 +153,7 @@ class _CorrectExamState extends State<CorrectExam> {
                                                   ],
                                                 ),
                                               )
-                                            : doc.get("type") == "CC"
+                                            : doc.get("question_type") == "CC"
                                                 ? Padding(
                                                     padding: const EdgeInsets
                                                         .fromLTRB(0, 15, 0, 15),
@@ -340,7 +340,6 @@ class _CorrectExamState extends State<CorrectExam> {
                                               max: doc
                                                   .get("max_point")
                                                   .toDouble(),
-                                              value: 0,
                                             ),
                                           ),
                                         ),
