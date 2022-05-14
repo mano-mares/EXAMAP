@@ -24,6 +24,11 @@ const String examResult = 'exam_result';
 const String location = 'location';
 const String timesLeftExam = 'times_left_exam';
 
+// location
+const String longitude = 'longitude';
+const String lattitude = 'lattitude';
+const String address = 'address';
+
 // Other string constants.
 const String OQ = 'OQ';
 const String CC = 'CC';
@@ -37,3 +42,6 @@ const String dialogTitle = 'Examen eindigen';
 const String dialogContent =
     'Ben je zeker dat je je examen wilt indienen? Je kan het daarna niet meer aanpassen.';
 const String dialogExitButton = 'Sluit';
+
+// Submit exam text
+const String info = 'Volgende gegevens zullen bewaard worden.';

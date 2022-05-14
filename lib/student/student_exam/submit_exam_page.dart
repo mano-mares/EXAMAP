@@ -1,5 +1,6 @@
 import 'package:examap/main.dart';
 import 'package:examap/models/exam.dart';
+import 'package:examap/services/http_service.dart';
 import 'package:examap/student/student_state.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -88,11 +89,14 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
         // Set fields in doc student.
         await studentsRef.doc(studentNumber).set(
           {
+            strings.address: StudentState.address,
             strings.examCompleted: true,
             strings.examIsCorrected: false,
             strings.examResult: 0,
-            // TODO: change this to student location coordinates.
-            strings.location: ['45 N', '69 E'],
+            strings.location: {
+              strings.longitude: StudentState.position!.longitude,
+              strings.lattitude: StudentState.position!.latitude,
+            },
             strings.timesLeftExam: StudentState.studentTimesLeftExam,
           },
         );
@@ -121,33 +125,77 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
 
   @override
   Widget build(BuildContext context) {
-    //print("ANSWERS OF THE STUDENT");
-    //print(widget.answers);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Examen indienen'),
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Align(
-          alignment: Alignment.center,
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            child: ElevatedButton(
-              onPressed: () async => await submitExam(),
-              child: const Text(
-                'Indienen',
-                style: TextStyle(fontSize: sizes.btnMedium),
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: Colors.red,
-                padding: const EdgeInsets.all(16.0),
+      body: Column(
+        children: [
+          FutureBuilder(
+            future: HttpService.getAddress(
+                lon: StudentState.position!.longitude,
+                lat: StudentState.position!.latitude),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              Widget addressWidget;
+              if (snapshot.hasData) {
+                // Get the address from api
+                String address = snapshot.data as String;
+                StudentState.address = address;
+                addressWidget = Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        const Text(
+                          strings.info,
+                          style: TextStyle(
+                              fontSize: sizes.small,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          'Adres: $address',
+                          style: const TextStyle(fontSize: sizes.small),
+                        ),
+                        Text(
+                          'Longitude: ${StudentState.position!.longitude}, ${StudentState.position!.latitude}',
+                          style: const TextStyle(fontSize: sizes.small),
+                        ),
+                        Text(
+                          'Lattitude: ${StudentState.position!.latitude}',
+                          style: const TextStyle(fontSize: sizes.small),
+                        ),
+                      ],
+                    ));
+              } else if (snapshot.hasError) {
+                addressWidget = const Text('Error!');
+              } else {
+                addressWidget = const CircularProgressIndicator();
+              }
+              return addressWidget;
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Align(
+              alignment: Alignment.center,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                child: ElevatedButton(
+                  onPressed: () async => await submitExam(),
+                  child: const Text(
+                    'Indienen',
+                    style: TextStyle(fontSize: sizes.btnMedium),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red,
+                    padding: const EdgeInsets.all(16.0),
+                  ),
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
