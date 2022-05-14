@@ -6,6 +6,7 @@ import 'package:examap/models/questions/multiple_choice/answer.dart';
 import 'package:examap/models/questions/multiple_choice/multiple_choice_question.dart';
 import 'package:examap/models/questions/open_question/open_question.dart';
 import 'package:examap/models/questions/question.dart';
+import 'package:examap/services/http_service.dart';
 import 'package:examap/student/student_exam/submit_exam_page.dart';
 import 'package:examap/student/student_state.dart';
 import 'package:flutter/material.dart';
@@ -781,8 +782,78 @@ class _StudentExamState extends State<StudentExam> with WidgetsBindingObserver {
           Position position = snapshot.data as Position;
           String location =
               'Lat: ${position.latitude} , Long: ${position.longitude}';
-          print(location);
+          //print(location);
           StudentState.position = position; // Store the student position
+          examPage = futureBuilderAddress();
+          // examPage = Scaffold(
+          //   appBar: AppBar(
+          //     title: Text(_exam!.subject),
+          //     centerTitle: true,
+          //   ),
+          //   body: Padding(
+          //     padding: const EdgeInsets.all(16.0),
+          //     child: ListView(
+          //       children: [
+          //         questionButtons(),
+          //         Container(
+          //           margin: const EdgeInsets.only(top: 16.0),
+          //           child: Text(
+          //             'Resterende tijd: ${formatTime(_counterInSeconds!)}',
+          //             style: const TextStyle(fontSize: sizes.small),
+          //           ),
+          //         ),
+          //         questionForm(),
+          //         const SizedBox(height: 16.0),
+          //       ],
+          //     ),
+          //   ),
+          // );
+        } else if (snapshot.hasError) {
+          examPage = Scaffold(
+            appBar: AppBar(),
+            body: Center(
+              child: Text('Error: ${snapshot.error}'),
+            ),
+          );
+        } else {
+          // Displaying Loading Spinner to indicate waiting state
+          examPage = Scaffold(
+            appBar: AppBar(),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const <Widget>[
+                  SizedBox(
+                    width: 60,
+                    height: 60,
+                    child: CircularProgressIndicator(),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: Text(
+                      'Retrieving current device location...',
+                      style: TextStyle(fontSize: sizes.medium),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        }
+        return examPage;
+      },
+    );
+  }
+
+  Widget futureBuilderAddress() {
+    return FutureBuilder(
+      future: HttpService.getAddress(
+          StudentState.position!.longitude, StudentState.position!.latitude),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        Widget examPage;
+        if (snapshot.hasData) {
+          String address = snapshot.data as String;
+          print(address);
           examPage = Scaffold(
             appBar: AppBar(
               title: Text(_exam!.subject),
@@ -829,7 +900,7 @@ class _StudentExamState extends State<StudentExam> with WidgetsBindingObserver {
                   Padding(
                     padding: EdgeInsets.only(top: 16),
                     child: Text(
-                      'Retrieving current device location...',
+                      'Retrieving address...',
                       style: TextStyle(fontSize: sizes.medium),
                     ),
                   )
