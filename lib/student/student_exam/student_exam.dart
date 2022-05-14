@@ -9,6 +9,7 @@ import 'package:examap/models/questions/question.dart';
 import 'package:examap/student/student_exam/submit_exam_page.dart';
 import 'package:examap/student/student_state.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../../res/style/my_fontsize.dart' as sizes;
 
@@ -77,6 +78,36 @@ class _StudentExamState extends State<StudentExam> with WidgetsBindingObserver {
       _timesLeftExam ??= 0;
     });
     startTimer();
+  }
+
+  Future<Position> getGeoLocationPosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      await Geolocator.openLocationSettings();
+      return Future.error('Location services are disabled.');
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
   }
 
   @override
@@ -739,23 +770,16 @@ class _StudentExamState extends State<StudentExam> with WidgetsBindingObserver {
         ((route) => false));
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<Exam>(
-      // Future that needs to be resolved
-      // inorder to display something on the Canvas
-      future: getExam(), // a previously-obtained Future<Exam> or null
-      builder: (BuildContext context, AsyncSnapshot<Exam> snapshot) {
+  Widget futureBuilderLocation() {
+    return FutureBuilder(
+      future: getGeoLocationPosition(),
+      builder: (BuildContext context, AsyncSnapshot<Position> snapshot) {
         Widget examPage;
         if (snapshot.hasData) {
-          // Extracting data from snapshot object
-          _exam = snapshot.data as Exam;
-          _questions ??= _exam?.questions;
-          int? counterInSeconds = getStartTimeInSeconds(_exam!.timeLimit);
-          _counterInSeconds ??=
-              counterInSeconds; // Start value of the timer of the exam.
-          _currentQuestion ??=
-              _questions![_currentQuestionIndex!]; // set the current question.
+          Position position = snapshot.data as Position;
+          String location =
+              'Lat: ${position.latitude} , Long: ${position.longitude}';
+          print(location);
           examPage = Scaffold(
             appBar: AppBar(
               title: Text(_exam!.subject),
@@ -779,6 +803,45 @@ class _StudentExamState extends State<StudentExam> with WidgetsBindingObserver {
               ),
             ),
           );
+        } else if (snapshot.hasError) {
+          examPage = Scaffold(
+            appBar: AppBar(),
+            body: Center(
+              child: Text('Error: ${snapshot.error}'),
+            ),
+          );
+        } else {
+          // Displaying Loading Spinner to indicate waiting state
+          examPage = Scaffold(
+            appBar: AppBar(),
+            body: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+        return examPage;
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Exam>(
+      // Future that needs to be resolved
+      // inorder to display something on the Canvas
+      future: getExam(), // a previously-obtained Future<Exam> or null
+      builder: (BuildContext context, AsyncSnapshot<Exam> snapshot) {
+        Widget examPage;
+        if (snapshot.hasData) {
+          // Extracting data from snapshot object
+          _exam = snapshot.data as Exam;
+          _questions ??= _exam?.questions;
+          int? counterInSeconds = getStartTimeInSeconds(_exam!.timeLimit);
+          _counterInSeconds ??=
+              counterInSeconds; // Start value of the timer of the exam.
+          _currentQuestion ??=
+              _questions![_currentQuestionIndex!]; // set the current question.
+          examPage = futureBuilderLocation();
         } else if (snapshot.hasError) {
           examPage = Scaffold(
             appBar: AppBar(),
