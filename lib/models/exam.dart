@@ -17,6 +17,7 @@ class Exam with ChangeNotifier {
   set timeLimit(String value) => _timeLimit = value;
 
   List<Question> get questions => _questions;
+  set questions(List<Question> value) => _questions = value;
 
   void addQuestion(Question question) {
     _questions.add(question);

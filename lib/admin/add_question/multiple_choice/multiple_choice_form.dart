@@ -1,14 +1,14 @@
-import 'package:examap/add_question/multiple_choice/multiple_choice_answer_form.dart';
+import 'package:examap/admin/add_question/multiple_choice/multiple_choice_answer_form.dart';
 import 'package:examap/models/questions/multiple_choice/multiple_choice_question.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../models/exam.dart';
-import '../../models/questions/multiple_choice/answer.dart';
+import '../../../models/exam.dart';
+import '../../../models/questions/multiple_choice/answer.dart';
 import 'strings.dart' as strings;
-import '../../res/style/my_fontsize.dart' as sizes;
+import '../../../res/style/my_fontsize.dart' as sizes;
 
 class MultipleChoiceForm extends StatefulWidget {
   const MultipleChoiceForm({Key? key}) : super(key: key);
@@ -157,7 +157,8 @@ class _MultipleChoiceFormState extends State<MultipleChoiceForm> {
                       child: Text(
                         strings.headingText,
                         style: TextStyle(
-                            fontSize: sizes.headingText, fontWeight: FontWeight.bold),
+                            fontSize: sizes.headingText,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                     MultipleChoiceAnswerForm(

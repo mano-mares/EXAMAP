@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/exam.dart';
+import '../../../models/exam.dart';
 
 class QuestionCard extends StatelessWidget {
   final int index;

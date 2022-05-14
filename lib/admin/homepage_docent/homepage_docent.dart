@@ -1,10 +1,10 @@
-import 'package:examap/correct_exam/choose_student_correction.dart';
-import 'package:examap/create_exam/create_exam.dart';
+import 'package:examap/admin/create_exam/create_exam.dart';
+import 'package:examap/student_list/student_list.dart';
 import 'package:flutter/material.dart';
 
-import '../app_bar/my_app_bar.dart';
+import '../../app_bar/my_app_bar.dart';
 import './strings.dart' as strings;
-import '../res/style/my_fontsize.dart' as sizes;
+import '../../res/style/my_fontsize.dart' as sizes;
 
 class HomePageDocent extends StatelessWidget {
   const HomePageDocent({Key? key}) : super(key: key);
@@ -65,14 +65,7 @@ class HomePageDocent extends StatelessWidget {
                 textStyle: const TextStyle(
                     fontSize: sizes.text, fontWeight: FontWeight.bold),
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ChooseStudentCorrection(),
-                  ),
-                );
-              }, //TODO: Redirect to Examen verbeteren page
+              onPressed: () {}, //TODO: Redirect to Examen verbeteren page
             ),
             const SizedBox(height: 20),
             ElevatedButton(
@@ -83,7 +76,14 @@ class HomePageDocent extends StatelessWidget {
                 textStyle: const TextStyle(
                     fontSize: sizes.text, fontWeight: FontWeight.bold),
               ),
-              onPressed: () {}, //TODO: Redirect to Studenten lijst page
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const StudentList(),
+                  ),
+                );
+              },
             ),
           ],
         ),

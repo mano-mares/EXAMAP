@@ -1,4 +1,5 @@
 import 'package:examap/student/student_photo/student_photo.dart';
+import 'package:examap/student/student_state.dart';
 import 'package:flutter/material.dart';
 
 import 'students.dart';
@@ -17,6 +18,8 @@ class _ChooseStudentPageState extends State<ChooseStudentPage> {
 
   void checkStudent() {
     if (studentNumbers.contains(studentNumberController.text.trim()) == true) {
+      StudentState.studentNumber =
+          studentNumberController.text; // Store studentnumber
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const StudentPhoto()),
@@ -76,7 +79,8 @@ class _ChooseStudentPageState extends State<ChooseStudentPage> {
                       padding: const EdgeInsets.only(top: 50),
                       child: const Text(
                         "Voer je studentennummer in",
-                        style: TextStyle(fontSize: sizes.btnMedium, color: Colors.white),
+                        style: TextStyle(
+                            fontSize: sizes.btnMedium, color: Colors.white),
                       ),
                     ),
                   ),
