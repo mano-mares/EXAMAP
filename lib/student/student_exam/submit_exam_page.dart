@@ -1,5 +1,6 @@
 import 'package:examap/main.dart';
 import 'package:examap/models/exam.dart';
+import 'package:examap/services/http_service.dart';
 import 'package:examap/student/student_state.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -123,33 +124,52 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
 
   @override
   Widget build(BuildContext context) {
-    //print("ANSWERS OF THE STUDENT");
-    //print(widget.answers);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Examen indienen'),
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Align(
-          alignment: Alignment.center,
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            child: ElevatedButton(
-              onPressed: () async => await submitExam(),
-              child: const Text(
-                'Indienen',
-                style: TextStyle(fontSize: sizes.btnMedium),
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: Colors.red,
-                padding: const EdgeInsets.all(16.0),
+      body: Column(
+        children: [
+          FutureBuilder(
+            future: HttpService.getAddress(
+                lon: StudentState.position!.longitude,
+                lat: StudentState.position!.latitude),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              Widget addressWidget;
+              if (snapshot.hasData) {
+                String address = snapshot.data as String;
+                addressWidget = Text('Retrieved address: $address');
+              } else if (snapshot.hasError) {
+                addressWidget = Text('Error!');
+              } else {
+                addressWidget = CircularProgressIndicator();
+              }
+              return addressWidget;
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Align(
+              alignment: Alignment.center,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                child: ElevatedButton(
+                  onPressed: () async => await submitExam(),
+                  child: const Text(
+                    'Indienen',
+                    style: TextStyle(fontSize: sizes.btnMedium),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red,
+                    padding: const EdgeInsets.all(16.0),
+                  ),
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

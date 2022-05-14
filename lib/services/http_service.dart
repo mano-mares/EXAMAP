@@ -5,7 +5,8 @@ import 'package:http/http.dart';
 class HttpService {
   final String openstreetMapURI = 'https://nominatim.openstreetmap.org/reverse';
 
-  static Future<String> getAddress(double lon, double lat) async {
+  static Future<String> getAddress(
+      {required double lon, required double lat}) async {
     Response res = await get(Uri.parse(
         'https://nominatim.openstreetmap.org/reverse?format=json&lat=$lat&lon=$lon&zoom=18&addressdetails=1'));
 
