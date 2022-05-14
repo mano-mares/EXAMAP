@@ -140,16 +140,37 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               Widget addressWidget;
               if (snapshot.hasData) {
+                // Get the address from api
                 String address = snapshot.data as String;
                 StudentState.address = address;
-                addressWidget = Text(
-                  'Uw adres is $address met volgende coordinaten: ${StudentState.position!.longitude}, ${StudentState.position!.latitude}',
-                  style: const TextStyle(fontSize: sizes.medium),
-                );
+                addressWidget = Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        const Text(
+                          strings.info,
+                          style: TextStyle(
+                              fontSize: sizes.small,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          'Adres: $address',
+                          style: const TextStyle(fontSize: sizes.small),
+                        ),
+                        Text(
+                          'Longitude: ${StudentState.position!.longitude}, ${StudentState.position!.latitude}',
+                          style: const TextStyle(fontSize: sizes.small),
+                        ),
+                        Text(
+                          'Lattitude: ${StudentState.position!.latitude}',
+                          style: const TextStyle(fontSize: sizes.small),
+                        ),
+                      ],
+                    ));
               } else if (snapshot.hasError) {
                 addressWidget = const Text('Error!');
               } else {
-                addressWidget = CircularProgressIndicator();
+                addressWidget = const CircularProgressIndicator();
               }
               return addressWidget;
             },
