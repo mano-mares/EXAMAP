@@ -91,8 +91,10 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
             strings.examCompleted: true,
             strings.examIsCorrected: false,
             strings.examResult: 0,
-            // TODO: change this to student location coordinates.
-            strings.location: ['45 N', '69 E'],
+            strings.location: {
+              strings.longitude: StudentState.position!.longitude,
+              strings.lattitude: StudentState.position!.latitude,
+            },
             strings.timesLeftExam: StudentState.studentTimesLeftExam,
           },
         );

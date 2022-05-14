@@ -24,6 +24,10 @@ const String examResult = 'exam_result';
 const String location = 'location';
 const String timesLeftExam = 'times_left_exam';
 
+// location
+const String longitude = 'longitude';
+const String lattitude = 'lattitude';
+
 // Other string constants.
 const String OQ = 'OQ';
 const String CC = 'CC';

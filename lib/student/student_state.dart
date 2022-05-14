@@ -7,5 +7,6 @@ class StudentState {
   static void clear() {
     studentNumber = '';
     studentTimesLeftExam = 0;
+    position = null;
   }
 }
