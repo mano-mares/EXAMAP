@@ -22,6 +22,7 @@ const String examCompleted = 'exam_completed';
 const String examIsCorrected = 'exam_is_corrected';
 const String examResult = 'exam_result';
 const String location = 'location';
+const String timesLeftExam = 'times_left_exam';
 
 // Other string constants.
 const String OQ = 'OQ';
