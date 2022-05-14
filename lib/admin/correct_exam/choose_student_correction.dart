@@ -1,8 +1,8 @@
-import 'package:examap/correct_exam/correct_exam.dart';
+import 'package:examap/admin/correct_exam/correct_exam.dart';
 import 'package:flutter/material.dart';
-import '../res/style/my_fontsize.dart' as sizes;
+import '../../res/style/my_fontsize.dart' as sizes;
 import 'package:firebase_core/firebase_core.dart';
-import '../firebase_options.dart';
+import '../../firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChooseStudentCorrection extends StatefulWidget {

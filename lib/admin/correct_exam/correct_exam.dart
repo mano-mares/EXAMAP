@@ -2,10 +2,10 @@ import 'package:examap/student/choose_student_number/students.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../firebase_options.dart';
+import '../../firebase_options.dart';
 import 'package:flutter_spinbox/flutter_spinbox.dart';
 
-import '../res/style/my_fontsize.dart' as sizes;
+import '../../res/style/my_fontsize.dart' as sizes;
 
 class CorrectExam extends StatefulWidget {
   const CorrectExam({Key? key, this.studentNumber}) : super(key: key);
@@ -48,7 +48,6 @@ class _CorrectExamState extends State<CorrectExam> {
       values.add(changedValue);
     }
     for (int i = 0; i < values.length; i++) {
-      print(values[i]);
       totalGrade = values[i] + totalGrade;
     }
     setState(() {});
@@ -149,7 +148,6 @@ class _CorrectExamState extends State<CorrectExam> {
                           height: 350,
                           child: StreamBuilder<QuerySnapshot>(
                             stream: firestore
-                                // TODO: Change to EXAMAP
                                 .collection('EXAMAP')
                                 .doc('exam')
                                 .collection('students')
@@ -440,6 +438,7 @@ class _CorrectExamState extends State<CorrectExam> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       ElevatedButton(
+                        // TODO: navigate to location
                         onPressed: () => {},
                         child: const Padding(
                           padding: EdgeInsets.all(20),
