@@ -674,14 +674,23 @@ class _StudentExamState extends State<StudentExam> {
     showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(strings.dialogTitle),
-        content: const Text(strings.dialogContent),
+        title: const Text(
+          strings.dialogTitle,
+          style: TextStyle(fontSize: sizes.large),
+        ),
+        content: const Text(
+          strings.dialogContent,
+          style: TextStyle(fontSize: sizes.medium),
+        ),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            child: const Text(strings.dialogExitButton),
+            child: const Text(
+              strings.dialogExitButton,
+              style: TextStyle(fontSize: sizes.btnMedium),
+            ),
           ),
           ElevatedButton(
             onPressed: () {
@@ -690,7 +699,7 @@ class _StudentExamState extends State<StudentExam> {
             },
             child: const Text(
               strings.submitExamButtonText,
-              style: TextStyle(fontSize: sizes.btnXSmall),
+              style: TextStyle(fontSize: sizes.btnMedium),
             ),
           ),
         ],
