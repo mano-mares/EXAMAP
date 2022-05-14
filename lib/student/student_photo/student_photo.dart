@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import '../../firebase_options.dart';
 import '../../res/style/my_fontsize.dart' as fontSizes;
+import 'package:examap/student/student_state.dart';
 
 class StudentPhoto extends StatefulWidget {
   const StudentPhoto({Key? key}) : super(key: key);
@@ -62,7 +63,7 @@ class _StudentPhotoState extends State<StudentPhoto> {
   void uploadPhoto() async {
     try {
       FirebaseStorage storage = FirebaseStorage.instance;
-      final ref = storage.ref().child('S112189');
+      final ref = storage.ref().child(StudentState.studentNumber);
       //TODO: Change student number dynamically
       File uploadImage = File(image!.path);
       await ref.putFile(uploadImage);
