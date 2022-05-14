@@ -9,7 +9,6 @@ class StudentState {
     studentNumber = '';
     studentTimesLeftExam = 0;
     position = null;
-
     address = null;
   }
 }

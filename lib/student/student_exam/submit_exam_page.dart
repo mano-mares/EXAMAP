@@ -142,9 +142,12 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
               if (snapshot.hasData) {
                 String address = snapshot.data as String;
                 StudentState.address = address;
-                addressWidget = Text('Retrieved address: $address');
+                addressWidget = Text(
+                  'Uw adres is $address met volgende coordinaten: ${StudentState.position!.longitude}, ${StudentState.position!.latitude}',
+                  style: const TextStyle(fontSize: sizes.medium),
+                );
               } else if (snapshot.hasError) {
-                addressWidget = Text('Error!');
+                addressWidget = const Text('Error!');
               } else {
                 addressWidget = CircularProgressIndicator();
               }
