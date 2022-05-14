@@ -7,6 +7,7 @@ import 'package:examap/models/questions/multiple_choice/multiple_choice_question
 import 'package:examap/models/questions/open_question/open_question.dart';
 import 'package:examap/models/questions/question.dart';
 import 'package:examap/student/student_exam/submit_exam_page.dart';
+import 'package:examap/student/student_state.dart';
 import 'package:flutter/material.dart';
 
 import '../../res/style/my_fontsize.dart' as sizes;
@@ -26,7 +27,8 @@ class StudentExam extends StatefulWidget {
   State<StudentExam> createState() => _StudentExamState();
 }
 
-class _StudentExamState extends State<StudentExam> {
+class _StudentExamState extends State<StudentExam> with WidgetsBindingObserver {
+  late AppLifecycleState _lastLifecycleState;
   final TextEditingController openQuestionController = TextEditingController();
   final TextEditingController codeCorrectionController =
       TextEditingController();
@@ -50,11 +52,15 @@ class _StudentExamState extends State<StudentExam> {
   // The state of the MC answers of the student.
   List<bool>? _isChecked;
 
+  // Keep track how many times the student has left the exam page.
+  int? _timesLeftExam;
+
   late FirebaseFirestore firestore;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance!.addObserver(this);
     setState(() {
       // Assign 0 to _currentQuestion if _currentQuestion is null.
       _currentQuestionIndex ??= 0;
@@ -67,8 +73,20 @@ class _StudentExamState extends State<StudentExam> {
 
       // Set empty answers of the student.
       _answers ??= [];
+
+      _timesLeftExam ??= 0;
     });
     startTimer();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // If student leaves the exam.
+    if (state == AppLifecycleState.paused) {
+      setState(() {
+        _timesLeftExam = _timesLeftExam! + 1;
+      });
+    }
   }
 
   Future<void> loadFirestore() async {
@@ -695,6 +713,8 @@ class _StudentExamState extends State<StudentExam> {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
+              // Store number of times left.
+              StudentState.studentTimesLeftExam = _timesLeftExam;
               goToSubmitExamPage();
             },
             child: const Text(
@@ -782,6 +802,7 @@ class _StudentExamState extends State<StudentExam> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance!.removeObserver(this);
     _timer?.cancel();
     openQuestionController.dispose();
     codeCorrectionController.dispose();

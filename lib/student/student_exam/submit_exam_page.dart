@@ -93,6 +93,7 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
             strings.examResult: 0,
             // TODO: change this to student location coordinates.
             strings.location: ['45 N', '69 E'],
+            strings.timesLeftExam: StudentState.studentTimesLeftExam,
           },
         );
         // Write answer to collection answers in student doc.
