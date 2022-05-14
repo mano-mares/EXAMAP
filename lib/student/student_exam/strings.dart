@@ -18,6 +18,10 @@ const String studentAnswer = 'student_answer';
 const String teacherAnswer = 'teacher_answer';
 const String studentAnswers = 'student_answers';
 const String teacherAnswers = 'teacher_answers';
+const String examCompleted = 'exam_completed';
+const String examIsCorrected = 'exam_is_corrected';
+const String examResult = 'exam_result';
+const String location = 'location';
 
 // Other string constants.
 const String OQ = 'OQ';

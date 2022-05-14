@@ -84,8 +84,18 @@ class _SubmitExamPageState extends State<SubmitExamPage> {
         default:
           break;
       }
-      // Write answer to collection answers in student doc.
       try {
+        // Set fields in doc student.
+        await studentsRef.doc(studentNumber).set(
+          {
+            strings.examCompleted: true,
+            strings.examIsCorrected: false,
+            strings.examResult: 0,
+            // TODO: change this to student location coordinates.
+            strings.location: ['45 N', '69 E'],
+          },
+        );
+        // Write answer to collection answers in student doc.
         await studentsRef
             .doc(studentNumber)
             .collection(strings.answers)
