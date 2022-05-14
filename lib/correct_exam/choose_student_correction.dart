@@ -20,6 +20,7 @@ class _ChooseStudentCorrection extends State<ChooseStudentCorrection> {
     super.initState();
     Firebase.initializeApp(options: DefaultFirebaseOptions.android);
     loadFirestore();
+    setState(() {});
   }
 
   void loadFirestore() {
