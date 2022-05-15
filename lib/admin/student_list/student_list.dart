@@ -1,8 +1,8 @@
-import 'package:examap/student_list/add_student/add_student.dart';
+import 'package:examap/admin/student_list/add_student/add_student.dart';
 import 'package:flutter/material.dart';
 
 import './strings.dart' as strings;
-import '../res/style/my_fontsize.dart' as sizes;
+import 'package:examap/res/style/my_fontsize.dart' as sizes;
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:examap/firebase_options.dart';

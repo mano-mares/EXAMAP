@@ -2,10 +2,15 @@
     package="com.example.examap">
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="examap"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyD5-ZjByLYsHwxDyW4h8r6h1DU2YB1ALjM"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

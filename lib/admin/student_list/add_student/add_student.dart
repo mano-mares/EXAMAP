@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../strings.dart' as strings;
-import '../../res/style/my_fontsize.dart' as sizes;
+import '../../../res/style/my_fontsize.dart' as sizes;
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:examap/firebase_options.dart';
@@ -97,6 +97,20 @@ class _StudentListAddState extends State<StudentListAdd> {
       String studTrim = student.trim();
       // students.studentList.add(studTrimmed);
       if (studentStore.contains(studTrim.toLowerCase())) {
+        // Delete answer from students.
+        var answers = firestore
+            .collection(strings.headCollection)
+            .doc(strings.headCollectionDoc)
+            .collection(strings.studentCollection)
+            .doc(studTrim)
+            .collection('answers')
+            .snapshots()
+            .forEach((element) {
+          for (QueryDocumentSnapshot snapshot in element.docs) {
+            snapshot.reference.delete();
+          }
+        });
+
         firestore
             .collection(strings.headCollection)
             .doc(strings.headCollectionDoc)

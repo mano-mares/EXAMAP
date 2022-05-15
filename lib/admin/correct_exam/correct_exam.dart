@@ -1,3 +1,4 @@
+import 'package:examap/admin/student_location/student_location.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -21,6 +22,7 @@ class _CorrectExamState extends State<CorrectExam> {
   var preValue;
   var afterValue;
   var totalGrade = 0;
+  late String address;
   @override
   void initState() {
     super.initState();
@@ -434,30 +436,39 @@ class _CorrectExamState extends State<CorrectExam> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 40, 20, 20),
                 child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        // TODO: navigate to location
-                        onPressed: () => {},
-                        child: const Padding(
-                          padding: EdgeInsets.all(20),
-                          child: Text(
-                            "Locatie",
-                            style: TextStyle(fontSize: sizes.btnMedium),
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => StudentLocation(
+                              studentNumber: widget.studentNumber,
+                            ),
                           ),
+                        );
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Text(
+                          "Locatie",
+                          style: TextStyle(fontSize: sizes.btnMedium),
                         ),
                       ),
-                      ElevatedButton(
-                        onPressed: saveCorrectedExam,
-                        child: const Padding(
-                          padding: EdgeInsets.all(20),
-                          child: Text(
-                            "Opslaan",
-                            style: TextStyle(fontSize: sizes.btnMedium),
-                          ),
+                    ),
+                    ElevatedButton(
+                      onPressed: saveCorrectedExam,
+                      child: const Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Text(
+                          "Opslaan",
+                          style: TextStyle(fontSize: sizes.btnMedium),
                         ),
                       ),
-                    ]),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
