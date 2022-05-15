@@ -21,7 +21,7 @@ class StudentLocation extends StatefulWidget {
 class _StudentLocationState extends State<StudentLocation> {
   late GoogleMapController mapController;
 
-  final LatLng _center = const LatLng(45.521563, -122.677433);
+  //final LatLng _center = const LatLng(45.521563, -122.677433);
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -63,15 +63,25 @@ class _StudentLocationState extends State<StudentLocation> {
           if (snapshot.hasData) {
             // Get address from snapshot object
             address = snapshot.data!['address'] as String;
-            longitude = snapshot.data!['location']['longitude'];
-            lattitude = snapshot.data!['location']['lattitude'];
+            longitude = snapshot.data!['location']['longitude'] as double;
+            lattitude = snapshot.data!['location']['lattitude'] as double;
             //page = Text('Adres: $address, long: $longitude, lat: $lattitude');
             page = GoogleMap(
               onMapCreated: _onMapCreated,
               initialCameraPosition: CameraPosition(
-                target: _center,
-                zoom: 11.0,
+                target: LatLng(lattitude, longitude),
+                zoom: 20.0,
               ),
+              markers: {
+                Marker(
+                  markerId: MarkerId(address),
+                  position: LatLng(lattitude, longitude),
+                  infoWindow: InfoWindow(
+                    title: widget.studentNumber,
+                    snippet: address,
+                  ),
+                )
+              },
             );
           } else if (snapshot.hasError) {
             page = Scaffold(
