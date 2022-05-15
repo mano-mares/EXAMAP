@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:examap/firebase_options.dart';
+import 'package:examap/student/student_exam/strings.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'strings.dart' as strings;
@@ -19,12 +20,13 @@ class StudentLocation extends StatefulWidget {
 class _StudentLocationState extends State<StudentLocation> {
   late FirebaseFirestore firestore;
   late String address;
+  late double longitude, lattitude;
   Future<void> loadFirestore() async {
     await Firebase.initializeApp(options: DefaultFirebaseOptions.android);
     firestore = FirebaseFirestore.instance;
   }
 
-  Future<String> getAddress() async {
+  Future<DocumentSnapshot> getStudent() async {
     await loadFirestore();
     final DocumentReference documentReference = firestore
         .collection('EXAMAP')
@@ -34,7 +36,7 @@ class _StudentLocationState extends State<StudentLocation> {
 
     final DocumentSnapshot studentDoc = await documentReference.get();
 
-    return studentDoc['address'];
+    return studentDoc;
   }
 
   @override
@@ -44,14 +46,17 @@ class _StudentLocationState extends State<StudentLocation> {
         title: const Text(strings.appBarTitle),
         centerTitle: true,
       ),
-      body: FutureBuilder<String>(
-        future: getAddress(),
-        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+      body: FutureBuilder<DocumentSnapshot>(
+        future: getStudent(),
+        builder:
+            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           Widget page;
           if (snapshot.hasData) {
             // Get address from snapshot object
-            address = snapshot.data as String;
-            page = Text('Adres: $address');
+            address = snapshot.data!['address'] as String;
+            longitude = snapshot.data!['location']['longitude'];
+            lattitude = snapshot.data!['location']['lattitude'];
+            page = Text('Adres: $address, long: $longitude, lat: $lattitude');
           } else if (snapshot.hasError) {
             page = Scaffold(
               appBar: AppBar(),
