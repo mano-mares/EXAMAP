@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'strings.dart' as strings;
 import '../../res/style/my_fontsize.dart' as sizes;
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class StudentLocation extends StatefulWidget {
   String studentNumber;
@@ -18,6 +19,14 @@ class StudentLocation extends StatefulWidget {
 }
 
 class _StudentLocationState extends State<StudentLocation> {
+  late GoogleMapController mapController;
+
+  final LatLng _center = const LatLng(45.521563, -122.677433);
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
   late FirebaseFirestore firestore;
   late String address;
   late double longitude, lattitude;
@@ -56,7 +65,14 @@ class _StudentLocationState extends State<StudentLocation> {
             address = snapshot.data!['address'] as String;
             longitude = snapshot.data!['location']['longitude'];
             lattitude = snapshot.data!['location']['lattitude'];
-            page = Text('Adres: $address, long: $longitude, lat: $lattitude');
+            //page = Text('Adres: $address, long: $longitude, lat: $lattitude');
+            page = GoogleMap(
+              onMapCreated: _onMapCreated,
+              initialCameraPosition: CameraPosition(
+                target: _center,
+                zoom: 11.0,
+              ),
+            );
           } else if (snapshot.hasError) {
             page = Scaffold(
               appBar: AppBar(),
