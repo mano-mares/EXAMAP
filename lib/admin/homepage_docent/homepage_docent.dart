@@ -1,6 +1,6 @@
 import 'package:examap/admin/correct_exam/choose_student_correction.dart';
 import 'package:examap/admin/create_exam/create_exam.dart';
-import 'package:examap/student_list/student_list.dart';
+import 'package:examap/admin//student_list/student_list.dart';
 import 'package:flutter/material.dart';
 
 import '../../app_bar/my_app_bar.dart';
