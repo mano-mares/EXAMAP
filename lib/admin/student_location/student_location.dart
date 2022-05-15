@@ -68,7 +68,7 @@ class _StudentLocationState extends State<StudentLocation> {
           onMapCreated: _onMapCreated,
           initialCameraPosition: CameraPosition(
             target: LatLng(lattitude, longitude),
-            zoom: 20.0,
+            zoom: 18.0,
           ),
           markers: {
             Marker(
