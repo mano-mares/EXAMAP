@@ -48,6 +48,43 @@ class _StudentLocationState extends State<StudentLocation> {
     return studentDoc;
   }
 
+  Widget map({
+    required String address,
+    required double lattitude,
+    required double longitude,
+  }) {
+    return Container(
+      height: 500,
+      padding: const EdgeInsets.all(64.0),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.black, //color of border
+            width: 2, //width of border
+          ),
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: GoogleMap(
+          onMapCreated: _onMapCreated,
+          initialCameraPosition: CameraPosition(
+            target: LatLng(lattitude, longitude),
+            zoom: 20.0,
+          ),
+          markers: {
+            Marker(
+              markerId: MarkerId(address),
+              position: LatLng(lattitude, longitude),
+              infoWindow: InfoWindow(
+                title: widget.studentNumber,
+                snippet: address,
+              ),
+            )
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,22 +103,36 @@ class _StudentLocationState extends State<StudentLocation> {
             longitude = snapshot.data!['location']['longitude'] as double;
             lattitude = snapshot.data!['location']['lattitude'] as double;
             //page = Text('Adres: $address, long: $longitude, lat: $lattitude');
-            page = GoogleMap(
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: LatLng(lattitude, longitude),
-                zoom: 20.0,
-              ),
-              markers: {
-                Marker(
-                  markerId: MarkerId(address),
-                  position: LatLng(lattitude, longitude),
-                  infoWindow: InfoWindow(
-                    title: widget.studentNumber,
-                    snippet: address,
+            page = Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(top: 16.0),
+                    child: Text(
+                      'Locatie van ${widget.studentNumber}',
+                      style: const TextStyle(
+                        fontSize: sizes.large,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                )
-              },
+                  map(
+                    address: address,
+                    lattitude: lattitude,
+                    longitude: longitude,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 16.0),
+                    child: Text(
+                      'Adres: $address',
+                      style: const TextStyle(
+                        fontSize: sizes.medium,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             );
           } else if (snapshot.hasError) {
             page = Scaffold(
