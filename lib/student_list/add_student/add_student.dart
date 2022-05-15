@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../strings.dart' as strings;
-import '../../Student/choose_student_number/students.dart' as students;
 import '../../res/style/my_fontsize.dart' as sizes;
 
 import 'package:firebase_core/firebase_core.dart';
@@ -56,7 +55,6 @@ class _StudentListAddState extends State<StudentListAdd> {
   }
 
   void _addStudent() async {
-    students.studentList = [];
     String studentStore = await getData();
     // Student object
     final studentObject = <String, dynamic>{
@@ -69,7 +67,6 @@ class _StudentListAddState extends State<StudentListAdd> {
 
     for (var student in rawStudList) {
       String studTrim = student.trim();
-      students.studentList.add(studTrim);
       if (!studentStore.contains(student)) {
         firestore
             .collection(strings.headCollection)

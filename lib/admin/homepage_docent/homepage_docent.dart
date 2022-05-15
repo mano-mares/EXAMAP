@@ -1,3 +1,4 @@
+import 'package:examap/admin/correct_exam/choose_student_correction.dart';
 import 'package:examap/admin/create_exam/create_exam.dart';
 import 'package:examap/student_list/student_list.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +66,14 @@ class HomePageDocent extends StatelessWidget {
                 textStyle: const TextStyle(
                     fontSize: sizes.text, fontWeight: FontWeight.bold),
               ),
-              onPressed: () {}, //TODO: Redirect to Examen verbeteren page
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ChooseStudentCorrection(),
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 20),
             ElevatedButton(

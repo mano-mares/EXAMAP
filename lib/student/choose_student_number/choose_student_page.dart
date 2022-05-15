@@ -1,8 +1,10 @@
 import 'package:examap/student/student_photo/student_photo.dart';
 import 'package:examap/student/student_state.dart';
+import '../../firebase_options.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'students.dart';
 import '../../res/style/my_fontsize.dart' as sizes;
 
 class ChooseStudentPage extends StatefulWidget {
@@ -16,29 +18,45 @@ class _ChooseStudentPageState extends State<ChooseStudentPage> {
   final studentNumberController = TextEditingController();
   bool flagWrongStudentNumber = false;
 
-  void checkStudent() {
-    if (studentNumbers.contains(studentNumberController.text.trim()) == true) {
-      StudentState.studentNumber =
-          studentNumberController.text; // Store studentnumber
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const StudentPhoto()),
-      );
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Foutief studentennummer!'),
-          content: const Text('Voer een geldig studentennummer in'),
-          actions: [
-            TextButton(
-              child: const Text('Sluit'),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        ),
-      );
-    }
+  @override
+  void initState() {
+    Firebase.initializeApp(options: DefaultFirebaseOptions.android);
+    super.initState();
+  }
+
+  void loadFirestore() {
+    firestore = FirebaseFirestore.instance;
+  }
+
+  late FirebaseFirestore firestore;
+  void checkStudent() async {
+    loadFirestore();
+    var collectionRef =
+        firestore.collection("EXAMAP").doc("exam").collection("students");
+    collectionRef.doc(studentNumberController.text.trim()).get().then((value) {
+      if (value.exists) {
+        StudentState.studentNumber =
+            studentNumberController.text; // Store studentnumber
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const StudentPhoto()),
+        );
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Foutief studentennummer!'),
+            content: const Text('Voer een geldig studentennummer in'),
+            actions: [
+              TextButton(
+                child: const Text('Sluit'),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          ),
+        );
+      }
+    });
   }
 
   @override
