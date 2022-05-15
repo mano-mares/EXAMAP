@@ -22,6 +22,7 @@ class _CorrectExamState extends State<CorrectExam> {
   var preValue;
   var afterValue;
   var totalGrade = 0;
+  late String address;
   @override
   void initState() {
     super.initState();
@@ -438,12 +439,15 @@ class _CorrectExamState extends State<CorrectExam> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
-                      onPressed: () => {
+                      onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const StudentLocation()),
-                        )
+                            builder: (context) => StudentLocation(
+                              studentNumber: widget.studentNumber,
+                            ),
+                          ),
+                        );
                       },
                       child: const Padding(
                         padding: EdgeInsets.all(20),
