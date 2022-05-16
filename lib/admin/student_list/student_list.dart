@@ -89,7 +89,6 @@ class _StudentListState extends State<StudentList> {
                     style: TextStyle(fontSize: sizes.btnSmall)),
                 style: ElevatedButton.styleFrom(
                   primary: Colors.red,
-                  fixedSize: const Size(185, 50),
                 )),
             ElevatedButton(
               onPressed: () {
@@ -104,7 +103,6 @@ class _StudentListState extends State<StudentList> {
                   style: TextStyle(fontSize: sizes.btnSmall)),
               style: ElevatedButton.styleFrom(
                 primary: Colors.red,
-                fixedSize: const Size(200, 50),
               ),
             ),
           ],
