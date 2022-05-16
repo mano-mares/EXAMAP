@@ -137,6 +137,7 @@ class _StudentPhotoState extends State<StudentPhoto> {
         body: Padding(
           padding: EdgeInsets.zero,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
@@ -149,7 +150,7 @@ class _StudentPhotoState extends State<StudentPhoto> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: fontSizes.subTitle,
+                      fontSize: fontSizes.small,
                     ),
                   ),
                 ),
