@@ -23,10 +23,6 @@ class QuestionCard extends StatelessWidget {
     context.read<Exam>().removeQuestionAt(index);
   }
 
-  void _edit(BuildContext context) {
-    // TODO: go to edit form.
-  }
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -66,11 +62,6 @@ class QuestionCard extends StatelessWidget {
                     ),
                   );
                 },
-              ),
-              const SizedBox(width: 8),
-              IconButton(
-                icon: const Icon(Icons.edit),
-                onPressed: () => _edit(context),
               ),
               const SizedBox(width: 8),
             ],
