@@ -177,8 +177,10 @@ class _CorrectExamState extends State<CorrectExam> {
                                                         "question_text",
                                                       ),
                                                       style: const TextStyle(
-                                                          fontSize:
-                                                              sizes.small),
+                                                        fontSize: sizes.small,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
                                                     ),
                                                     Text(
                                                       'Antwoord student: ${doc.get("student_answer")}',
@@ -200,9 +202,13 @@ class _CorrectExamState extends State<CorrectExam> {
                                                       children: [
                                                         Text(
                                                           'Gegeven: ${doc.get("question_text")}',
-                                                          style: const TextStyle(
-                                                              fontSize:
-                                                                  sizes.small),
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize:
+                                                                sizes.small,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
                                                         ),
                                                         Text(
                                                           'Oplossing: ${doc.get("teacher_answer")}',
@@ -227,18 +233,24 @@ class _CorrectExamState extends State<CorrectExam> {
                                                       Text(
                                                         '${doc.get("question_text")}',
                                                         style: const TextStyle(
-                                                            fontSize:
-                                                                sizes.small),
+                                                          fontSize: sizes.small,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
                                                       ),
-                                                      Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
+                                                      Column(
+                                                          // mainAxisAlignment:
+                                                          //     MainAxisAlignment
+                                                          //         .spaceBetween,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
                                                           children: [
                                                             Text(
-                                                              doc.get("student_answers")[
-                                                                      0][
-                                                                  "answer_text"],
+                                                              'Optie: ' +
+                                                                  doc.get("student_answers")[
+                                                                          0][
+                                                                      "answer_text"],
                                                               style: const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
@@ -275,15 +287,19 @@ class _CorrectExamState extends State<CorrectExam> {
                                                                         fontSize:
                                                                             sizes.small)),
                                                           ]),
-                                                      Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
+                                                      Column(
+                                                          // mainAxisAlignment:
+                                                          //     MainAxisAlignment
+                                                          //         .spaceBetween,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
                                                           children: [
                                                             Text(
-                                                              doc.get("student_answers")[
-                                                                      1][
-                                                                  "answer_text"],
+                                                              'Optie: ' +
+                                                                  doc.get("student_answers")[
+                                                                          1][
+                                                                      "answer_text"],
                                                               style: const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
@@ -320,15 +336,19 @@ class _CorrectExamState extends State<CorrectExam> {
                                                                         fontSize:
                                                                             sizes.small)),
                                                           ]),
-                                                      Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
+                                                      Column(
+                                                          // mainAxisAlignment:
+                                                          //     MainAxisAlignment
+                                                          //         .spaceBetween,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
                                                           children: [
                                                             Text(
-                                                              doc.get("student_answers")[
-                                                                      2][
-                                                                  "answer_text"],
+                                                              'Optie: ' +
+                                                                  doc.get("student_answers")[
+                                                                          2][
+                                                                      "answer_text"],
                                                               style: const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
